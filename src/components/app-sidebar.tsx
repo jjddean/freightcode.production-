@@ -11,6 +11,7 @@ import {
   Settings,
   Terminal,
 } from "lucide-react"
+import { IconCirclePlusFilled, IconMail } from "@tabler/icons-react"
 
 import { useLocation } from "react-router-dom"
 import { useUser } from "@clerk/clerk-react"
@@ -19,11 +20,16 @@ import { NavMain } from "@/components/nav-main"
 import { NavDocuments } from "@/components/nav-documents"
 import { NavSecondary } from "@/components/nav-secondary"
 import { NavUser } from "@/components/nav-user"
+import { Button } from "@/components/ui/button"
+import { BrandLogo } from "@/components/ui/brand-logo"
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
 } from "@/components/ui/sidebar"
 
 const navMain = [
@@ -35,7 +41,7 @@ const navMain = [
   {
     title: "Shipments",
     url: "/shipments",
-    icon: Ship,
+    icon: Package,
   },
   {
     title: "Bookings",
@@ -103,13 +109,31 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader className="h-14 border-b">
-        <a href="/dashboard" className="flex items-center gap-3 px-4 h-full">
-          <img src="/freightcode-logo.png" alt="freightcode®" className="h-9 w-9 object-contain" />
-          <span className="truncate text-lg font-bold text-[#003057] group-data-[collapsible=icon]:hidden">freightcode®</span>
+      <SidebarHeader className="border-b-0 px-2 pt-2">
+        <a href="/dashboard" className="flex items-center px-4 h-12 mb-2">
+          <BrandLogo />
         </a>
+        <SidebarMenu className="pb-0">
+          <SidebarMenuItem className="flex items-center gap-2">
+            <SidebarMenuButton
+              tooltip="Quick Quote"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear"
+            >
+              <IconCirclePlusFilled className="size-4" />
+              <span>Quick Quote</span>
+            </SidebarMenuButton>
+            <Button
+              size="icon"
+              className="size-8 shrink-0 group-data-[collapsible=icon]:hidden"
+              variant="outline"
+            >
+              <IconMail className="size-4" />
+              <span className="sr-only">Inbox</span>
+            </Button>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="gap-0">
         <NavMain items={navMain} />
         <NavDocuments items={navDocuments} />
         <NavSecondary items={navSecondary} className="mt-auto" />

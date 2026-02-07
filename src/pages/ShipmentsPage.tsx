@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import MediaCardHeader from '@/components/ui/media-card-header';
 import DataTable from '@/components/ui/data-table';
 import { Button } from '@/components/ui/button';
-import { LiveVesselMap } from '@/components/ui/live-vessel-map';
-import { ShipmentMap } from '@/components/ui/ShipmentMap';
 import { useQuery, useAction, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { Sparkles, Mail } from "lucide-react";
@@ -13,6 +11,14 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useFeature } from '@/hooks/useFeature';
 import { Link } from 'react-router-dom'; // Ensure Link is imported for upgrade redo
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
 import {
   Sheet,
   SheetContent,
@@ -28,8 +34,9 @@ import {
   DialogDescription,
   DialogFooter
 } from "@/components/ui/dialog";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
+
+import { ShipmentMap } from '@/components/ui/ShipMapFinal';
+import { LiveVesselMap } from '@/components/ui/live-vessel-map';
 
 const ShipmentsPage = () => {
   const { user } = useUser();
@@ -39,13 +46,14 @@ const ShipmentsPage = () => {
   const [sheetMode, setSheetMode] = useState<'details' | 'tracking'>('details');
   const [emailing, setEmailing] = useState(false);
   const [limitDialogOpen, setLimitDialogOpen] = useState(false);
+  const [isMapExpanded, setIsMapExpanded] = useState(false);
   const createShipment = useMutation(api.shipments.upsertShipment);
 
   // Search & Filter State
   const [searchTerm, setSearchTerm] = useState('');
   const [activeFilters, setActiveFilters] = useState<Record<string, any>>({});
   const [showFilters, setShowFilters] = useState(false);
-  const [isHeaderExpanded, setIsHeaderExpanded] = useState(false);
+
 
   const handleFilterChange = (key: string, value: any) => {
     const newFilters = { ...activeFilters };
@@ -444,14 +452,12 @@ const ShipmentsPage = () => {
           overlayOpacity={0.5}
           className="mb-8"
           isExpandable={true}
-          isExpanded={isHeaderExpanded}
-          onToggle={() => setIsHeaderExpanded(!isHeaderExpanded)}
-          backgroundComponent={
-            <ShipmentMap
-              className="w-full h-full border-none shadow-none rounded-none"
-              minimal={!isHeaderExpanded}
-            />
-          }
+          isExpanded={isMapExpanded}
+          onToggle={() => {
+            setIsMapExpanded((v) => !v);
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+          backgroundComponent={<ShipmentMap minimal={!isMapExpanded} />}
         />
 
         {/* Action Toolbar */}
@@ -578,18 +584,22 @@ const ShipmentsPage = () => {
                       {filter.label}
                     </label>
                     {filter.type === 'select' && (
-                      <select
+                      <Select
                         value={activeFilters[filter.key] || ''}
-                        onChange={(e) => handleFilterChange(filter.key, e.target.value)}
-                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white"
+                        onValueChange={(value) => handleFilterChange(filter.key, value === "all" ? "" : value)}
                       >
-                        <option value="">All {filter.label}</option>
-                        {filter.options?.map((option) => (
-                          <option key={option.value} value={option.value}>
-                            {option.label}
-                          </option>
-                        ))}
-                      </select>
+                        <SelectTrigger className="w-full bg-white">
+                          <SelectValue placeholder={`All ${filter.label}`} />
+                        </SelectTrigger>
+                        <SelectContent className="z-[99999]">
+                          <SelectItem value="all">All {filter.label}</SelectItem>
+                          {filter.options?.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     )}
                     {filter.type === 'multiselect' && (
                       <div className="space-y-1.5 max-h-32 overflow-y-auto">
@@ -645,75 +655,9 @@ const ShipmentsPage = () => {
           )}
         />
 
-        {/* Real-Time Tracking for Active Shipments */}
-        {activeTab === 'active' && (
-          <div className="mt-8 space-y-8">
-            {/* Visual Progress Trackers */}
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900 flex items-center mb-4">
-                <span className="relative flex h-3 w-3 mr-3">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
-                </span>
-                Live Fleet Tracking
-              </h3>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {(liveData && liveData.filter((s: any) => s.status !== 'Delivered').length > 0) ? (
-                  liveData.filter((s: any) => s.status !== 'Delivered').slice(0, 2).map((s: any) => (
-                    <LiveVesselMap
-                      key={s.shipmentId}
-                      shipmentId={s.shipmentId}
-                      origin={s.shipmentDetails?.origin || 'Unknown'}
-                      destination={s.shipmentDetails?.destination || 'Unknown'}
-                      progress={s.progress || Math.floor(Math.random() * 60) + 20}
-                    />
-                  ))
-                ) : (
-                  <>
-                    <LiveVesselMap shipmentId="SH-2024-001" origin="London, UK" destination="Hamburg, DE" progress={72} />
-                    <LiveVesselMap shipmentId="SH-2024-002" origin="Shanghai, CN" destination="Felixstowe, UK" progress={35} />
-                  </>
-                )}
-              </div>
-            </div>
 
 
-          </div>
-        )}
 
-        {/* Pre-Pickup Protocol (New) */}
-        <Card className="mt-8 bg-green-50 border-green-200">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-green-800 text-lg flex items-center gap-2">
-              <span>🚚</span> Pre-Pickup Protocol
-            </CardTitle>
-            <CardDescription className="text-green-600">Driver arrival checklist - ensure smooth handover.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-sm text-green-900">
-              <li className="flex items-center gap-2">
-                <Checkbox id="labels" className="data-[state=checked]:bg-green-600 border-green-400" />
-                <label htmlFor="labels" className="cursor-pointer">Labels printed & attached?</label>
-              </li>
-              <li className="flex items-center gap-2">
-                <Checkbox id="invoice-copies" className="data-[state=checked]:bg-green-600 border-green-400" />
-                <label htmlFor="invoice-copies" className="cursor-pointer">Commercial Invoice (3 copies)?</label>
-              </li>
-              <li className="flex items-center gap-2">
-                <Checkbox id="warehouse-contact" className="data-[state=checked]:bg-green-600 border-green-400" />
-                <label htmlFor="warehouse-contact" className="cursor-pointer">Warehouse contact notified?</label>
-              </li>
-              <li className="flex items-center gap-2">
-                <Checkbox id="cargo-access" className="data-[state=checked]:bg-green-600 border-green-400" />
-                <label htmlFor="cargo-access" className="cursor-pointer">Cargo accessible (not blocked)?</label>
-              </li>
-              <li className="flex items-center gap-2">
-                <Checkbox id="photos" className="data-[state=checked]:bg-green-600 border-green-400" />
-                <label htmlFor="photos" className="cursor-pointer">Photos taken (for insurance)?</label>
-              </li>
-            </ul>
-          </CardContent>
-        </Card>
 
 
         {/* Shipment Details & Risk Analysis Sheet */}

@@ -1,4 +1,12 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
+
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import MediaCardHeader from '@/components/ui/media-card-header';
 import DataTable from '@/components/ui/data-table';
@@ -68,13 +76,13 @@ const DocumentsPage = () => {
                         if (user?.primaryEmailAddress?.emailAddress) {
                             await sendEmail({
                                 to: user.primaryEmailAddress.emailAddress,
-                                subject: "Document Successfully Signed - Freightcode.co.uk",
+                                subject: "Document Successfully Signed - freightcode",
                                 html: `
                                     <h1>Document Signed</h1>
                                     <p>Your document (ID: ${docId}) has been successfully signed and processed.</p>
                                     <p>You can view and downlaod it from your dashboard.</p>
                                     <br/>
-                                    <p>Best,<br/>Freightcode.co.uk Team</p>
+                                    <p>Best,<br/>freightcode team</p>
                                 `
                             });
                         }
@@ -332,18 +340,18 @@ const DocumentsPage = () => {
 
                 return (
                     <div className="flex space-x-2">
-                        <Button variant="ghost" size="icon" onClick={() => handleOpenDetail(row)} title="View Details">
+                        <Button variant="ghost" size="sm" onClick={() => handleOpenDetail(row)} title="View Details">
                             <Eye className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="icon" onClick={() => navigate(`/documents/print/${row._id}`)} title="Print / PDF">
+                        <Button variant="ghost" size="sm" onClick={() => navigate(`/documents/print/${row._id}`)} title="Print / PDF">
                             <Printer className="h-4 w-4" />
                         </Button>
                         {row.docusign?.envelopeId ? (
-                            <Button variant="ghost" size="icon" onClick={() => handleRefreshStatus(row)} disabled={refreshingId === row._id} title="Refresh Status">
+                            <Button variant="ghost" size="sm" onClick={() => handleRefreshStatus(row)} disabled={refreshingId === row._id} title="Refresh Status">
                                 <RefreshCw className={`h-4 w-4 ${refreshingId === row._id ? 'animate-spin' : ''}`} />
                             </Button>
                         ) : canSendForSignature ? (
-                            <Button variant="ghost" size="icon" onClick={() => handleOpenSend(row)} title="Send for Signature">
+                            <Button variant="ghost" size="sm" onClick={() => handleOpenSend(row)} title="Send for Signature">
                                 <Send className="h-4 w-4" />
                             </Button>
                         ) : isPlatformDoc ? (
@@ -351,7 +359,7 @@ const DocumentsPage = () => {
                                 Admin Only
                             </span>
                         ) : null}
-                        <Button variant="ghost" size="icon" onClick={() => handleShare(row)} title="Share Public Link">
+                        <Button variant="ghost" size="sm" onClick={() => handleShare(row)} title="Share Public Link">
                             <Share2 className="h-4 w-4" />
                         </Button>
                     </div>
@@ -470,7 +478,7 @@ const DocumentsPage = () => {
                             setCreateOpen(true);
                         }} />
 
-                        <Button variant="outline" className="gap-2" onClick={() => {
+                        <Button variant="outline" size="sm" className="gap-2" onClick={() => {
                             if (tableData.length === 0) {
                                 toast.error("No documents to export");
                                 return;
@@ -497,7 +505,7 @@ const DocumentsPage = () => {
                         </Button>
                         <a ref={downloadRef} style={{ display: 'none' }} />
 
-                        <Button className="gap-2" onClick={() => setCreateOpen(true)}>
+                        <Button size="sm" className="gap-2" onClick={() => setCreateOpen(true)}>
                             <Upload className="h-4 w-4" />
                             Upload Invoice/List
                         </Button>
@@ -816,20 +824,28 @@ function CreateDocumentDrawer({ open, onOpenChange, createDocument, initialData,
         <Drawer open={open} onOpenChange={onOpenChange} shouldScaleBackground={false}>
             <DrawerContent className="max-w-4xl mx-auto h-[85vh]">
                 <DrawerHeader>
-                    <DrawerTitle>Upload Commercial Invoice</DrawerTitle>
+                    <DrawerTitle>Upload Document</DrawerTitle>
                 </DrawerHeader>
                 <div className="px-6 py-4 overflow-y-auto">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-4">
                             <Label>Type</Label>
-                            <select className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm"
-                                value={formData.type} onChange={e => handleChange('type', e.target.value)}>
-                                <option value="commercial_invoice">Commercial Invoice</option>
-                                <option value="packing_list">Packing List</option>
-                            </select>
-                            <div className="p-3 bg-blue-50 text-blue-700 text-xs rounded border border-blue-100">
-                                ℹ️ Note: Bill of Lading and Air Waybills are issued by the Carrier/Admin upon booking confirmation. You cannot create them manually here.
-                            </div>
+                            <Select
+                                value={formData.type}
+                                onValueChange={(value) => handleChange('type', value)}
+                            >
+                                <SelectTrigger className="w-full">
+                                    <SelectValue placeholder="Select document type" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="commercial_invoice">Commercial Invoice</SelectItem>
+                                    <SelectItem value="packing_list">Packing List</SelectItem>
+                                    <SelectItem value="bill_of_lading">Bill of Lading</SelectItem>
+                                    <SelectItem value="air_waybill">Air Waybill</SelectItem>
+                                    <SelectItem value="certificate_of_origin">Certificate of Origin</SelectItem>
+                                    <SelectItem value="insurance_certificate">Insurance Certificate</SelectItem>
+                                </SelectContent>
+                            </Select>
                             <Label>Number</Label><Input value={formData.documentNumber} onChange={e => handleChange('documentNumber', e.target.value)} />
                             <Label>Shipper</Label><Input value={formData.shipperName} onChange={e => handleChange('shipperName', e.target.value)} />
                         </div>
@@ -926,6 +942,7 @@ function SmartUploadButton({ onParse }: { onParse: (data: any) => void }) {
             />
             <Button
                 variant="secondary"
+                size="sm"
                 className="bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border-indigo-200"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={analyzing}

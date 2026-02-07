@@ -268,15 +268,38 @@ const PaymentsPage = () => {
   }, [livePayments, convexInvoices]);
 
   const invoiceColumns = [
-    { key: 'id' as keyof typeof invoices[0], header: 'Invoice ID', sortable: true },
+    {
+      key: 'id' as keyof typeof invoices[0],
+      header: 'Invoice ID',
+      sortable: true,
+      render: (value: string) => <span className="font-mono text-xs text-gray-500 truncate max-w-[120px] block">{value}</span>
+    },
     { key: 'date' as keyof typeof invoices[0], header: 'Date', sortable: true },
-    { key: 'route' as keyof typeof invoices[0], header: 'Route', sortable: false },
-    { key: 'description' as keyof typeof invoices[0], header: 'Description', sortable: false },
+    {
+      key: 'description' as keyof typeof invoices[0],
+      header: 'Service',
+      sortable: false,
+      render: (value: string, row: any) => {
+        const parts = value.split(' - ');
+        return (
+          <div className="max-w-[180px]">
+            <div className="font-medium text-gray-900 truncate">{parts[0]}</div>
+            <div className="text-[10px] text-gray-500 leading-tight">
+              {parts[1] && <div>{parts[1]}</div>}
+              {row.route && row.route !== 'N/A' && !value.includes(row.route) && (
+                <div className="text-[9px] text-gray-400 mt-0.5">{row.route}</div>
+              )}
+            </div>
+          </div>
+        );
+      }
+    },
     {
       key: 'amount' as keyof typeof invoices[0],
       header: 'Amount',
       sortable: true,
-      render: (value: number) => `£${value.toLocaleString()}`
+      className: "text-right w-24",
+      render: (value: number) => <span className="font-semibold text-gray-900">£{value.toLocaleString()}</span>
     },
     {
       key: 'status' as keyof typeof invoices[0],
@@ -311,7 +334,7 @@ const PaymentsPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="px-4 sm:px-6 lg:px-8 py-4 pb-24">
+      <div className="px-4 sm:px-6 lg:px-8 py-4">
         {/* Payments Header */}
         <MediaCardHeader
           title="Payment Management"
@@ -374,16 +397,12 @@ const PaymentsPage = () => {
               }}>Export Invoices</Button>
             </div>
 
-            {/* Data Table wrapped in container to fix horizontal scroll and match UI */}
-            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden min-h-[400px]">
-              <DataTable
-                data={invoices}
-                columns={invoiceColumns}
-                searchPlaceholder="Search invoices by ID, shipment, or description..."
-                rowsPerPage={10}
-                className="border-0 shadow-none"
-              />
-            </div>
+            <DataTable
+              data={invoices}
+              columns={invoiceColumns}
+              searchPlaceholder="Search invoices by ID, shipment, or service..."
+              rowsPerPage={10}
+            />
           </div>
         )}
 
@@ -415,73 +434,69 @@ const PaymentsPage = () => {
 
 
 
+        {/* Invoice Detail Dialog */}
+        <Dialog open={!!selectedInvoice} onOpenChange={(open) => !open && setSelectedInvoice(null)}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Invoice Details</DialogTitle>
+              <DialogDescription>
+                {selectedInvoice?.id}
+              </DialogDescription>
+            </DialogHeader>
+            {selectedInvoice && (
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <p className="text-gray-500">Amount</p>
+                    <p className="text-xl font-bold text-primary">£{selectedInvoice.amount?.toLocaleString()}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-500">Status</p>
+                    <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${selectedInvoice.status === 'Paid' ? 'bg-green-100 text-green-800' :
+                      selectedInvoice.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
+                        selectedInvoice.status === 'Overdue' ? 'bg-red-100 text-red-800' :
+                          'bg-gray-100 text-gray-800'
+                      }`}>
+                      {selectedInvoice.status}
+                    </span>
+                  </div>
+                </div>
+                <div>
+                  <p className="text-gray-500 text-sm">Description</p>
+                  <p className="font-medium">{selectedInvoice.description}</p>
+                  {selectedInvoice.route && selectedInvoice.route !== 'N/A' && (
+                    <p className="text-xs text-gray-400 mt-1 italic">{selectedInvoice.route}</p>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <p className="text-gray-500">Issue Date</p>
+                    <p>{selectedInvoice.date}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-500">Due Date</p>
+                    <p>{selectedInvoice.dueDate}</p>
+                  </div>
+                </div>
+                <div>
+                  <p className="font-mono">{selectedInvoice.shipment}</p>
+                </div>
+
+
+                {selectedInvoice.status === 'Pending' && (
+                  <Button className="w-full" onClick={() => {
+                    handlePayInvoice(selectedInvoice.id);
+                    setSelectedInvoice(null);
+                  }}>
+                    Pay Now
+                  </Button>
+                )}
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
       </div>
-
-      {/* Invoice Detail Dialog */}
-      <Dialog open={!!selectedInvoice} onOpenChange={(open) => !open && setSelectedInvoice(null)}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Invoice Details</DialogTitle>
-            <DialogDescription>
-              {selectedInvoice?.id}
-            </DialogDescription>
-          </DialogHeader>
-          {selectedInvoice && (
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <p className="text-gray-500">Amount</p>
-                  <p className="text-xl font-bold text-primary">£{selectedInvoice.amount?.toLocaleString()}</p>
-                </div>
-                <div>
-                  <p className="text-gray-500">Status</p>
-                  <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${selectedInvoice.status === 'Paid' ? 'bg-green-100 text-green-800' :
-                    selectedInvoice.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
-                      selectedInvoice.status === 'Overdue' ? 'bg-red-100 text-red-800' :
-                        'bg-gray-100 text-gray-800'
-                    }`}>
-                    {selectedInvoice.status}
-                  </span>
-                </div>
-              </div>
-              <div>
-                <p className="text-gray-500 text-sm">Description</p>
-                <p className="font-medium">{selectedInvoice.description}</p>
-              </div>
-              {selectedInvoice.metadata?.route && (
-                <div>
-                  <p className="text-gray-500 text-sm">Route</p>
-                  <p className="font-medium">{selectedInvoice.metadata.route}</p>
-                </div>
-              )}
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <p className="text-gray-500">Issue Date</p>
-                  <p>{selectedInvoice.date}</p>
-                </div>
-                <div>
-                  <p className="text-gray-500">Due Date</p>
-                  <p>{selectedInvoice.dueDate}</p>
-                </div>
-              </div>
-              <div>
-                <p className="font-mono">{selectedInvoice.shipment}</p>
-              </div>
-
-
-              {selectedInvoice.status === 'Pending' && (
-                <Button className="w-full" onClick={() => {
-                  handlePayInvoice(selectedInvoice.id);
-                  setSelectedInvoice(null);
-                }}>
-                  Pay Now
-                </Button>
-              )}
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
-
     </div>
   );
 };

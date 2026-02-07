@@ -3,7 +3,7 @@ import { useAction, useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { useOrganization } from "@clerk/clerk-react";
 import { Button } from '@/components/ui/button';
-import { getAllCarrierRates, type CarrierRate, type RateRequest } from '@/services/carriers';
+import { type CarrierRate, type RateRequest } from '@/services/carriers';
 import { LandedCostTool } from '@/components/ui/landed-cost-tool';
 import { cn } from '@/lib/utils';
 
@@ -27,8 +27,8 @@ const LiveRateComparison: React.FC<LiveRateComparisonProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [selectedRate, setSelectedRate] = useState<CarrierRate | null>(null);
 
-  // Convex action for server-side SeaRates API call (avoids CORS)
-  const fetchSeaRates = useAction(api.searates.getSeaRatesQuotes);
+  // Convex action for server-side Carrier API calls (avoids CORS)
+  const fetchCarrierRates = useAction(api.carriers.fetchCarrierRates);
 
   useEffect(() => {
     if (rateRequest.origin.city && rateRequest.destination.city) {
@@ -37,66 +37,47 @@ const LiveRateComparison: React.FC<LiveRateComparisonProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(rateRequest)]);
 
-  // Mutation to fetch real Freightos rates
-  const requestQuote = useMutation(api.quotes.createQuote);
-  const { organization } = useOrganization();
-
   const fetchRates = async () => {
     setLoading(true);
     setError(null);
 
     try {
-      console.log('[LiveRates] Fetching rates for:', rateRequest.origin.city, '->', rateRequest.destination.city);
+      console.log('[LiveRates] Fetching consolidated rates for:', rateRequest.origin.city, '->', rateRequest.destination.city);
 
-      // 1. Get mock/parcel rates from browser (FedEx, UPS, USPS mock)
-      const mockRates = await getAllCarrierRates(rateRequest);
-      console.log('[LiveRates] Got', mockRates.length, 'mock rates');
+      // Call the unified server-side action
+      const results = await fetchCarrierRates({
+        origin: {
+          street1: rateRequest.origin.street1 || '',
+          city: rateRequest.origin.city || '',
+          state: rateRequest.origin.state || '',
+          zip: rateRequest.origin.zip || '',
+          country: rateRequest.origin.country || '',
+        },
+        destination: {
+          street1: rateRequest.destination.street1 || '',
+          city: rateRequest.destination.city || '',
+          state: rateRequest.destination.state || '',
+          zip: rateRequest.destination.zip || '',
+          country: rateRequest.destination.country || '',
+        },
+        parcel: {
+          length: rateRequest.parcel.length || 1,
+          width: rateRequest.parcel.width || 1,
+          height: rateRequest.parcel.height || 1,
+          weight: rateRequest.parcel.weight || 1,
+          distance_unit: rateRequest.parcel.distance_unit || 'cm',
+          mass_unit: rateRequest.parcel.mass_unit || 'kg',
+        }
+      });
 
-      // 2. Get SeaRates from Convex (server-side, no CORS)
-      let seaRatesData: CarrierRate[] = [];
-      try {
-        const weight = rateRequest.parcel.weight || 100;
-        const shippingType = weight > 15000 ? 'FCL' : 'LCL';
+      console.log('[LiveRates] Got', results.length, 'total consolidated rates');
 
-        const seaRatesResult = await fetchSeaRates({
-          origin: rateRequest.origin.city || '',
-          destination: rateRequest.destination.city || '',
-          shippingType,
-          weight,
-        });
-
-        // Convert SeaRates response to CarrierRate format
-        seaRatesData = (seaRatesResult || []).map((rate: any) => ({
-          carrierId: rate.carrierId || `searates-${Date.now()}`,
-          carrier: rate.carrierName || 'SeaRates Carrier',
-          service: rate.serviceType || 'Ocean Freight',
-          cost: rate.price?.amount || rate.totalPrice || 0,
-          amount: rate.price?.amount || rate.totalPrice || 0,
-          currency: rate.price?.currency || rate.currency || 'USD',
-          transit_time: rate.transitTime || '20 days',
-          transitTime: rate.transitTime || '20 days',
-          provider: 'searates' as const,
-          price: {
-            amount: rate.price?.amount || rate.totalPrice || 0,
-            currency: rate.price?.currency || rate.currency || 'USD',
-            lineItems: rate.price?.lineItems || [],
-          },
-        }));
-        console.log('[LiveRates] Got', seaRatesData.length, 'SeaRates quotes');
-      } catch (seaErr) {
-        console.warn('[LiveRates] SeaRates fetch failed:', seaErr);
-      }
-
-      // 3. Combine all rates
-      const allRates = [...seaRatesData, ...mockRates].sort((a, b) => a.cost - b.cost);
-      console.log('[LiveRates] Total rates:', allRates.length);
-
-      setRates(allRates);
-      onRatesFetched?.(allRates);
+      setRates(results);
+      onRatesFetched?.(results);
 
     } catch (err: any) {
       console.error('Error fetching rates:', err);
-      setError('Failed to fetch shipping rates.');
+      setError('Failed to fetch shipping rates. Please try again later.');
     } finally {
       setLoading(false);
     }

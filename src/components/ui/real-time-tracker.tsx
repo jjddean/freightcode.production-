@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
-import ShipmentMap from "../tracking/ShipmentMap";
+import { ShipmentMap } from "./ShipMapFinal";
 
 interface TrackingEvent {
   id: string;
@@ -193,18 +193,7 @@ const RealTimeTracker: React.FC<RealTimeTrackerProps> = ({ shipmentId, className
       {/* Map Section */}
       <div className="p-6 border-t border-gray-200">
         <ShipmentMap
-          shipments={shipmentData?.shipment ? [shipmentData.shipment] : [
-            // Mock shipment with coordinates for fallback
-            {
-              shipmentId: shipmentId,
-              status: tracking?.status || 'in-transit',
-              currentLocation: {
-                city: 'Hamburg',
-                country: 'Germany',
-                coordinates: { lat: 53.5511, lng: 9.9937 } // Hamburg coordinates
-              }
-            }
-          ]}
+          shipments={[]}
           focusedId={shipmentId}
           height={200}
           className="rounded-lg overflow-hidden"

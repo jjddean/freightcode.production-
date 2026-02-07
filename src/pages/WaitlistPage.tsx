@@ -7,6 +7,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from 'sonner';
 import { ShieldCheck, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
+import { BrandLogo } from '@/components/ui/brand-logo';
+import { InteractiveHero } from './InteractiveHero';
 
 const WaitlistPage = () => {
     const navigate = useNavigate();
@@ -138,7 +140,7 @@ const WaitlistPage = () => {
                 <div className="max-w-6xl mx-auto px-12 md:px-20 h-20 flex items-center justify-between">
                     {/* Logo */}
                     <div className="flex items-center gap-2">
-                        <span className="text-xl font-bold text-white tracking-tight">freightcode®</span>
+                        <BrandLogo size="lg" />
                     </div>
 
                     {/* Navigation Links (Restored) */}
@@ -225,66 +227,7 @@ const WaitlistPage = () => {
 
                         {/* Right: The Product (High Density UI Mock) */}
                         <div className="flex-1 w-full max-w-lg">
-                            <div className="rounded-xl border border-slate-800 bg-slate-900/50 backdrop-blur-sm shadow-2xl overflow-hidden relative group">
-                                <div className="h-8 border-b border-slate-800 bg-slate-900 flex items-center px-3 gap-2">
-                                    <div className="flex gap-1.5">
-                                        <div className="w-2.5 h-2.5 rounded-full bg-slate-700" />
-                                        <div className="w-2.5 h-2.5 rounded-full bg-slate-700" />
-                                    </div>
-                                    <div className="ml-auto text-[10px] text-slate-500 font-mono">dashboard.marketlive.io</div>
-                                </div>
-
-                                <div className="p-4 grid gap-3">
-                                    <div className="grid grid-cols-3 gap-3">
-                                        <div className="bg-slate-800/50 p-2 rounded border border-slate-700/50">
-                                            <div className="text-[10px] text-slate-400 uppercase">Active Shipments</div>
-                                            <div className="text-lg font-bold text-white">12</div>
-                                        </div>
-                                        <div className="bg-slate-800/50 p-2 rounded border border-slate-700/50">
-                                            <div className="text-[10px] text-slate-400 uppercase">Pending Quotes</div>
-                                            <div className="text-lg font-bold text-white">5</div>
-                                        </div>
-                                        <div className="bg-red-900/10 p-2 rounded border border-red-900/20">
-                                            <div className="text-[10px] text-red-300 uppercase">Critical Alerts</div>
-                                            <div className="text-lg font-bold text-red-500">1 ⚠️</div>
-                                        </div>
-                                    </div>
-
-                                    <div className="relative h-32 rounded-lg border border-slate-700 overflow-hidden group-hover:border-blue-500/30 transition-colors">
-                                        <img
-                                            src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=600&auto=format&fit=crop"
-                                            className="absolute inset-0 w-full h-full object-cover opacity-30"
-                                            alt="Map"
-                                        />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent" />
-                                        <div className="absolute bottom-3 left-3 right-3 text-sm">
-                                            <div className="flex items-center justify-between mb-1">
-                                                <span className="font-bold text-white flex items-center gap-1">
-                                                    📍 Route Analysis: LND → DXB
-                                                </span>
-                                                <span className="bg-red-500/20 text-red-300 text-[10px] px-1.5 py-0.5 rounded border border-red-500/30">
-                                                    HIGH RISK
-                                                </span>
-                                            </div>
-                                            <div className="w-full bg-slate-700 h-1.5 rounded-full overflow-hidden">
-                                                <div className="bg-red-500 h-full w-[88%]" />
-                                            </div>
-                                            <div className="flex justify-between mt-1 text-[10px] text-slate-400 font-mono">
-                                                <span>Score: 88/100</span>
-                                                <span>Potential Delay: +4 Days</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-1">
-                                        <div className="flex items-center justify-between p-2 bg-slate-800/30 rounded border border-slate-800/50 text-xs">
-                                            <span>PO-4921 • Shanghai</span>
-                                            <span className="text-emerald-400">Arrived 🚢</span>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
+                            <InteractiveHero />
                         </div>
 
                     </div>

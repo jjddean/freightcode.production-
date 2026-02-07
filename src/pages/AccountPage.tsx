@@ -1,4 +1,12 @@
 import React, { useState } from 'react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
 import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import MediaCardHeader from '@/components/ui/media-card-header';
@@ -138,19 +146,29 @@ const AccountPage = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <Label>Language</Label>
-                      <select className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
-                        <option>English (US)</option>
-                        <option>Spanish</option>
-                        <option>French</option>
-                      </select>
+                      <Select defaultValue="English (US)">
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select language" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="English (US)">English (US)</SelectItem>
+                          <SelectItem value="Spanish">Spanish</SelectItem>
+                          <SelectItem value="French">French</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
                     <div className="space-y-2">
                       <Label>Time Zone</Label>
-                      <select className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
-                        <option>{userData.timezone}</option>
-                        <option>Pacific Time (PT)</option>
-                        <option>Central Time (CT)</option>
-                      </select>
+                      <Select defaultValue={userData.timezone}>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select timezone" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value={userData.timezone}>{userData.timezone}</SelectItem>
+                          <SelectItem value="Pacific Time (PT)">Pacific Time (PT)</SelectItem>
+                          <SelectItem value="Central Time (CT)">Central Time (CT)</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
                   </div>
                 </div>

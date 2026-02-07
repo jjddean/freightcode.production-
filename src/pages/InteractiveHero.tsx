@@ -1,126 +1,140 @@
-import { useState, useMemo, useEffect } from "react";
-// @ts-ignore
-import Map, { Source, Layer, Marker } from "react-map-gl/mapbox";
-import "mapbox-gl/dist/mapbox-gl.css";
+
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
-import { Zap, Ship, Plane, Search, ArrowRight, TrendingUp } from "lucide-react";
-
-const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
-
-// Default to World View
-const INITIAL_VIEW_STATE = {
-    longitude: -20,
-    latitude: 30,
-    zoom: 1.5,
-};
-
-const ROUTES: Record<string, { start: [number, number], end: [number, number] }> = {
-    "shanghai": {
-        start: [121.4737, 31.2304], // Shanghai
-        end: [-2.2426, 53.4808],    // Manchester
-    },
-    "new_york": {
-        start: [-74.006, 40.7128],  // NYC
-        end: [-2.2426, 53.4808],    // Manchester
-    }
-};
+import { Zap, Search, ArrowRight, Ship, Package } from "lucide-react";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
 export const InteractiveHero = () => {
     const [origin, setOrigin] = useState("");
     const [destination, setDestination] = useState("");
-    const [viewState, setViewState] = useState(INITIAL_VIEW_STATE);
-    const [activeRoute, setActiveRoute] = useState<any>(null);
+    const [serviceType, setServiceType] = useState("");
+    const [cargoType, setCargoType] = useState("");
     const [showResults, setShowResults] = useState(false);
 
-    // Mock "Search" Effect
     const handleSearch = () => {
-        if (!origin) return; // Only require Origin for the demo hook
-
-        // Simulate "Finding Route"
-        const routeKey = origin.toLowerCase().includes("shanghai") ? "shanghai" : "new_york";
-        const route = ROUTES[routeKey] || ROUTES["shanghai"]; // Default fallbacks 
-
-        // Set line geometry
-        const geojson = {
-            type: "Feature",
-            geometry: {
-                type: "LineString",
-                coordinates: [route.start, route.end]
-            }
-        };
-
-        setActiveRoute(geojson);
-
-        // Zoom to route bounds (simplified pan for now)
-        setViewState({
-            longitude: (route.start[0] + route.end[0]) / 2,
-            latitude: (route.start[1] + route.end[1]) / 2,
-            zoom: 3
-        });
-
-        setTimeout(() => setShowResults(true), 1500); // Reveal cards after map animation
+        if (!origin) return;
+        setTimeout(() => setShowResults(true), 1200);
     };
 
     return (
-        <div className="relative w-full h-[600px] bg-slate-900 rounded-xl overflow-hidden shadow-2xl border border-slate-700">
-            {/* Mapbox Layer */}
-            {MAPBOX_TOKEN ? (
-                <Map
-                    {...viewState}
-                    onMove={(evt: any) => setViewState(evt.viewState)}
-                    style={{ width: '100%', height: '100%' }}
-                    mapStyle="mapbox://styles/mapbox/dark-v11"
-                    mapboxAccessToken={MAPBOX_TOKEN}
-                    scrollZoom={false}
-                >
-                    {activeRoute && (
-                        <Source id="route" type="geojson" data={activeRoute}>
-                            <Layer
-                                id="route-line"
-                                type="line"
-                                layout={{ "line-join": "round", "line-cap": "round" }}
-                                paint={{ "line-color": "#003366", "line-width": 4, "line-opacity": 0.8 }}
-                            />
-                        </Source>
-                    )}
-                </Map>
-            ) : (
-                <div className="absolute inset-0 flex items-center justify-center text-slate-500">
-                    Mapbox Token Missing
+        <div className="relative w-full h-[600px] bg-[#0B1026] rounded-xl overflow-hidden shadow-2xl border border-slate-700">
+            {/* Premium Animated Background (Non-WebGL replacement for Mapbox) */}
+            <div className="absolute inset-0 overflow-hidden">
+                <div className="absolute inset-0 opacity-30">
+                    <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" strokeWidth="0.5" />
+                            </pattern>
+                        </defs>
+                        <rect width="100%" height="100%" fill="url(#grid)" />
+                    </svg>
                 </div>
-            )}
+
+                {/* Simulated Data Streams / Routes */}
+                <div className="absolute inset-0">
+                    {[...Array(6)].map((_, i) => (
+                        <div
+                            key={i}
+                            className="absolute h-[1px] bg-gradient-to-r from-transparent via-blue-500/50 to-transparent w-full animate-data-flow"
+                            style={{
+                                top: `${20 + (i * 15)}%`,
+                                left: '-100%',
+                                animationDelay: `${i * 1.5}s`,
+                                animationDuration: `${5 + (i * 2)}s`
+                            }}
+                        />
+                    ))}
+                </div>
+
+                {/* Decorative Glowing Orbs */}
+                <div className="absolute top-1/4 left-1/3 w-64 h-64 bg-blue-600/10 rounded-full blur-[100px] animate-pulse"></div>
+                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-600/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }}></div>
+            </div>
 
             {/* Overlay UI: Quote Search */}
-            <div className="absolute top-8 left-8 z-10 w-[380px]">
-                <Card className="bg-white/95 backdrop-blur shadow-xl border-0">
-                    <CardContent className="p-6 space-y-4">
-                        <div className="flex items-center gap-2 mb-2">
-                            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                            <span className="text-xs font-bold uppercase text-slate-500 tracking-wider">Live Rate Engine</span>
+            <div className="absolute top-8 left-8 z-10 w-full max-w-[420px] p-4 sm:p-0">
+                <Card className="!bg-[#0d1f35] border-slate-700 shadow-[0_0_50px_-12px_rgba(0,0,0,0.5)] rounded-2xl overflow-hidden backdrop-blur-sm">
+                    <CardContent className="p-8 pt-10 !bg-[#0d1f35]">
+                        {/* Header Section */}
+                        <div className="flex items-center justify-between mb-6">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 bg-[#1e3a5f] rounded-xl flex items-center justify-center shadow-inner border border-slate-700/40 flex-shrink-0">
+                                    <span className="relative flex h-3 w-3">
+                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                        <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                                    </span>
+                                </div>
+                                <div>
+                                    <h2 className="text-xl font-bold tracking-tight text-white mb-0.5">Get Instant Quotes</h2>
+                                    <p className="text-slate-400 text-[10px] leading-tight font-medium uppercase tracking-wider">Live Rate Engine</p>
+                                </div>
+                            </div>
                         </div>
-                        <h2 className="text-2xl font-bold text-slate-900">Get Instant Quotes</h2>
-                        <div className="space-y-3">
-                            <div>
-                                <label className="text-xs font-medium text-slate-500 ml-1">Origin</label>
-                                <Input
-                                    placeholder="e.g. Shanghai, China"
-                                    className="bg-slate-50 border-slate-200"
-                                    value={origin}
-                                    onChange={e => setOrigin(e.target.value)}
-                                />
+
+                        <div className="space-y-6">
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Origin</label>
+                                    <Input
+                                        placeholder="e.g. Shanghai, China"
+                                        className="!bg-[#0a1628] border-slate-700 !text-white placeholder:text-slate-600 h-12 rounded-xl focus:border-cyan-500 focus:ring-0 transition-all shadow-sm font-medium"
+                                        value={origin}
+                                        onChange={e => setOrigin(e.target.value)}
+                                    />
+                                </div>
+                                <div>
+                                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Destination</label>
+                                    <Input
+                                        placeholder="e.g. Manchester, UK"
+                                        className="!bg-[#0a1628] border-slate-700 !text-white placeholder:text-slate-600 h-12 rounded-xl focus:border-cyan-500 focus:ring-0 transition-all shadow-sm font-medium"
+                                        value={destination}
+                                        onChange={e => setDestination(e.target.value)}
+                                    />
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Service Type</label>
+                                        <Select value={serviceType} onValueChange={setServiceType}>
+                                            <SelectTrigger className="!bg-[#0a1628] border-slate-700 !text-white h-12 rounded-xl focus:ring-0 focus:border-cyan-500 font-medium">
+                                                <SelectValue placeholder="Select..." />
+                                            </SelectTrigger>
+                                            <SelectContent className="bg-[#0d1f35] border-slate-700 text-white">
+                                                <SelectItem value="ocean" className="text-white hover:bg-slate-800 focus:bg-slate-800 cursor-pointer">Ocean</SelectItem>
+                                                <SelectItem value="air" className="text-white hover:bg-slate-800 focus:bg-slate-800 cursor-pointer">Air</SelectItem>
+                                                <SelectItem value="road" className="text-white hover:bg-slate-800 focus:bg-slate-800 cursor-pointer">Road</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                    <div>
+                                        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Cargo Type</label>
+                                        <Select value={cargoType} onValueChange={setCargoType}>
+                                            <SelectTrigger className="!bg-[#0a1628] border-slate-700 !text-white h-12 rounded-xl focus:ring-0 focus:border-cyan-500 font-medium">
+                                                <SelectValue placeholder="Select..." />
+                                            </SelectTrigger>
+                                            <SelectContent className="bg-[#0d1f35] border-slate-700 text-white">
+                                                <SelectItem value="general" className="text-white hover:bg-slate-800 focus:bg-slate-800 cursor-pointer">General</SelectItem>
+                                                <SelectItem value="perishable" className="text-white hover:bg-slate-800 focus:bg-slate-800 cursor-pointer">Perishable</SelectItem>
+                                                <SelectItem value="hazardous" className="text-white hover:bg-slate-800 focus:bg-slate-800 cursor-pointer">Hazardous</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                </div>
                             </div>
-                            <div>
-                                <label className="text-xs font-medium text-slate-500 ml-1">Destination</label>
-                                <Input
-                                    placeholder="e.g. Manchester, UK"
-                                    className="bg-slate-50 border-slate-200"
-                                    value={destination}
-                                    onChange={e => setDestination(e.target.value)}
-                                />
-                            </div>
-                            <Button size="lg" className="w-full bg-primary hover:bg-primary-700" onClick={handleSearch}>
+
+                            <Button
+                                size="lg"
+                                className="w-full h-14 bg-cyan-500 hover:bg-cyan-600 !text-white text-base font-bold rounded-xl transition-all shadow-lg active:scale-[0.98] flex items-center justify-center gap-2 border-0 mt-2"
+                                onClick={handleSearch}
+                            >
                                 <Search className="w-4 h-4 mr-2" />
                                 Search Routes
                             </Button>
@@ -129,9 +143,9 @@ export const InteractiveHero = () => {
                 </Card>
             </div>
 
-            {/* Simulated Results - "The Hook" */}
+            {/* Simulated Results */}
             {showResults && (
-                <div className="absolute bottom-6 right-6 z-10 w-[360px] animate-in slide-in-from-bottom-5 fade-in duration-500">
+                <div className="absolute bottom-6 right-6 z-10 w-full max-w-[360px] p-4 sm:p-0 animate-in slide-in-from-bottom-5 fade-in duration-500">
                     <div className="bg-white/95 backdrop-blur-md rounded-xl p-4 shadow-xl border border-blue-100/50">
                         <div className="flex justify-between items-center mb-4">
                             <div className="flex items-center gap-2">
@@ -165,7 +179,6 @@ export const InteractiveHero = () => {
                             <Button
                                 size="sm"
                                 className="w-full bg-primary hover:bg-primary-700 text-white shadow-lg shadow-primary/20 transition-all hover:scale-[1.02]"
-                                onClick={() => document.getElementById('waitlist-form')?.scrollIntoView({ behavior: 'smooth' })}
                             >
                                 Unlock & Book these Rates
                                 <ArrowRight className="w-3 h-3 ml-1.5" />
@@ -174,6 +187,18 @@ export const InteractiveHero = () => {
                     </div>
                 </div>
             )}
+
+            <style>{`
+                @keyframes dataFlow {
+                    0% { left: -100%; opacity: 0; }
+                    10% { opacity: 1; }
+                    90% { opacity: 1; }
+                    100% { left: 100%; opacity: 0; }
+                }
+                .animate-data-flow {
+                    animation: dataFlow linear infinite;
+                }
+            `}</style>
         </div>
     );
 };

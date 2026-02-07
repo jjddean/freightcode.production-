@@ -20,9 +20,9 @@ export function NavDocuments({
   }[]
 }) {
   return (
-    <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel>Documents</SidebarGroupLabel>
-      <SidebarGroupContent>
+    <SidebarGroup className="py-1 group-data-[collapsible=icon]:hidden">
+      <SidebarGroupLabel className="h-6">Documents</SidebarGroupLabel>
+      <SidebarGroupContent className="flex flex-col gap-0.5">
         <SidebarMenu>
           {items.map((item) => (
             <SidebarMenuItem key={item.name}>

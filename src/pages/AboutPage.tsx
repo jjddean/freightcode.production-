@@ -36,7 +36,7 @@ const AboutPage = () => {
             <div>
               <h2 className="text-2xl font-bold text-primary-900 mb-6">Our Mission</h2>
               <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-                At Freightcode.co.uk, our mission is to simplify the complexities of global supply chains.
+                At freightcode, our mission is to simplify the complexities of global supply chains.
                 We believe that logistics should be an accelerator for your business, not a bottleneck.
               </p>
               <p className="text-lg text-gray-600 mb-8 leading-relaxed">

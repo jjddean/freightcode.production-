@@ -58,7 +58,7 @@ export function AIAssistant() {
             // Construct Context
             // In a real app, we would fetch relevant data context here
             const contextPrompt = `
-You are a helpful logistics assistant for Freightcode.co.uk.
+You are a helpful logistics assistant for freightcode.
 Current active shipments: 5.
 Recent revenue: £125,000.
 User asks: "${userMsg}"

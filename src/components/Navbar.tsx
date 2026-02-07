@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
 import { Button } from '@/components/ui/button';
+import { BrandLogo } from './ui/brand-logo';
 import AuthButtons from './AuthButtons';
 import NotificationCenter from './ui/notification-center';
 
@@ -52,9 +53,8 @@ const Navbar: React.FC = () => {
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        <Link to="/" className="navbar-logo flex items-center gap-2">
-          <img src="/freightcode-logo.png" alt="freightcode®" className="h-8 w-auto object-contain" />
-          <span className="text-xl font-bold text-primary-900">freightcode®</span>
+        <Link to="/" className="navbar-logo">
+          <BrandLogo size="lg" />
         </Link>
 
         <ul className="nav-menu">

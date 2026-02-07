@@ -1,5 +1,13 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
 import { cn } from '@/lib/utils';
 
 interface FilterOption {
@@ -37,13 +45,13 @@ const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
 
   const handleFilterChange = (key: string, value: any) => {
     const newFilters = { ...activeFilters };
-    
+
     if (value === '' || value === null || (Array.isArray(value) && value.length === 0)) {
       delete newFilters[key];
     } else {
       newFilters[key] = value;
     }
-    
+
     setActiveFilters(newFilters);
   };
 
@@ -66,18 +74,22 @@ const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
     switch (filter.type) {
       case 'select':
         return (
-          <select
-            value={value}
-            onChange={(e) => handleFilterChange(filter.key, e.target.value)}
-            className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+          <Select
+            value={value || "_all"}
+            onValueChange={(val) => handleFilterChange(filter.key, val === "_all" ? "" : val)}
           >
-            <option value="">{filter.placeholder || `All ${filter.label}`}</option>
-            {filter.options?.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label} {option.count && `(${option.count})`}
-              </option>
-            ))}
-          </select>
+            <SelectTrigger className="w-full bg-white">
+              <SelectValue placeholder={filter.placeholder || `All ${filter.label}`} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="_all">{filter.placeholder || `All ${filter.label}`}</SelectItem>
+              {filter.options?.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label} {option.count && `(${option.count})`}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         );
 
       case 'multiselect':
@@ -171,7 +183,7 @@ const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
               </svg>
             </div>
           </div>
-          
+
           <Button
             variant="outline"
             onClick={() => setShowFilters(!showFilters)}
@@ -187,11 +199,11 @@ const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
               </span>
             )}
           </Button>
-          
+
           <Button onClick={handleSearch}>
             Search
           </Button>
-          
+
           {(searchTerm || activeFilterCount > 0) && (
             <Button variant="outline" onClick={handleClear}>
               Clear
@@ -213,7 +225,7 @@ const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
               </div>
             ))}
           </div>
-          
+
           {activeFilterCount > 0 && (
             <div className="mt-4 pt-4 border-t border-gray-200">
               <div className="flex flex-wrap gap-2">
@@ -221,14 +233,14 @@ const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
                 {Object.entries(activeFilters).map(([key, value]) => {
                   const filter = filters.find(f => f.key === key);
                   if (!filter) return null;
-                  
+
                   let displayValue = value;
                   if (Array.isArray(value)) {
                     displayValue = value.join(', ');
                   } else if (typeof value === 'object' && value.min && value.max) {
                     displayValue = `${value.min} - ${value.max}`;
                   }
-                  
+
                   return (
                     <span
                       key={key}

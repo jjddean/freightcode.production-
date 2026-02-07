@@ -37,6 +37,7 @@ const AdminPageHeader: React.FC<AdminPageHeaderProps> = ({
                 {actionLabel && onAction && (
                     <Button
                         onClick={onAction}
+                        size="sm"
                         className="bg-primary hover:bg-primary-700 text-white shadow-sm"
                     >
                         {actionLabel}

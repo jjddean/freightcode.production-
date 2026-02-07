@@ -16,9 +16,27 @@ const HomePage = () => {
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [searchParams, setSearchParams] = useState({ origin: '', destination: '' });
+  const [quoteInitialData, setQuoteInitialData] = useState<any>(null);
 
-  const handleVisualSearch = (data: { origin: string; destination: string }) => {
-    setSearchParams(data);
+  const handleVisualSearch = (data: { origin: string; destination: string; weight: string; dimensions: string }) => {
+    setSearchParams({ origin: data.origin, destination: data.destination });
+
+    // Parse dimensions string into object
+    let dims = { length: '', width: '', height: '' };
+    if (data.dimensions) {
+      const parts = data.dimensions.toLowerCase().split(/[x\s*]+/).filter(p => !isNaN(parseFloat(p)));
+      if (parts.length >= 1) dims.length = parts[0];
+      if (parts.length >= 2) dims.width = parts[1];
+      if (parts.length >= 3) dims.height = parts[2];
+    }
+
+    setQuoteInitialData({
+      origin: data.origin,
+      destination: data.destination,
+      weight: data.weight,
+      dimensions: dims
+    });
+
     setShowResults(true);
     toast.success(`Found 3 routes from ${data.origin} to ${data.destination}`);
 
@@ -191,6 +209,7 @@ const HomePage = () => {
           <QuoteRequestForm
             onSubmit={handleQuoteSubmit}
             onCancel={handleCloseModal}
+            initialData={quoteInitialData}
           />
         </Modal>
       </div>

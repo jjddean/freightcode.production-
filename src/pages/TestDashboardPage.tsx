@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { BrandLogo } from '@/components/ui/brand-logo';
 import {
     BarChart3,
     Box,
@@ -34,10 +35,7 @@ const TestDashboardPage = () => {
             {/* SIDEBAR */}
             <aside className="w-64 border-r border-slate-800 bg-slate-900/50 backdrop-blur-xl hidden md:flex flex-col">
                 <div className="h-16 flex items-center px-6 border-b border-slate-800">
-                    <span className="text-xl font-bold text-white tracking-tight flex items-center gap-2">
-                        <div className="w-6 h-6 rounded bg-gradient-to-br from-blue-500 to-teal-400"></div>
-                        freightcode®
-                    </span>
+                    <BrandLogo />
                 </div>
 
                 <nav className="flex-1 overflow-y-auto p-4 space-y-2">

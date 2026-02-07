@@ -94,7 +94,7 @@ function DataTable<T extends Record<string, any>>({
   };
 
   return (
-    <div className={cn("bg-white rounded-lg border border-gray-200 shadow-sm", className)}>
+    <div className={cn("bg-white rounded-lg border border-gray-200 shadow-sm w-full min-w-0 overflow-hidden", className)}>
       {/* Search Bar & Toolbar */}
       {(searchable || toolbarActions) && (
         <div className="p-4 border-b border-gray-200 space-y-4">

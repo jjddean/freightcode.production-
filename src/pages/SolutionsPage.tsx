@@ -108,7 +108,7 @@ const SolutionsPage = () => {
               />
             </div>
             <div className="order-1 lg:order-2">
-              <h2 className="text-2xl font-bold text-primary-900 mb-6">Why Choose Freightcode.co.uk Solutions?</h2>
+              <h2 className="text-2xl font-bold text-primary-900 mb-6">Why Choose freightcode Solutions?</h2>
               <div className="space-y-6">
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-green-100 text-green-700 flex items-center justify-center font-bold">✓</div>

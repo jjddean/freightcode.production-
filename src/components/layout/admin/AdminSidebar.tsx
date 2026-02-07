@@ -11,6 +11,7 @@ import {
     History
 } from 'lucide-react';
 import { UserButton } from '@clerk/clerk-react';
+import { BrandLogo } from '../../ui/brand-logo';
 
 /* 
   Simplified Flat Navigation
@@ -36,10 +37,11 @@ const AdminSidebar = () => {
     return (
         <div className="hidden md:flex flex-col w-56 bg-slate-950 border-r border-slate-800/50 h-screen fixed left-0 top-0 text-slate-300 z-50">
             {/* Logo Area - Compact */}
-            <div className="h-14 flex items-center px-4 border-b border-slate-800/50 bg-slate-950/50 backdrop-blur-sm">
-                <div className="flex items-center gap-2 text-white">
-                    <ShieldCheck className="h-5 w-5 text-primary-400" />
-                    <span className="font-bold tracking-tight text-sm">Admin Panel</span>
+            <div className="h-14 flex items-center px-4 border-b border-slate-800/50 bg-slate-950/50 backdrop-blur-sm justify-between">
+                <BrandLogo inverted size="sm" />
+                <div className="flex items-center gap-2 text-white opacity-60">
+                    <ShieldCheck className="h-4 w-4 text-primary-400" />
+                    <span className="font-bold tracking-tight text-[10px] uppercase">Admin</span>
                 </div>
             </div>
 

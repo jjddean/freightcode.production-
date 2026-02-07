@@ -5,7 +5,7 @@ import DataTable from '@/components/ui/data-table';
 import type { Column } from '@/components/ui/data-table';
 import { Button } from '@/components/ui/button';
 import Footer from '@/components/layout/Footer';
-import { ShipmentMap } from '@/components/ui/ShipmentMap';
+import { ShipmentMap } from '@/components/ui/ShipMapFinal';
 import MobileDashboard from '@/components/mobile/MobileDashboard';
 
 import { useQuery, useMutation } from "convex/react";

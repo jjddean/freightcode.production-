@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrandLogo } from '../../ui/brand-logo';
 
 // Standard Bill of Lading Template
 // Designed for A4 Print
@@ -95,7 +96,7 @@ export const BillOfLadingTemplate = ({ data }: { data: any }) => {
                 <div className="border border-black p-4 h-32 flex flex-col justify-between">
                     <div>
                         <h3 className="uppercase font-bold mb-4">Signed for the Carrier</h3>
-                        <p>Freightcode.co.uk Logistics Inc.</p>
+                        <BrandLogo size="sm" />
                     </div>
                     <div className="border-t border-black pt-2 flex justify-between">
                         <span>Place: New York</span>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { SignedIn, SignedOut } from '@clerk/clerk-react';
 import { cn } from '@/lib/utils';
+import { BrandLogo } from '../ui/brand-logo';
 
 interface MobileNavItem {
   label: string;
@@ -85,9 +86,8 @@ const MobileNavigation: React.FC = () => {
 
       {/* Mobile Header */}
       <div className="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-40 md:hidden flex items-center justify-between px-4 h-14">
-        <Link to="/" className="flex items-center space-x-2">
-          <img src="/freightcode-logo.png" alt="freightcode®" className="w-8 h-8 object-contain" />
-          <span className="text-lg font-bold text-gray-900">freightcode®</span>
+        <Link to="/" className="flex items-center">
+          <BrandLogo size="md" />
         </Link>
 
         <div className="flex items-center space-x-3">

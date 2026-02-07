@@ -86,29 +86,29 @@ const MediaCardHeader: React.FC<MediaCardHeaderProps> = ({
 
       {/* Overlay */}
       <div
-        className="absolute inset-0 bg-black transition-opacity duration-300 pointer-events-none"
-        style={{ opacity: isExpanded ? Math.max(0, overlayOpacity - 0.2) : overlayOpacity }}
+        className="absolute inset-0 bg-black transition-opacity duration-300 pointer-events-none z-40"
+        style={{ opacity: isExpanded ? 0.1 : overlayOpacity }}
       />
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col justify-center h-full px-4 sm:px-6 lg:px-8 pointer-events-none">
-        <div className={cn("max-w-4xl transition-all duration-300", isExpanded && "opacity-0 invisible")}>
-          {/* Hide text when expanded to give clear view of map, or keep it? 
-               User said "expand to use", implied map usage. Text might abstract map. 
-               Let's fade it out or keep it minimal. I'll keep it for now but maybe move it.
-               Actually, let's keep it visible but allow clicks through.
-           */}
-          <div className="pointer-events-auto"> {/* Allow text interaction if needed */}
+      <div className="relative z-50 flex flex-col justify-center h-full px-4 sm:px-6 lg:px-8 pointer-events-none">
+        <div className="max-w-4xl transition-all duration-300 relative z-[60]">
+          <div className={cn(
+            "pointer-events-auto transition-all duration-300",
+            isExpanded
+              ? "opacity-0 scale-95 pointer-events-none translate-y-4"
+              : "opacity-100 scale-100"
+          )}>
             {subtitle && (
-              <p className="text-xs font-medium text-gray-200 uppercase tracking-wide mb-1">
+              <p className="text-[10px] font-semibold text-gray-200 uppercase tracking-wider mb-1 drop-shadow-sm">
                 {subtitle}
               </p>
             )}
-            <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-white mb-1">
+            <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-white mb-1 drop-shadow-md tracking-tight">
               {title}
             </h1>
             {description && (
-              <p className="text-sm text-gray-100 max-w-2xl">
+              <p className="text-xs text-gray-100 max-w-xl font-medium drop-shadow-sm leading-relaxed">
                 {description}
               </p>
             )}

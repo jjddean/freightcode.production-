@@ -1,4 +1,12 @@
 import React, { useState, useMemo } from 'react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
 import MediaCardHeader from '@/components/ui/media-card-header';
 import DataTable from '@/components/ui/data-table';
 import { Button } from '@/components/ui/button';
@@ -239,33 +247,48 @@ const ReportsPage = () => {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Date Range</label>
-                    <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
-                      <option>Last 30 days</option>
-                      <option>Last 90 days</option>
-                      <option>Last 6 months</option>
-                      <option>Last year</option>
-                      <option>Custom range</option>
-                    </select>
+                    <Select defaultValue="30">
+                      <SelectTrigger className="w-full bg-white">
+                        <SelectValue placeholder="Select date range" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="30">Last 30 days</SelectItem>
+                        <SelectItem value="90">Last 90 days</SelectItem>
+                        <SelectItem value="6m">Last 6 months</SelectItem>
+                        <SelectItem value="1y">Last year</SelectItem>
+                        <SelectItem value="custom">Custom range</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Report Type</label>
-                    <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
-                      <option>Shipment Summary</option>
-                      <option>Financial Analysis</option>
-                      <option>Carrier Performance</option>
-                      <option>Route Analysis</option>
-                      <option>Compliance Report</option>
-                    </select>
+                    <Select defaultValue="summary">
+                      <SelectTrigger className="w-full bg-white">
+                        <SelectValue placeholder="Select type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="summary">Shipment Summary</SelectItem>
+                        <SelectItem value="financial">Financial Analysis</SelectItem>
+                        <SelectItem value="carrier">Carrier Performance</SelectItem>
+                        <SelectItem value="route">Route Analysis</SelectItem>
+                        <SelectItem value="compliance">Compliance Report</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Format</label>
-                    <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
-                      <option>PDF</option>
-                      <option>Excel</option>
-                      <option>CSV</option>
-                    </select>
+                    <Select defaultValue="pdf">
+                      <SelectTrigger className="w-full bg-white">
+                        <SelectValue placeholder="Select format" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="pdf">PDF</SelectItem>
+                        <SelectItem value="excel">Excel</SelectItem>
+                        <SelectItem value="csv">CSV</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
 
@@ -274,30 +297,45 @@ const ReportsPage = () => {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                       <label className="block text-xs text-gray-500 mb-1">Carrier</label>
-                      <select className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md">
-                        <option>All Carriers</option>
-                        <option>Maersk Line</option>
-                        <option>COSCO Shipping</option>
-                        <option>MSC</option>
-                      </select>
+                      <Select defaultValue="all">
+                        <SelectTrigger className="w-full bg-white">
+                          <SelectValue placeholder="All Carriers" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Carriers</SelectItem>
+                          <SelectItem value="maersk">Maersk Line</SelectItem>
+                          <SelectItem value="cosco">COSCO Shipping</SelectItem>
+                          <SelectItem value="msc">MSC</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
                     <div>
                       <label className="block text-xs text-gray-500 mb-1">Route</label>
-                      <select className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md">
-                        <option>All Routes</option>
-                        <option>UK-EU</option>
-                        <option>UK-US</option>
-                        <option>UK-Asia</option>
-                      </select>
+                      <Select defaultValue="all">
+                        <SelectTrigger className="w-full bg-white">
+                          <SelectValue placeholder="All Routes" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Routes</SelectItem>
+                          <SelectItem value="uk-eu">UK-EU</SelectItem>
+                          <SelectItem value="uk-us">UK-US</SelectItem>
+                          <SelectItem value="uk-asia">UK-Asia</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
                     <div>
                       <label className="block text-xs text-gray-500 mb-1">Status</label>
-                      <select className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md">
-                        <option>All Statuses</option>
-                        <option>In Transit</option>
-                        <option>Delivered</option>
-                        <option>Pending</option>
-                      </select>
+                      <Select defaultValue="all">
+                        <SelectTrigger className="w-full bg-white">
+                          <SelectValue placeholder="All Statuses" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Statuses</SelectItem>
+                          <SelectItem value="transit">In Transit</SelectItem>
+                          <SelectItem value="delivered">Delivered</SelectItem>
+                          <SelectItem value="pending">Pending</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
                   </div>
                 </div>

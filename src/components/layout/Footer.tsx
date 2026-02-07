@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { BrandLogo } from '../ui/brand-logo';
 
 const Footer: React.FC = () => {
   return (
@@ -8,9 +9,8 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="col-span-1 md:col-span-2">
-            <div className="flex items-center space-x-2 mb-4">
-              <img src="/freightcode-logo.png" alt="freightcode®" className="w-8 h-8 object-contain" />
-              <span className="text-xl font-bold">freightcode®</span>
+            <div className="mb-4">
+              <BrandLogo inverted size="lg" />
             </div>
             <p className="text-gray-300 mb-4 max-w-md">
               Professional freight forwarding services connecting UK businesses to global markets.

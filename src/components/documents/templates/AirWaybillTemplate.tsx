@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrandLogo } from '../../ui/brand-logo';
 
 export const AirWaybillTemplate = ({ data }: { data: any }) => {
     const doc = data.documentData || {};
@@ -47,7 +48,7 @@ export const AirWaybillTemplate = ({ data }: { data: any }) => {
                 </div>
                 <div className="bg-white p-2">
                     <h3 className="uppercase text-[9px] font-bold">By First Carrier</h3>
-                    <div>Freightcode.co.uk Air</div>
+                    <BrandLogo size="sm" />
                 </div>
                 <div className="bg-white p-2">
                     <h3 className="uppercase text-[9px] font-bold">Airport of Destination</h3>

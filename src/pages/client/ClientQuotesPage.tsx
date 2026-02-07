@@ -174,7 +174,7 @@ const BookingDialog = ({ quote, selectedCarrier }: { quote: any, selectedCarrier
                         value: quote.value || '',
                     },
                     // riskLevel: (addInsurance ? 'low' : 'medium') as any, 
-                    // customs: addCustoms ? { filingStatus: 'pending', brokerName: 'Freightcode Customs' } : undefined,
+                    // customs: addCustoms ? { filingStatus: 'pending', brokerName: 'freightcode customs' } : undefined,
                     events: [
                         {
                             timestamp: new Date().toISOString(),

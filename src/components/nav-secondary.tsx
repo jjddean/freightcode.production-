@@ -2,6 +2,7 @@ import * as React from "react"
 import { type LucideIcon } from "lucide-react"
 import { NavLink } from "react-router-dom"
 
+import { cn } from "@/lib/utils"
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -21,8 +22,8 @@ export function NavSecondary({
   }[]
 } & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
   return (
-    <SidebarGroup {...props}>
-      <SidebarGroupContent>
+    <SidebarGroup {...props} className={cn("py-1", props.className)}>
+      <SidebarGroupContent className="flex flex-col gap-0.5">
         <SidebarMenu>
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>

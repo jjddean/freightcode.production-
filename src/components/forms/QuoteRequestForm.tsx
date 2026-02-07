@@ -13,6 +13,28 @@ import {
   quoteStep4Schema
 } from '@/lib/validation/quoteSchema';
 import { z } from 'zod';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { Check, ChevronsUpDown } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface QuoteFormData {
   origin: string;
@@ -44,10 +66,27 @@ interface QuoteRequestFormProps {
   onCancel: () => void;
   initialStep?: number;
   onStepChange?: (step: number) => void;
+  initialData?: Partial<QuoteFormData>;
 }
 
-const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel, initialStep = 1, onStepChange }) => {
+const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel, initialStep = 1, onStepChange, initialData }) => {
   const [formData, setFormData] = useState<QuoteFormData>(() => {
+    // 1. If initialData is provided (e.g. from Hero), use it to override defaults
+    if (initialData) {
+      return {
+        origin: initialData.origin || '',
+        destination: initialData.destination || '',
+        serviceType: 'ocean',
+        cargoType: 'general',
+        weight: initialData.weight || '',
+        dimensions: initialData.dimensions || { length: '', width: '', height: '' },
+        value: '',
+        incoterms: 'FOB',
+        urgency: 'standard',
+        additionalServices: [],
+        contactInfo: { name: '', email: '', phone: '', company: '' }
+      } as QuoteFormData;
+    }
     const saved = localStorage.getItem('quoteFormDraft');
     if (saved) {
       try { return JSON.parse(saved); } catch (e) { console.error(e); }
@@ -214,31 +253,99 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Origin</label>
-                <select
-                  value={formData.origin}
-                  onChange={(e) => handleInputChange('origin', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                >
-                  <option value="">Select origin</option>
-                  {SUPPORTED_PORTS.map(port => (
-                    <option key={port} value={port}>{port}</option>
-                  ))}
-                </select>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      className={cn(
+                        "w-full justify-between font-normal",
+                        !formData.origin && "text-muted-foreground"
+                      )}
+                    >
+                      {formData.origin
+                        ? SUPPORTED_PORTS.find((port) => port === formData.origin)
+                        : "Select origin"}
+                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-full p-0" align="start">
+                    <Command>
+                      <CommandInput placeholder="Search origin..." />
+                      <CommandList>
+                        <CommandEmpty>No port found.</CommandEmpty>
+                        <CommandGroup>
+                          {SUPPORTED_PORTS.map((port) => (
+                            <CommandItem
+                              key={port}
+                              value={port}
+                              onSelect={() => {
+                                handleInputChange('origin', port === formData.origin ? "" : port)
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  formData.origin === port ? "opacity-100" : "opacity-0"
+                                )}
+                              />
+                              {port}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
                 {errors.origin && <p className="text-red-500 text-xs mt-1">{errors.origin}</p>}
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Destination</label>
-                <select
-                  value={formData.destination}
-                  onChange={(e) => handleInputChange('destination', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                >
-                  <option value="">Select destination</option>
-                  {SUPPORTED_PORTS.map(port => (
-                    <option key={port} value={port}>{port}</option>
-                  ))}
-                </select>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      className={cn(
+                        "w-full justify-between font-normal",
+                        !formData.destination && "text-muted-foreground"
+                      )}
+                    >
+                      {formData.destination
+                        ? SUPPORTED_PORTS.find((port) => port === formData.destination)
+                        : "Select destination"}
+                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-full p-0" align="start">
+                    <Command>
+                      <CommandInput placeholder="Search destination..." />
+                      <CommandList>
+                        <CommandEmpty>No port found.</CommandEmpty>
+                        <CommandGroup>
+                          {SUPPORTED_PORTS.map((port) => (
+                            <CommandItem
+                              key={port}
+                              value={port}
+                              onSelect={() => {
+                                handleInputChange('destination', port === formData.destination ? "" : port)
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  formData.destination === port ? "opacity-100" : "opacity-0"
+                                )}
+                              />
+                              {port}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
                 {errors.destination && <p className="text-red-500 text-xs mt-1">{errors.destination}</p>}
               </div>
             </div>
@@ -246,33 +353,40 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Service Type</label>
-                <select
+                <Select
                   value={formData.serviceType}
-                  onChange={(e) => handleInputChange('serviceType', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  onValueChange={(value) => handleInputChange('serviceType', value)}
                 >
-                  <option value="ocean">Ocean Freight</option>
-                  <option value="air">Air Freight</option>
-                  <option value="road">Road Transport</option>
-                  <option value="rail">Rail Transport</option>
-                </select>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select service type" />
+                  </SelectTrigger>
+                  <SelectContent className="z-[99999]">
+                    <SelectItem value="ocean">Ocean Freight</SelectItem>
+                    <SelectItem value="air">Air Freight</SelectItem>
+                    <SelectItem value="road">Road Transport</SelectItem>
+                    <SelectItem value="rail">Rail Transport</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Cargo Type</label>
-                <select
+                <Select
                   value={formData.cargoType}
-                  onChange={(e) => handleInputChange('cargoType', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  onValueChange={(value) => handleInputChange('cargoType', value)}
                 >
-                  <option value="general">General Cargo</option>
-                  <option value="dangerous">Dangerous Goods</option>
-                  <option value="perishable">Perishable</option>
-                  <option value="oversized">Oversized</option>
-                  <option value="fragile">Fragile</option>
-                </select>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select cargo type" />
+                  </SelectTrigger>
+                  <SelectContent className="z-[99999]">
+                    <SelectItem value="general">General Cargo</SelectItem>
+                    <SelectItem value="dangerous">Dangerous Goods</SelectItem>
+                    <SelectItem value="perishable">Perishable</SelectItem>
+                    <SelectItem value="oversized">Oversized</SelectItem>
+                    <SelectItem value="fragile">Fragile</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
-
             </div>
           </div >
         );
@@ -282,46 +396,47 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
           <div className="space-y-4">
             <h3 className="text-lg font-medium text-gray-900 mb-4">Cargo Specifications</h3>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Total Weight (kg)</label>
-              <input
-                type="number"
-                value={formData.weight}
-                onChange={(e) => handleInputChange('weight', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                placeholder="Enter weight in kg"
-              />
-              {errors.weight && <p className="text-red-500 text-xs mt-1">{errors.weight}</p>}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Dimensions (cm)</label>
-              <div className="grid grid-cols-3 gap-4">
-                <input
-                  type="number"
-                  value={formData.dimensions.length}
-                  onChange={(e) => handleInputChange('dimensions.length', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                  placeholder="Length"
-                />
-                <input
-                  type="number"
-                  value={formData.dimensions.width}
-                  onChange={(e) => handleInputChange('dimensions.width', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                  placeholder="Width"
-                />
-                <input
-                  type="number"
-                  value={formData.dimensions.height}
-                  onChange={(e) => handleInputChange('dimensions.height', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                  placeholder="Height"
-                />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Total Weight (kg)</label>
+                <div className="relative">
+                  <input
+                    type="number"
+                    value={formData.weight}
+                    onChange={(e) => handleInputChange('weight', e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-lg"
+                    placeholder="0"
+                  />
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-medium">kg</span>
+                </div>
+                {errors.weight && <p className="text-red-500 text-xs mt-1">{errors.weight}</p>}
               </div>
-              {(errors['dimensions.length'] || errors['dimensions.width'] || errors['dimensions.height']) && (
-                <p className="text-red-500 text-xs mt-1">All dimensions are required and must be valid numbers</p>
-              )}
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Dimensions (L x W x H)</label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    defaultValue={`${formData.dimensions.length}x${formData.dimensions.width}x${formData.dimensions.height}`}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      // Simple parse logic: split by 'x', space, or '*'
+                      const parts = val.toLowerCase().split(/[x\s*]+/).filter(p => !isNaN(parseFloat(p)));
+
+                      if (parts.length >= 1) handleInputChange('dimensions.length', parts[0]);
+                      if (parts.length >= 2) handleInputChange('dimensions.width', parts[1]);
+                      if (parts.length >= 3) handleInputChange('dimensions.height', parts[2]);
+                    }}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-lg"
+                    placeholder="e.g. 120x80x100"
+                  />
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-medium">cm</span>
+                </div>
+                <p className="text-xs text-gray-500 mt-2">Format: Length x Width x Height</p>
+                {(errors['dimensions.length'] || errors['dimensions.width'] || errors['dimensions.height']) && (
+                  <p className="text-red-500 text-xs mt-1">Please enter valid dimensions (e.g. 120x80x100)</p>
+                )}
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -338,16 +453,20 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Incoterms</label>
-                <select
+                <Select
                   value={formData.incoterms}
-                  onChange={(e) => handleInputChange('incoterms', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  onValueChange={(value) => handleInputChange('incoterms', value)}
                 >
-                  <option value="EXW">EXW - Ex Works</option>
-                  <option value="FOB">FOB - Free on Board</option>
-                  <option value="CIF">CIF - Cost, Insurance & Freight</option>
-                  <option value="DDP">DDP - Delivered Duty Paid</option>
-                </select>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select incoterms" />
+                  </SelectTrigger>
+                  <SelectContent className="z-[99999]">
+                    <SelectItem value="EXW">EXW - Ex Works</SelectItem>
+                    <SelectItem value="FOB">FOB - Free on Board</SelectItem>
+                    <SelectItem value="CIF">CIF - Cost, Insurance & Freight</SelectItem>
+                    <SelectItem value="DDP">DDP - Delivered Duty Paid</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
           </div>

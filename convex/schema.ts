@@ -448,6 +448,7 @@ export default defineSchema({
     sender: v.string(), // "user" | "admin"
     read: v.boolean(),
     timestamp: v.number(),
+    archived: v.optional(v.boolean()),
   }).index("byUserId", ["userId"])
     .index("byTimestamp", ["timestamp"])
     .index("byRead", ["read"]), // Efficiently find unread messages

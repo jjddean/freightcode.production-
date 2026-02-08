@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import MediaCardHeader from '@/components/ui/media-card-header';
 import Modal from '@/components/ui/modal';

@@ -61,6 +61,7 @@ const AdminCarriersPage = lazy(() => import('./pages/admin/AdminCarriersPage'));
 const AdminDocumentsPage = lazy(() => import('./pages/admin/AdminDocumentsPage'));
 const AdminCompliancePage = lazy(() => import('./pages/admin/AdminCompliancePage'));
 const AdminSettingsPage = lazy(() => import('./pages/admin/AdminSettingsPage'));
+const AdminMessagesPage = lazy(() => import('./pages/admin/AdminMessagesPage'));
 
 
 // --- Helper Components ---
@@ -202,6 +203,7 @@ export default function App() {
                     <AdminLayout>
                       <Routes>
                         <Route index element={<AdminDashboardPage />} />
+                        <Route path="messages" element={<AdminMessagesPage />} />
                         <Route path="approvals" element={<AdminApprovalsPage />} />
                         <Route path="bookings" element={<AdminBookingsPage />} />
                         <Route path="payments" element={<AdminFinancePage />} />

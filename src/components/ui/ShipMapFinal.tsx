@@ -51,30 +51,50 @@ export function ShipmentMap({
     useEffect(() => {
         if (!MAPBOX_TOKEN || !mapContainerRef.current || mapRef.current) return;
 
+        // check for webgl support
+        if (!mapboxgl.supported()) {
+            mapContainerRef.current.innerHTML = '<div style="display:flex;align-items:center;justify-center;height:100%;color:gray;">Map not supported</div>';
+            return;
+        }
+
         // Clear container to avoid Mapbox warnings
         mapContainerRef.current.innerHTML = '';
 
         mapboxgl.accessToken = MAPBOX_TOKEN;
 
-        const map = new mapboxgl.Map({
-            container: mapContainerRef.current,
-            style: 'mapbox://styles/mapbox/satellite-streets-v12',
-            center: [0, 20],
-            zoom: 1.5,
-            attributionControl: false
-        });
+        try {
+            const map = new mapboxgl.Map({
+                container: mapContainerRef.current,
+                style: 'mapbox://styles/mapbox/satellite-streets-v12',
+                center: [0, 20],
+                zoom: 1.5,
+                attributionControl: false
+            });
 
-        map.on('error', (e) => {
-            console.error('Mapbox error:', e);
-        });
+            map.on('error', (e) => {
+                console.error('Mapbox error:', e);
+                // Handle context loss or other runtime errors
+                if (e.error?.message === 'Failed to initialize WebGL') {
+                    setIsMapReady(false);
+                    if (mapContainerRef.current) {
+                        mapContainerRef.current.innerHTML = '<div class="p-4 text-center text-sm text-gray-500 bg-gray-100 h-full flex items-center justify-center">Map 3D Context Failed</div>';
+                    }
+                }
+            });
 
-        map.on('load', () => {
-            mapRef.current = map;
-            setIsMapReady(true);
-            // Initial resize to ensure canvas fills container
-            map.resize();
-            setTimeout(() => map.resize(), 100);
-        });
+            map.on('load', () => {
+                mapRef.current = map;
+                setIsMapReady(true);
+                // Initial resize to ensure canvas fills container
+                map.resize();
+                setTimeout(() => map.resize(), 100);
+            });
+        } catch (error) {
+            console.error("Map initialization failed:", error);
+            if (mapContainerRef.current) {
+                mapContainerRef.current.innerHTML = '<div class="p-4 text-center text-sm text-gray-500 bg-gray-100 h-full flex items-center justify-center">Map Could Not Load</div>';
+            }
+        }
 
         return () => {
             if (mapRef.current) {

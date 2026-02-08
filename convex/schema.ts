@@ -441,4 +441,14 @@ export default defineSchema({
     createdAt: v.number(),
   }).index("byUserId", ["userId"])
     .index("byOrgId", ["orgId"]),
+
+  messages: defineTable({
+    body: v.string(),
+    userId: v.string(), // Conversation ID (The Client's User ID)
+    sender: v.string(), // "user" | "admin"
+    read: v.boolean(),
+    timestamp: v.number(),
+  }).index("byUserId", ["userId"])
+    .index("byTimestamp", ["timestamp"])
+    .index("byRead", ["read"]), // Efficiently find unread messages
 }); 

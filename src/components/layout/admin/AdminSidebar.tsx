@@ -8,10 +8,13 @@ import {
     Settings,
     ShieldCheck,
     CreditCard,
-    History
+    History,
+    Inbox
 } from 'lucide-react';
 import { UserButton } from '@clerk/clerk-react';
 import { BrandLogo } from '../../ui/brand-logo';
+import { useQuery } from "convex/react";
+import { api } from "../../../../convex/_generated/api";
 
 /* 
   Simplified Flat Navigation
@@ -20,11 +23,11 @@ import { BrandLogo } from '../../ui/brand-logo';
 
 const navigation: { name: string; href: string; icon: any; badge?: number }[] = [
     { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
+    { name: 'Messages', href: '/admin/messages', icon: Inbox, badge: 3 }, // Placeholder badge
     { name: 'Bookings', href: '/admin/bookings', icon: FileText },
     { name: 'Shipments', href: '/admin/shipments', icon: Truck },
     { name: 'Documents', href: '/admin/documents', icon: FileText },
-    { name: 'Customers', href: '/admin/customers', icon: Users },
-    { name: 'Waitlist', href: '/admin/waitlist', icon: History },
+    { name: 'Customers', href: '/admin/customers', icon: Users }, // Waitlist moved here
     { name: 'Audit Logs', href: '/admin/audit', icon: ShieldCheck },
     { name: 'Finance', href: '/admin/payments', icon: CreditCard },
     { name: 'Compliance', href: '/admin/compliance', icon: ShieldCheck },
@@ -33,6 +36,14 @@ const navigation: { name: string; href: string; icon: any; badge?: number }[] = 
 
 const AdminSidebar = () => {
     const location = useLocation();
+    const unreadCount = useQuery(api.messages.adminUnreadCount) || 0;
+
+    const navigationWithBadges = navigation.map(item => {
+        if (item.name === 'Messages') {
+            return { ...item, badge: unreadCount > 0 ? unreadCount : undefined };
+        }
+        return item;
+    });
 
     return (
         <div className="hidden md:flex flex-col w-56 bg-slate-950 border-r border-slate-800/50 h-screen fixed left-0 top-0 text-slate-300 z-50">
@@ -48,7 +59,7 @@ const AdminSidebar = () => {
             {/* Navigation - Flat & Dense */}
             <div className="flex-1 overflow-y-auto py-4 px-2 custom-scrollbar">
                 <nav className="space-y-0.5">
-                    {navigation.map((item) => {
+                    {navigationWithBadges.map((item) => {
                         const isActive = location.pathname === item.href;
                         return (
                             <NavLink
@@ -65,11 +76,11 @@ const AdminSidebar = () => {
                                     <item.icon className={`h-4 w-4 mr-3 ${isActive ? 'text-primary-400' : 'text-slate-500'}`} />
                                     {item.name}
                                 </div>
-                                {item.badge && (
+                                {item.badge ? (
                                     <span className={`text-[11px] px-2 py-0.5 rounded-full font-bold ${isActive ? 'bg-primary-500/20 text-primary-300' : 'bg-slate-800 text-slate-500'}`}>
                                         {item.badge}
                                     </span>
-                                )}
+                                ) : null}
                             </NavLink>
                         );
                     })}

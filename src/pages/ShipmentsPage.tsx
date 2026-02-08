@@ -1,4 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { format } from "date-fns";
+import { Calendar as CalendarIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import MediaCardHeader from '@/components/ui/media-card-header';
 import DataTable from '@/components/ui/data-table';
 import { Button } from '@/components/ui/button';
@@ -641,12 +650,32 @@ const ShipmentsPage = () => {
                       </div>
                     )}
                     {filter.type === 'date' && (
-                      <Input
-                        type="date"
-                        className="h-9"
-                        value={activeFilters[filter.key] || ''}
-                        onChange={(e) => handleFilterChange(filter.key, e.target.value)}
-                      />
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant={"outline"}
+                            className={cn(
+                              "w-full justify-start text-left font-normal",
+                              !activeFilters[filter.key] && "text-muted-foreground"
+                            )}
+                          >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {activeFilters[filter.key] ? (
+                              format(new Date(activeFilters[filter.key]), "PPP")
+                            ) : (
+                              <span>Pick a date</span>
+                            )}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={activeFilters[filter.key] ? new Date(activeFilters[filter.key]) : undefined}
+                            onSelect={(date) => handleFilterChange(filter.key, date ? format(date, "yyyy-MM-dd") : "")}
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
                     )}
                   </div>
                 ))}

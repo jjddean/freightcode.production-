@@ -15,6 +15,8 @@ import { IconCirclePlusFilled, IconMail } from "@tabler/icons-react"
 
 import { useLocation } from "react-router-dom"
 import { useUser } from "@clerk/clerk-react"
+import { useQuery } from "convex/react"
+import { api } from "../../convex/_generated/api"
 
 import { NavMain } from "@/components/nav-main"
 import { NavDocuments } from "@/components/nav-documents"
@@ -32,7 +34,9 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogDescription } from "@/components/ui/dialog"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { InstantQuoteWidget } from "@/components/widgets/InstantQuoteWidget"
+import { ChatWidget } from "@/components/widgets/ChatWidget"
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
 
 const navMain = [
@@ -110,6 +114,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       avatar: "",
     }
 
+  const unreadCount = useQuery(api.messages.unreadCount, user?.id ? { userId: user.id } : "skip") || 0;
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader className="border-b-0 px-2 pt-2">
@@ -138,14 +144,27 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 </div>
               </DialogContent>
             </Dialog>
-            <Button
-              size="icon"
-              className="size-8 shrink-0 group-data-[collapsible=icon]:hidden"
-              variant="outline"
-            >
-              <IconMail className="size-4" />
-              <span className="sr-only">Inbox</span>
-            </Button>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  size="icon"
+                  className="size-8 shrink-0 group-data-[collapsible=icon]:hidden relative"
+                  variant="outline"
+                >
+                  <IconMail className="size-4" />
+                  {unreadCount > 0 && (
+                    <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-3 w-3 bg-cyan-500"></span>
+                    </span>
+                  )}
+                  <span className="sr-only">Inbox</span>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent side="right" align="start" className="w-auto p-0 border-none shadow-xl ml-2">
+                <ChatWidget />
+              </PopoverContent>
+            </Popover>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>

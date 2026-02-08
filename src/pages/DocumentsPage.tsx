@@ -430,7 +430,7 @@ const DocumentsPage = () => {
                             </div>
                             <div className="ml-4">
                                 <h3 className="text-sm font-medium text-gray-500">Completed</h3>
-                                <p className="text-sm font-medium text-gray-500">Fully executed</p>
+                                <p className="text-xs text-gray-400">Fully executed</p>
                                 <p className="text-2xl font-semibold text-gray-900">
                                     {liveDocuments?.filter((d: any) => d.docusign?.status === 'completed' || d.status === 'approved').length || 0}
                                 </p>
@@ -448,7 +448,7 @@ const DocumentsPage = () => {
                             </div>
                             <div className="ml-4">
                                 <h3 className="text-sm font-medium text-gray-500">Drafts</h3>
-                                <p className="text-sm font-medium text-gray-500">In progress</p>
+                                <p className="text-xs text-gray-400">In progress</p>
                                 <p className="text-2xl font-semibold text-gray-900">
                                     {liveDocuments?.filter((d: any) => d.status === 'draft').length || 0}
                                 </p>
@@ -461,16 +461,17 @@ const DocumentsPage = () => {
                 <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
                     <div className="flex items-center gap-4">
                         <h2 className="text-xl font-semibold text-gray-900">Documents</h2>
-                        <select
-                            value={docTypeFilter}
-                            onChange={(e) => setDocTypeFilter(e.target.value)}
-                            className="border rounded-md px-3 py-1.5 text-sm bg-white"
-                        >
-                            <option value="all">All Types</option>
-                            <option value="bill_of_lading">Bill of Lading</option>
-                            <option value="commercial_invoice">Commercial Invoice</option>
-                            <option value="air_waybill">Air Waybill</option>
-                        </select>
+                        <Select value={docTypeFilter} onValueChange={setDocTypeFilter}>
+                            <SelectTrigger className="w-[180px] bg-white">
+                                <SelectValue placeholder="All Types" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="all">All Types</SelectItem>
+                                <SelectItem value="bill_of_lading">Bill of Lading</SelectItem>
+                                <SelectItem value="commercial_invoice">Commercial Invoice</SelectItem>
+                                <SelectItem value="air_waybill">Air Waybill</SelectItem>
+                            </SelectContent>
+                        </Select>
                     </div>
                     <div className="flex items-center gap-2">
                         <SmartUploadButton onParse={async (data) => {

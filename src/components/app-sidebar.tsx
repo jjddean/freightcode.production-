@@ -31,6 +31,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogDescription } from "@/components/ui/dialog"
+import { InstantQuoteWidget } from "@/components/widgets/InstantQuoteWidget"
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
 
 const navMain = [
   {
@@ -115,13 +118,26 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </a>
         <SidebarMenu className="pb-0">
           <SidebarMenuItem className="flex items-center gap-2">
-            <SidebarMenuButton
-              tooltip="Quick Quote"
-              className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear"
-            >
-              <IconCirclePlusFilled className="size-4" />
-              <span>Quick Quote</span>
-            </SidebarMenuButton>
+            <Dialog>
+              <DialogTrigger asChild>
+                <SidebarMenuButton
+                  tooltip="Quick Quote"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear"
+                >
+                  <IconCirclePlusFilled className="size-4" />
+                  <span>Quick Quote</span>
+                </SidebarMenuButton>
+              </DialogTrigger>
+              <DialogContent className="w-[380px] p-0 bg-transparent border-none shadow-none text-white">
+                <VisuallyHidden>
+                  <DialogTitle>Quick Rate Search</DialogTitle>
+                  <DialogDescription>Instantly check live market rates for your shipments.</DialogDescription>
+                </VisuallyHidden>
+                <div className="flex justify-center">
+                  <InstantQuoteWidget />
+                </div>
+              </DialogContent>
+            </Dialog>
             <Button
               size="icon"
               className="size-8 shrink-0 group-data-[collapsible=icon]:hidden"

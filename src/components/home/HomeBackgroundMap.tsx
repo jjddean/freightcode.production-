@@ -20,29 +20,46 @@ export function HomeBackgroundMap({ focusedLocation }: HomeBackgroundMapProps) {
 
     // 1. Initialize Map
     useEffect(() => {
-        if (!MAPBOX_TOKEN || !mapContainerRef.current || mapRef.current) return;
+        if (!mapContainerRef.current) return; // Keep original check for mapContainerRef.current
 
-        mapboxgl.accessToken = MAPBOX_TOKEN;
+        // Check for WebGL support
+        if (!mapboxgl.supported()) {
+            console.warn('WebGL not supported');
+            return;
+        }
 
-        const map = new mapboxgl.Map({
-            container: mapContainerRef.current,
-            style: 'mapbox://styles/mapbox/dark-v11', // Dark theme for background
-            center: INITIAL_CENTER,
-            zoom: INITIAL_ZOOM,
-            interactive: false, // Disable user interaction
-            attributionControl: false
-        });
+        // Add original checks for MAPBOX_TOKEN and mapRef.current
+        if (!MAPBOX_TOKEN || mapRef.current) return;
 
-        map.on('load', () => {
-            mapRef.current = map;
-            setIsMapReady(true);
+        mapboxgl.accessToken = MAPBOX_TOKEN; // Keep original token usage
 
-            // Start rotation immediately
-            startRotation();
-        });
+        try {
+            const map = new mapboxgl.Map({
+                container: mapContainerRef.current, // Keep original mapContainerRef.current
+                style: 'mapbox://styles/mapbox/dark-v11', // Dark theme for background
+                center: INITIAL_CENTER, // Keep original constant
+                zoom: INITIAL_ZOOM, // Keep original constant
+                interactive: false, // Disable user interaction
+                attributionControl: false
+            });
+
+            map.on('error', (e) => { // Add new error handler
+                console.error('Mapbox error:', e);
+            });
+
+            map.on('load', () => {
+                mapRef.current = map;
+                setIsMapReady(true); // Keep original state update
+
+                // Start rotation immediately
+                startRotation(); // Keep original rotation start
+            });
+        } catch (error) {
+            console.error("HomeBackgroundMap initialization failed:", error);
+        }
 
         return () => {
-            stopRotation();
+            stopRotation(); // Keep original stop rotation
             if (mapRef.current) {
                 mapRef.current.remove();
                 mapRef.current = null;

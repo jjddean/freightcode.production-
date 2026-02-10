@@ -20,16 +20,15 @@ if (container) {
   if ('serviceWorker' in navigator) {
     if (import.meta.env.PROD) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW failed', err));
+        navigator.serviceWorker.register('/sw.js').catch(err => console.error('SW failed', err));
       });
     } else {
-      // In development, unregister any existing service workers to prevent caching issues
-      navigator.serviceWorker.getRegistrations().then((registrations) => {
-        for (const registration of registrations) {
+      // Unregister SW in development
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.ready.then(registration => {
           registration.unregister();
-          console.log('SW unregistered in dev mode');
-        }
-      });
+        });
+      }
     }
   }
 

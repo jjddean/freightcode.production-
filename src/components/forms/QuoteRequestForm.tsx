@@ -1,25 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import { Input } from '@/components/ui/input';
 import { SUPPORTED_PORTS } from '@/lib/ports';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import LiveRateComparison from '@/components/shipping/LiveRateComparison';
 import { type RateRequest, type CarrierRate } from '@/services/carriers';
-import { CO2Badge } from '@/components/ui/co2-badge';
-import { LandedCostTool } from '@/components/ui/landed-cost-tool';
+
 import {
   quoteStep1Schema,
   quoteStep2Schema,
-  quoteStep3Schema,
-  quoteStep4Schema
+  quoteStep3Schema
 } from '@/lib/validation/quoteSchema';
-import { z } from 'zod';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+
 import {
   Command,
   CommandEmpty,
@@ -33,8 +25,16 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { Check, ChevronsUpDown } from 'lucide-react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Check, ChevronsUpDown, Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
+
 
 interface QuoteFormData {
   origin: string;
@@ -76,13 +76,13 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
       return {
         origin: initialData.origin || '',
         destination: initialData.destination || '',
-        serviceType: 'ocean',
+        serviceType: '',
         cargoType: 'general',
         weight: initialData.weight || '',
         dimensions: initialData.dimensions || { length: '', width: '', height: '' },
         value: '',
         incoterms: 'FOB',
-        urgency: 'standard',
+        urgency: '',
         additionalServices: [],
         contactInfo: { name: '', email: '', phone: '', company: '' }
       } as QuoteFormData;
@@ -94,13 +94,13 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
     return {
       origin: 'Shanghai',
       destination: 'London',
-      serviceType: 'ocean',
-      cargoType: 'general',
+      serviceType: '',
+      cargoType: '',
       weight: '1000',
       dimensions: { length: '120', width: '100', height: '100' },
       value: '5000',
       incoterms: 'FOB',
-      urgency: 'standard',
+      urgency: '',
       additionalServices: [],
       contactInfo: { name: 'Test Demo', email: 'demo@freightcode.co.uk', phone: '555-0123', company: 'Demo Corp' }
     };
@@ -114,7 +114,10 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
 
   const [currentStep, setCurrentStep] = useState(initialStep);
   const [selectedRate, setSelectedRate] = useState<CarrierRate | null>(null);
-  const totalSteps = 5; // Added rate comparison step
+  const [originOpen, setOriginOpen] = useState(false);
+  const [destOpen, setDestOpen] = useState(false);
+
+  const totalSteps = 5; // Added Summary Step (Pre-Rates)
 
   const rateRequest = React.useMemo<RateRequest>(() => ({
     origin: {
@@ -206,8 +209,8 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
         quoteStep1Schema.parse(formData);
       } else if (step === 2) {
         quoteStep2Schema.parse(formData);
-      } else if (step === 4) {
-        quoteStep4Schema.parse(formData);
+      } else if (step === 3) {
+        quoteStep3Schema.parse(formData);
       }
       setErrors({});
       return true;
@@ -253,34 +256,33 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Origin</label>
-                <Popover>
+                <Popover open={originOpen} onOpenChange={setOriginOpen}>
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
                       role="combobox"
-                      className={cn(
-                        "w-full justify-between font-normal",
-                        !formData.origin && "text-muted-foreground"
-                      )}
+                      aria-expanded={originOpen}
+                      className="w-full justify-between"
                     >
                       {formData.origin
                         ? SUPPORTED_PORTS.find((port) => port === formData.origin)
-                        : "Select origin"}
+                        : "Select origin..."}
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-full p-0" align="start">
+                  <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
                     <Command>
                       <CommandInput placeholder="Search origin..." />
                       <CommandList>
-                        <CommandEmpty>No port found.</CommandEmpty>
+                        <CommandEmpty>No origin found.</CommandEmpty>
                         <CommandGroup>
                           {SUPPORTED_PORTS.map((port) => (
                             <CommandItem
                               key={port}
                               value={port}
-                              onSelect={() => {
-                                handleInputChange('origin', port === formData.origin ? "" : port)
+                              onSelect={(currentValue) => {
+                                handleInputChange('origin', currentValue);
+                                setOriginOpen(false);
                               }}
                             >
                               <Check
@@ -297,39 +299,37 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
                     </Command>
                   </PopoverContent>
                 </Popover>
-                {errors.origin && <p className="text-red-500 text-xs mt-1">{errors.origin}</p>}
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Destination</label>
-                <Popover>
+                <Popover open={destOpen} onOpenChange={setDestOpen}>
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
                       role="combobox"
-                      className={cn(
-                        "w-full justify-between font-normal",
-                        !formData.destination && "text-muted-foreground"
-                      )}
+                      aria-expanded={destOpen}
+                      className="w-full justify-between"
                     >
                       {formData.destination
                         ? SUPPORTED_PORTS.find((port) => port === formData.destination)
-                        : "Select destination"}
+                        : "Select destination..."}
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-full p-0" align="start">
+                  <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
                     <Command>
                       <CommandInput placeholder="Search destination..." />
                       <CommandList>
-                        <CommandEmpty>No port found.</CommandEmpty>
+                        <CommandEmpty>No destination found.</CommandEmpty>
                         <CommandGroup>
                           {SUPPORTED_PORTS.map((port) => (
                             <CommandItem
                               key={port}
                               value={port}
-                              onSelect={() => {
-                                handleInputChange('destination', port === formData.destination ? "" : port)
+                              onSelect={(currentValue) => {
+                                handleInputChange('destination', currentValue);
+                                setDestOpen(false);
                               }}
                             >
                               <Check
@@ -350,7 +350,7 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Service Type</label>
                 <Select
@@ -358,7 +358,7 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
                   onValueChange={(value) => handleInputChange('serviceType', value)}
                 >
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select service type" />
+                    <SelectValue placeholder="Select service" />
                   </SelectTrigger>
                   <SelectContent className="z-[99999]">
                     <SelectItem value="ocean">Ocean Freight</SelectItem>
@@ -376,7 +376,7 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
                   onValueChange={(value) => handleInputChange('cargoType', value)}
                 >
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select cargo type" />
+                    <SelectValue placeholder="Select cargo" />
                   </SelectTrigger>
                   <SelectContent className="z-[99999]">
                     <SelectItem value="general">General Cargo</SelectItem>
@@ -384,6 +384,23 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
                     <SelectItem value="perishable">Perishable</SelectItem>
                     <SelectItem value="oversized">Oversized</SelectItem>
                     <SelectItem value="fragile">Fragile</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Urgency</label>
+                <Select
+                  value={formData.urgency}
+                  onValueChange={(value) => handleInputChange('urgency', value)}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select urgency" />
+                  </SelectTrigger>
+                  <SelectContent className="z-[99999]">
+                    <SelectItem value="standard">Standard (7-14 days)</SelectItem>
+                    <SelectItem value="express">Express (3-7 days)</SelectItem>
+                    <SelectItem value="urgent">Urgent (1-3 days)</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -400,41 +417,54 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Total Weight (kg)</label>
                 <div className="relative">
-                  <input
+                  <Input
                     type="number"
                     value={formData.weight}
                     onChange={(e) => handleInputChange('weight', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-lg"
+                    className="pr-10 text-lg"
                     placeholder="0"
                   />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-medium">kg</span>
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm font-medium pointer-events-none">kg</span>
                 </div>
                 {errors.weight && <p className="text-red-500 text-xs mt-1">{errors.weight}</p>}
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Dimensions (L x W x H)</label>
-                <div className="relative">
-                  <input
-                    type="text"
-                    defaultValue={`${formData.dimensions.length}x${formData.dimensions.width}x${formData.dimensions.height}`}
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      // Simple parse logic: split by 'x', space, or '*'
-                      const parts = val.toLowerCase().split(/[x\s*]+/).filter(p => !isNaN(parseFloat(p)));
-
-                      if (parts.length >= 1) handleInputChange('dimensions.length', parts[0]);
-                      if (parts.length >= 2) handleInputChange('dimensions.width', parts[1]);
-                      if (parts.length >= 3) handleInputChange('dimensions.height', parts[2]);
-                    }}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-lg"
-                    placeholder="e.g. 120x80x100"
-                  />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-medium">cm</span>
+                <div className="grid grid-cols-3 gap-2">
+                  <div className="relative">
+                    <Input
+                      type="number"
+                      placeholder="L"
+                      value={formData.dimensions.length}
+                      onChange={(e) => handleInputChange('dimensions.length', e.target.value)}
+                      className="pr-8"
+                    />
+                    <span className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground text-xs font-medium pointer-events-none">cm</span>
+                  </div>
+                  <div className="relative">
+                    <Input
+                      type="number"
+                      placeholder="W"
+                      value={formData.dimensions.width}
+                      onChange={(e) => handleInputChange('dimensions.width', e.target.value)}
+                      className="pr-8"
+                    />
+                    <span className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground text-xs font-medium pointer-events-none">cm</span>
+                  </div>
+                  <div className="relative">
+                    <Input
+                      type="number"
+                      placeholder="H"
+                      value={formData.dimensions.height}
+                      onChange={(e) => handleInputChange('dimensions.height', e.target.value)}
+                      className="pr-8"
+                    />
+                    <span className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground text-xs font-medium pointer-events-none">cm</span>
+                  </div>
                 </div>
-                <p className="text-xs text-gray-500 mt-2">Format: Length x Width x Height</p>
                 {(errors['dimensions.length'] || errors['dimensions.width'] || errors['dimensions.height']) && (
-                  <p className="text-red-500 text-xs mt-1">Please enter valid dimensions (e.g. 120x80x100)</p>
+                  <p className="text-red-500 text-xs mt-1">Please enter all dimensions</p>
                 )}
               </div>
             </div>
@@ -442,11 +472,10 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Cargo Value (£)</label>
-                <input
+                <Input
                   type="number"
                   value={formData.value}
                   onChange={(e) => handleInputChange('value', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                   placeholder="Enter cargo value"
                 />
               </div>
@@ -475,76 +504,15 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
       case 3:
         return (
           <div className="space-y-4">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Service Options</h3>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Urgency</label>
-              <div className="space-y-2">
-                {[
-                  { value: 'standard', label: 'Standard (7-14 days)', price: 'Standard pricing' },
-                  { value: 'express', label: 'Express (3-7 days)', price: '+25% premium' },
-                  { value: 'urgent', label: 'Urgent (1-3 days)', price: '+50% premium' }
-                ].map((option) => (
-                  <label key={option.value} className="flex items-center space-x-3 p-3 border border-gray-200 rounded-md hover:bg-gray-50 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="urgency"
-                      value={option.value}
-                      checked={formData.urgency === option.value}
-                      onChange={(e) => handleInputChange('urgency', e.target.value)}
-                      className="text-primary focus:ring-primary"
-                    />
-                    <div className="flex-1">
-                      <div className="font-medium text-gray-900">{option.label}</div>
-                      <div className="text-sm text-gray-500">{option.price}</div>
-                    </div>
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Additional Services</label>
-              <div className="space-y-2">
-                {[
-                  { value: 'insurance', label: 'Cargo Insurance', desc: 'Full coverage for cargo value' },
-                  { value: 'customs', label: 'Customs Clearance', desc: 'Complete customs handling' },
-                  { value: 'packaging', label: 'Professional Packaging', desc: 'Export-grade packaging' },
-                  { value: 'tracking', label: 'Premium Tracking', desc: 'Real-time GPS tracking' }
-                ].map((service) => (
-                  <label key={service.value} className="flex items-center space-x-3 p-3 border border-gray-200 rounded-md hover:bg-gray-50 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={formData.additionalServices.includes(service.value)}
-                      onChange={() => handleServiceToggle(service.value)}
-                      className="text-primary focus:ring-primary"
-                    />
-                    <div className="flex-1">
-                      <div className="font-medium text-gray-900">{service.label}</div>
-                      <div className="text-sm text-gray-500">{service.desc}</div>
-                    </div>
-                  </label>
-                ))}
-              </div>
-            </div>
-          </div>
-        );
-
-
-
-      case 4:
-        return (
-          <div className="space-y-4">
             <h3 className="text-lg font-medium text-gray-900 mb-4">Contact Information</h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
-                <input
+                <Input
                   type="text"
                   value={formData.contactInfo.name}
                   onChange={(e) => handleInputChange('contactInfo.name', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                   placeholder="Enter your full name"
                   required
                 />
@@ -553,11 +521,10 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Company</label>
-                <input
+                <Input
                   type="text"
                   value={formData.contactInfo.company}
                   onChange={(e) => handleInputChange('contactInfo.company', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                   placeholder="Enter company name"
                 />
               </div>
@@ -566,11 +533,10 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Email Address *</label>
-                <input
+                <Input
                   type="email"
                   value={formData.contactInfo.email}
                   onChange={(e) => handleInputChange('contactInfo.email', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                   placeholder="Enter email address"
                   required
                 />
@@ -579,13 +545,76 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
-                <input
+                <Input
                   type="tel"
                   value={formData.contactInfo.phone}
                   onChange={(e) => handleInputChange('contactInfo.phone', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                   placeholder="Enter phone number"
                 />
+              </div>
+            </div>
+          </div>
+        );
+
+      case 4:
+        return (
+          <div className="space-y-3">
+            <h3 className="text-lg font-medium text-gray-900 mb-1">Review Details</h3>
+
+            <div className="rounded-md border border-gray-200 bg-white">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2 p-3">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-500">Origin</span>
+                  <span className="font-medium text-gray-900">{formData.origin || '—'}</span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-500">Destination</span>
+                  <span className="font-medium text-gray-900">{formData.destination || '—'}</span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-500">Service</span>
+                  <span className="font-medium text-gray-900 capitalize">{formData.serviceType || '—'}</span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-500">Urgency</span>
+                  <span className="font-medium text-gray-900 capitalize">{formData.urgency || '—'}</span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-500">Cargo / Weight</span>
+                  <span className="font-medium text-gray-900 capitalize">
+                    {formData.cargoType || '—'}{formData.weight ? ` · ${formData.weight} kg` : ''}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-500">Dimensions</span>
+                  <span className="font-medium text-gray-900">
+                    {formData.dimensions.length || formData.dimensions.width || formData.dimensions.height
+                      ? `${formData.dimensions.length}x${formData.dimensions.width}x${formData.dimensions.height} cm`
+                      : '—'}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-500">Value / Incoterms</span>
+                  <span className="font-medium text-gray-900">
+                    {formData.value ? `£${formData.value}` : '—'}{formData.incoterms ? ` · ${formData.incoterms}` : ''}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-500">Contact</span>
+                  <span className="font-medium text-gray-900">{formData.contactInfo.name || '—'}</span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-500">Email</span>
+                  <span className="font-medium text-gray-900">{formData.contactInfo.email || '—'}</span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-500">Company</span>
+                  <span className="font-medium text-gray-900">{formData.contactInfo.company || '—'}</span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-500">Phone</span>
+                  <span className="font-medium text-gray-900">{formData.contactInfo.phone || '—'}</span>
+                </div>
               </div>
             </div>
           </div>
@@ -616,7 +645,7 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 pb-24">
+    <form onSubmit={handleSubmit} className="space-y-6">
       {/* Progress Bar */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-2">
@@ -632,12 +661,12 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
       </div>
 
       {/* Form Content */}
-      <div className="mb-8">
+      <div className="mb-0 min-h-[250px]">
         {renderStep()}
       </div>
 
       {/* Navigation Buttons */}
-      <div className="flex justify-between pt-6 border-t border-gray-200 mt-8 bg-white">
+      <div className="flex justify-between pt-2 border-t border-gray-200 bg-white space-x-3">
         <div>
           {currentStep > 1 && (
             <Button type="button" variant="outline" onClick={prevStep}>
@@ -647,17 +676,9 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
         </div>
 
         <div className="flex space-x-3">
-          <Button type="button" variant="outline" onClick={onCancel}>
-            Cancel
-          </Button>
-
-          {currentStep < totalSteps ? (
+          {currentStep < totalSteps && (
             <Button type="button" onClick={nextStep}>
-              Next
-            </Button>
-          ) : currentStep === totalSteps ? null : (
-            <Button type="submit">
-              Submit Quote Request
+              {currentStep === 4 ? 'Submit Quote Request' : 'Next'}
             </Button>
           )}
         </div>

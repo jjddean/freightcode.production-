@@ -18,7 +18,6 @@ import {
 import { toast } from 'sonner';
 import { useStripeCheckout } from '@/hooks/useStripeCheckout';
 import SubscriptionCards from '@/components/subscription/SubscriptionCards';
-import PriceBreakdownTable from '@/components/shipping/PriceBreakdownTable';
 
 const PaymentsPage = () => {
   const { user } = useUser();
@@ -172,57 +171,12 @@ const PaymentsPage = () => {
     startCheckout(invoiceId);
   };
 
-  // Hardcoded fallback invoices
-  const HARDCODED_INVOICES = [
-    {
-      id: 'INV-2024-105',
-      date: '2024-07-25',
-      amount: 2450.00,
-      status: 'Pending',
-      shipment: 'SH-2024-001',
-      dueDate: '2024-08-25',
-      description: 'Ocean Freight - London to Hamburg'
-    },
-    {
-      id: 'INV-2024-098',
-      date: '2024-07-18',
-      amount: 1875.50,
-      status: 'Overdue',
-      shipment: 'SH-2024-002',
-      dueDate: '2024-08-18',
-      description: 'Air Freight - Shanghai to Felixstowe'
-    },
-    {
-      id: 'INV-2024-087',
-      date: '2024-07-05',
-      amount: 3200.75,
-      status: 'Paid',
-      shipment: 'SH-2024-003',
-      dueDate: '2024-08-05',
-      description: 'Container Shipping - Rotterdam to New York'
-    },
-    {
-      id: 'INV-2024-076',
-      date: '2024-06-20',
-      amount: 1950.25,
-      status: 'Paid',
-      shipment: 'SH-2024-006',
-      dueDate: '2024-07-20',
-      description: 'Express Delivery - Tokyo to Long Beach'
-    },
-  ];
-
-  const paymentMethods = [
-    { id: 1, type: 'Credit Card', last4: '4242', expiry: '05/25', default: true, brand: 'Visa' },
-    { id: 2, type: 'Bank Account', last4: '9876', name: 'Business Checking', default: false, bank: 'HSBC' },
-  ];
-
-  // Merge live payments and convex invoices with hardcoded fallback
+  // Merge live payments and convex invoices
   const invoices = useMemo(() => {
     let combined = [];
 
     // 1. Process Convex Invoices (shipment-specific)
-    if (convexInvoices.length > 0) {
+    if (convexInvoices && convexInvoices.length > 0) {
       combined.push(...convexInvoices.map((inv: any) => ({
         id: inv.invoiceNumber || inv._id,
         date: new Date(inv.createdAt).toLocaleDateString(),
@@ -233,13 +187,13 @@ const PaymentsPage = () => {
         dueDate: inv.dueDate ? new Date(inv.dueDate).toLocaleDateString() : '-',
         description: `Shipment Invoice - ${inv.invoiceNumber}`,
         route: inv.route || 'N/A',
-        lineItems: inv.lineItems || [], // If we store detailed line items here too
+        lineItems: inv.lineItems || [],
         metadata: inv
       })));
     }
 
     // 2. Process Live Payments (subscriptions, etc)
-    if (livePayments.length > 0) {
+    if (livePayments && livePayments.length > 0) {
       combined.push(...livePayments.map((p: any) => ({
         id: p.payment_id || p.invoice_id || `PAY-${p._id}`,
         date: p.created_at ? new Date(p.created_at).toLocaleDateString() : '-',
@@ -253,15 +207,6 @@ const PaymentsPage = () => {
         lineItems: p.metadata?.lineItems || [],
         metadata: p.metadata
       })));
-    }
-
-    // 3. Fallback to hardcoded if nothing found
-    if (combined.length === 0) {
-      return HARDCODED_INVOICES.map(inv => ({
-        ...inv,
-        route: 'N/A',
-        lineItems: []
-      }));
     }
 
     return combined;
@@ -339,7 +284,7 @@ const PaymentsPage = () => {
         <MediaCardHeader
           title="Payment Management"
           subtitle="Financial Operations"
-          description="Manage invoices, process payments, and maintain financial records for your freight operations."
+          description="Manage invoices, process payments, and maintain financial records."
           backgroundImage="https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
           overlayOpacity={0.6}
           className="mb-8"

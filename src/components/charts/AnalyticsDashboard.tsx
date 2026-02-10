@@ -112,7 +112,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
       metric.trend === 'down' ? '↘' : '→';
 
     return (
-      <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+      <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm font-medium text-gray-500">{metric.title}</p>

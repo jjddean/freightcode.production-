@@ -18,7 +18,7 @@ const DashboardPage = () => {
   const { organization } = useOrganization();
   const { user } = useUser();
   const orgId = organization?.id;
-  console.log("orgId from useOrganization:", orgId); // Debugging Log
+
 
   const liveShipments = useQuery(api.shipments.listShipments, { orgId: orgId ?? null });
   const liveDocuments = useQuery(api.documents.listDocuments, { orgId: orgId ?? null });
@@ -121,7 +121,7 @@ const DashboardPage = () => {
           <MediaCardHeader
             title="Shipment Overview"
             subtitle="Dashboard"
-            description="Monitor your active shipments, track documentation, and manage logistics operations."
+            description="Monitor active shipments, track documentation, and manage operations."
             backgroundImage="/dashboard-bg.jpg"
             overlayOpacity={0.6}
             className="mb-8"
@@ -299,7 +299,7 @@ const DashboardPage = () => {
           <div className="mt-8">
             <h2 className="text-xl font-semibold text-gray-900 mb-6">Global Shipment Tracking</h2>
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden relative z-0" style={{ height: '500px' }}>
-              <ShipmentMap className="w-full h-full" />
+              <ShipmentMap shipments={liveShipments || []} className="w-full h-full" />
             </div>
           </div>
         </div>

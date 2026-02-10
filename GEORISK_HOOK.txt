@@ -1,3 +1,0 @@
-# The "GeoRisk" Hook
-*   **Standard Forwarder:** Tracks the container.
-*   **Freightcode:** Predicts the delay before booking.

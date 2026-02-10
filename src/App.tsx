@@ -83,7 +83,7 @@ function Layout({ children }: LayoutProps) {
 
   useEffect(() => {
     // Service Worker registration moved to main.tsx
-    console.log("MARKET LIVE: Version 8081");
+
   }, []);
 
   const isClientApp = [

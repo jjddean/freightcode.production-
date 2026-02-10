@@ -23,7 +23,7 @@ export function AIAssistant() {
     const scrollRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        console.log('🤖 AI Assistant mounted!');
+
     }, []);
 
     useEffect(() => {

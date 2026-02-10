@@ -39,7 +39,7 @@ const ClientBookingsPage = () => {
     // const createCheckout = useAction(api.billing.createCheckoutSession);
 
     const handleCreateBooking = (data: any) => {
-        console.log("New Booking Data:", data);
+
         toast.success("Booking request submitted successfully!");
         setIsCreateOpen(false);
     };
@@ -256,7 +256,7 @@ const ClientBookingsPage = () => {
                         <SheetTrigger asChild>
                             <Button>New Booking</Button>
                         </SheetTrigger>
-                        <SheetContent className="w-[100%] sm:max-w-4xl overflow-y-auto p-6">
+                        <SheetContent className="w-[100%] sm:max-w-xl overflow-y-auto p-6">
                             <SheetHeader className="mb-6">
                                 <SheetTitle>Create New Shipment</SheetTitle>
                             </SheetHeader>

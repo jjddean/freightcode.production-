@@ -42,8 +42,6 @@ const LiveRateComparison: React.FC<LiveRateComparisonProps> = ({
     setError(null);
 
     try {
-      console.log('[LiveRates] Fetching consolidated rates for:', rateRequest.origin.city, '->', rateRequest.destination.city);
-
       // Call the unified server-side action
       const results = await fetchCarrierRates({
         origin: {
@@ -70,7 +68,7 @@ const LiveRateComparison: React.FC<LiveRateComparisonProps> = ({
         }
       });
 
-      console.log('[LiveRates] Got', results.length, 'total consolidated rates');
+
 
       setRates(results);
       onRatesFetched?.(results);

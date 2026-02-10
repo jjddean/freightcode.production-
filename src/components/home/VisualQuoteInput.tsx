@@ -1,164 +1,145 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Search, Plane, Ship, ArrowRight, Loader2, MapPin } from 'lucide-react';
 import { toast } from 'sonner';
 import { HomeBackgroundMap } from './HomeBackgroundMap';
-
-const PORTS: Record<string, [number, number]> = {
-    'London': [-0.1278, 51.5074],
-    'New York': [-74.0060, 40.7128],
-    'Shanghai': [121.4737, 31.2304],
-    'Singapore': [103.8198, 1.3521],
-    'Dubai': [55.2708, 25.2048],
-    'Los Angeles': [-118.2437, 34.0522],
-    'Hamburg': [9.9937, 53.5511],
-    'Mumbai': [72.8777, 19.0760]
-};
+import { GeoapifyAutocomplete } from '@/components/ui/GeoapifyAutocomplete';
 
 interface VisualQuoteInputProps {
-    onSearch: (data: { origin: string; destination: string; weight: string; dimensions: string }) => void;
+    onSearch: (searchParams: any) => void;
 }
 
 export const VisualQuoteInput: React.FC<VisualQuoteInputProps> = ({ onSearch }) => {
     const [origin, setOrigin] = useState('');
     const [destination, setDestination] = useState('');
-    const [weight, setWeight] = useState('');
-    const [dimensions, setDimensions] = useState('');
-    const [searching, setSearching] = useState(false);
+    const [isSearching, setIsSearching] = useState(false);
+    const [transportMode, setTransportMode] = useState<'ocean' | 'air'>('ocean');
 
-    const coordsOrigin = useMemo(() =>
-        PORTS[Object.keys(PORTS).find(k => k.toLowerCase() === origin.toLowerCase()) || ''],
-        [origin]);
-
-    const coordsDest = useMemo(() =>
-        PORTS[Object.keys(PORTS).find(k => k.toLowerCase() === destination.toLowerCase()) || ''],
-        [destination]);
-
-    const handleSearch = () => {
+    const handleSearch = async () => {
         if (!origin || !destination) {
-            toast.error("Please enter both Origin and Destination");
+            toast.error("Please select both origin and destination");
             return;
         }
 
-        setSearching(true);
-        setTimeout(() => {
-            setSearching(false);
-            onSearch({ origin, destination, weight, dimensions });
-        }, 1500);
-    };
+        setIsSearching(true);
+        // Simulate API delay for effect
+        await new Promise(resolve => setTimeout(resolve, 800));
 
-    const project = (lng: number, lat: number) => {
-        const x = (lng + 180) * (100 / 360);
-        const y = (90 - lat) * (100 / 180);
-        return { x, y };
+        onSearch({
+            origin,
+            destination,
+            mode: transportMode,
+            containerSize: '20ft',
+            incoterms: 'FOB'
+        });
+        setIsSearching(false);
     };
 
     return (
-        <div className="relative w-full h-[500px] lg:h-[600px] rounded-xl overflow-hidden shadow-2xl border border-gray-200 bg-[#0B1026]">
-            {/* 1. SVG Map Background (Non-WebGL replacement) */}
-            {/* 1. Mapbox Background */}
-            <div className="absolute inset-0">
-                <HomeBackgroundMap focusedLocation={coordsDest || coordsOrigin} />
-                {/* Overlay Gradient for readability */}
-                <div className="absolute inset-0 bg-[#0B1026]/40 pointer-events-none" />
-            </div>
+        <div className="w-full max-w-4xl mx-auto">
+            <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 p-6 relative">
 
-            {/* 2. Floating Glassmorphism Input Bar */}
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl z-10 px-4">
-                <div className="bg-white/90 backdrop-blur-md p-5 rounded-xl shadow-2xl border border-white/40 space-y-4">
-                    <div className="text-center mb-1">
-                        <h2 className="text-xl font-bold text-gray-900 tracking-tight">Where are you shipping?</h2>
-                        <p className="text-xs text-slate-500 font-medium uppercase tracking-wide">Instant Multi-Modal Quotes</p>
+                {/* Background Map Decoration */}
+                <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
+                    <HomeBackgroundMap />
+                </div>
+
+                <div className="relative z-10 space-y-6">
+                    {/* Mode Selection */}
+                    <div className="flex justify-center mb-6">
+                        <div className="bg-slate-100/80 p-1 rounded-lg inline-flex">
+                            <button
+                                onClick={() => setTransportMode('ocean')}
+                                className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${transportMode === 'ocean'
+                                    ? 'bg-white text-blue-600 shadow-sm'
+                                    : 'text-slate-500 hover:text-slate-700'
+                                    }`}
+                            >
+                                <Ship className="w-4 h-4" />
+                                Ocean Freight
+                            </button>
+                            <button
+                                onClick={() => setTransportMode('air')}
+                                className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${transportMode === 'air'
+                                    ? 'bg-white text-blue-600 shadow-sm'
+                                    : 'text-slate-500 hover:text-slate-700'
+                                    }`}
+                            >
+                                <Plane className="w-4 h-4" />
+                                Air Freight
+                            </button>
+                        </div>
                     </div>
 
-                    <div className="flex flex-col sm:flex-row gap-3 items-stretch relative">
-                        <div className="flex-1 relative">
-                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <div className="h-1.5 w-1.5 bg-primary rounded-full animate-pulse shadow-sm"></div>
+                    {/* Input Fields */}
+                    <div className="grid grid-cols-1 md:grid-cols-[1fr,auto,1fr] gap-4 items-center">
+                        <div className="relative">
+                            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none z-10">
+                                <MapPin className="h-4 w-4" />
                             </div>
-                            <input
-                                type="text"
-                                list="ports"
-                                className="block w-full pl-7 pr-3 py-2.5 text-sm font-medium border border-gray-200 bg-white/50 focus:bg-white rounded-lg focus:ring-1 focus:ring-primary focus:border-primary transition-all shadow-sm placeholder:text-gray-400"
-                                placeholder="Origin city"
+                            <GeoapifyAutocomplete
+                                className="pl-10"
+                                placeholder="Origin city or port"
                                 value={origin}
-                                onChange={(e) => setOrigin(e.target.value)}
+                                onChange={(val) => setOrigin(val)}
                             />
                         </div>
 
-                        <div className="hidden sm:flex items-center text-slate-300">
-                            <ArrowRight className="w-4 h-4" />
+                        <div className="hidden md:flex justify-center text-slate-300">
+                            <ArrowRight className="w-5 h-5" />
                         </div>
 
-                        <div className="flex-1 relative">
-                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <div className="h-1.5 w-1.5 bg-secondary rounded-full shadow-sm"></div>
+                        <div className="relative">
+                            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none z-10">
+                                <MapPin className="h-4 w-4" />
                             </div>
-                            <input
-                                type="text"
-                                list="ports"
-                                className="block w-full pl-7 pr-3 py-2.5 text-sm font-medium border border-gray-200 bg-white/50 focus:bg-white rounded-lg focus:ring-1 focus:ring-primary focus:border-primary transition-all shadow-sm placeholder:text-gray-400"
-                                placeholder="Destination city"
+                            <GeoapifyAutocomplete
+                                className="pl-10"
+                                placeholder="Destination city or port"
                                 value={destination}
-                                onChange={(e) => setDestination(e.target.value)}
+                                onChange={(val) => setDestination(val)}
                             />
                         </div>
                     </div>
 
-                    <div className="flex flex-col sm:flex-row gap-3 items-stretch">
-                        <div className="flex-1 relative">
-                            <input
-                                type="number"
-                                className="block w-full px-3 py-2.5 text-sm font-medium border border-gray-200 bg-white/50 focus:bg-white rounded-lg focus:ring-1 focus:ring-primary focus:border-primary transition-all shadow-sm placeholder:text-gray-400"
-                                placeholder="Weight (kg)"
-                                value={weight}
-                                onChange={(e) => setWeight(e.target.value)}
-                            />
-                        </div>
-                        <div className="flex-1 relative">
-                            <input
-                                type="text"
-                                className="block w-full px-3 py-2.5 text-sm font-medium border border-gray-200 bg-white/50 focus:bg-white rounded-lg focus:ring-1 focus:ring-primary focus:border-primary transition-all shadow-sm placeholder:text-gray-400"
-                                placeholder="Dimensions (L x W x H)"
-                                value={dimensions}
-                                onChange={(e) => setDimensions(e.target.value)}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
-                        <div className="flex gap-4 text-xs font-medium text-slate-500 order-2 sm:order-1">
-                            <div className="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-slate-50 cursor-pointer transition-colors">
-                                <Ship className="w-3.5 h-3.5 text-primary" />
-                                <span>Ocean</span>
-                            </div>
-                            <div className="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-slate-50 cursor-pointer transition-colors">
-                                <Plane className="w-3.5 h-3.5 text-secondary" />
-                                <span>Air</span>
-                            </div>
-                        </div>
-
+                    {/* Search Button */}
+                    <div className="mt-6">
                         <Button
-                            size="sm"
-                            className="w-full sm:w-auto h-9 px-6 text-sm font-semibold bg-primary hover:bg-primary-700 shadow-md shadow-primary/10 transition-all hover:scale-[1.01] order-1 sm:order-2"
+                            className="w-full text-lg h-12 bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/20"
                             onClick={handleSearch}
-                            disabled={searching}
+                            disabled={isSearching}
                         >
-                            {searching ? (
-                                <><Loader2 className="w-3.5 h-3.5 mr-2 animate-spin" /> Check Rates</>
+                            {isSearching ? (
+                                <>
+                                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                                    Finding Best Rates...
+                                </>
                             ) : (
-                                <><Search className="w-3.5 h-3.5 mr-2" /> Search Rates</>
+                                <>
+                                    <Search className="mr-2 h-5 w-5" />
+                                    Get Instant Quotes
+                                </>
                             )}
                         </Button>
                     </div>
                 </div>
             </div>
 
-            <datalist id="ports">
-                {Object.keys(PORTS).map(port => (
-                    <option key={port} value={port} />
-                ))}
-            </datalist>
+            {/* Trust Badges */}
+            <div className="mt-8 grid grid-cols-3 gap-4 text-center">
+                <div className="p-3">
+                    <div className="text-2xl font-bold text-white mb-1">50+</div>
+                    <div className="text-blue-100 text-sm">Global Carriers</div>
+                </div>
+                <div className="p-3 border-l border-white/10">
+                    <div className="text-2xl font-bold text-white mb-1">24/7</div>
+                    <div className="text-blue-100 text-sm">Support</div>
+                </div>
+                <div className="p-3 border-l border-white/10">
+                    <div className="text-2xl font-bold text-white mb-1">Instant</div>
+                    <div className="text-blue-100 text-sm">Booking</div>
+                </div>
+            </div>
         </div>
     );
 };

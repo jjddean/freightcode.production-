@@ -100,15 +100,15 @@ const MediaCardHeader: React.FC<MediaCardHeaderProps> = ({
               : "opacity-100 scale-100"
           )}>
             {subtitle && (
-              <p className="text-[10px] font-semibold text-gray-200 uppercase tracking-wider mb-1 drop-shadow-sm">
+              <p className="text-xs font-semibold text-gray-200 uppercase tracking-wider mb-1 drop-shadow-sm">
                 {subtitle}
               </p>
             )}
-            <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-white mb-1 drop-shadow-md tracking-tight">
+            <h1 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-white mb-1 drop-shadow-md tracking-tight">
               {title}
             </h1>
             {description && (
-              <p className="text-xs text-gray-100 max-w-xl font-medium drop-shadow-sm leading-relaxed">
+              <p className="text-xs sm:text-sm text-gray-100 max-w-lg font-medium drop-shadow-sm leading-relaxed">
                 {description}
               </p>
             )}

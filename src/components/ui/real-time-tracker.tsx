@@ -193,10 +193,10 @@ const RealTimeTracker: React.FC<RealTimeTrackerProps> = ({ shipmentId, className
       {/* Map Section */}
       <div className="p-6 border-t border-gray-200">
         <ShipmentMap
-          shipments={[]}
-          focusedId={shipmentId}
-          height={200}
-          className="rounded-lg overflow-hidden"
+          shipments={shipmentData?.shipment ? [shipmentData.shipment] : []}
+          selectedShipmentId={shipmentId}
+          isExpanded={true}
+          className="h-[200px] w-full rounded-lg overflow-hidden"
         />
       </div>
     </div>

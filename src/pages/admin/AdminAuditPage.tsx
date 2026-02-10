@@ -1,15 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
 import {
     ShieldAlert,
     ShieldCheck,
     User,
     CreditCard,
-    Search,
     Activity,
     Shield
 } from 'lucide-react';
@@ -18,7 +16,6 @@ import AdminPageHeader from '@/components/layout/admin/AdminPageHeader';
 
 const AdminAuditPage = () => {
     const logs = useQuery(api.auditLogs.listLogs, {}) || [];
-    const [search, setSearch] = useState("");
 
     const getIcon = (action: string) => {
         if (action.includes('error') || action.includes('failed') || action.includes('rejected')) return <ShieldAlert className="h-4 w-4 text-red-500" />;
@@ -71,35 +68,20 @@ const AdminAuditPage = () => {
         }
     ];
 
-    const filteredLogs = logs.filter((log: any) =>
-        log.action.toLowerCase().includes(search.toLowerCase()) ||
-        log.entityType.toLowerCase().includes(search.toLowerCase()) ||
-        (log.userEmail && log.userEmail.toLowerCase().includes(search.toLowerCase()))
-    );
-
     return (
         <div className="space-y-6">
             <AdminPageHeader
                 title="Audit & Security Logs"
                 subtitle="Monitor system activity, compliance events, and user actions."
                 icon={Shield}
-            >
-                <div className="relative w-72">
-                    <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
-                    <Input
-                        placeholder="Search logs..."
-                        className="pl-9 bg-white border-gray-200 focus:border-blue-500 focus:ring-blue-500"
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                    />
-                </div>
-            </AdminPageHeader>
+            />
 
             <Card className="overflow-hidden border-gray-200 shadow-sm bg-white">
                 <DataTable
-                    data={filteredLogs}
+                    data={logs}
                     columns={columns}
                     searchPlaceholder="Filter logs..."
+                    rowsPerPage={15}
                 />
             </Card>
         </div>

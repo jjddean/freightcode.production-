@@ -207,7 +207,7 @@ const DocumentsPage = () => {
             }
 
             // REAL DOCUSIGN INTEGRATION
-            console.log("Calling api.docusign.sendEnvelope...");
+
 
             const result: any = await sendEnvelope({
                 documentId: sendDoc._id,
@@ -216,7 +216,7 @@ const DocumentsPage = () => {
                 returnUrl: `${window.location.origin}/documents?event=signing_complete&documentId=${sendDoc._id}`
             });
 
-            console.log("Msg Sent Result:", result);
+
             const finalEnvelopeId = typeof result === 'string' ? result : (result.envelopeId || result.id);
 
             // Update Database with the returned Envelope ID
@@ -878,7 +878,7 @@ function SmartUploadButton({ onParse }: { onParse: (data: any) => void }) {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        console.log("File selected:", file.name);
+
         const toastId = toast.loading("🤖 AI is reading your document...");
         setAnalyzing(true);
 

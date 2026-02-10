@@ -145,7 +145,7 @@ const ReportsPage = () => {
         <MediaCardHeader
           title="Analytics & Reports"
           subtitle="Business Intelligence"
-          description="Comprehensive analytics, performance metrics, and detailed reporting for your freight operations."
+          description="Comprehensive analytics, performance metrics, and detailed reporting."
           backgroundImage="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
           overlayOpacity={0.6}
           className="mb-8"
@@ -193,7 +193,7 @@ const ReportsPage = () => {
                 { title: 'Total Shipments', value: liveStats.totalShipments.toString(), change: 12, trend: 'up', icon: '📦' },
                 { title: 'Active Quotes', value: liveStats.totalQuotes.toString(), change: 5, trend: 'up', icon: '💬' },
                 { title: 'Bookings', value: liveStats.totalBookings.toString(), change: -2, trend: 'down', icon: '📅' },
-                { title: 'Ontime Performance', value: '94%', change: 1.2, trend: 'up', icon: '⚡' }
+                { title: 'On-Time', value: '94%', change: 1.2, trend: 'up', icon: '⚡' }
               ],
               shipmentData: monthlyShipments.map(d => ({ label: d.month, value: d.count })),
               revenueData: carrierDistribution.map((d, i) => ({

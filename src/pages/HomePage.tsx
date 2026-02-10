@@ -89,13 +89,13 @@ const HomePage = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* 1. Interactive Visual Quote Hero */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="px-4 sm:px-6 lg:px-8 py-8">
         <VisualQuoteInput onSearch={handleVisualSearch} />
       </div>
 
       {/* 2. Results Section (Conditionally Rendered) */}
       {showResults && (
-        <div id="quote-results" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+        <div id="quote-results" className="px-4 sm:px-6 lg:px-8 py-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-bold text-gray-900">Best Routes Found</h2>
             <Button variant="outline" onClick={() => setShowResults(false)}>Clear Search</Button>

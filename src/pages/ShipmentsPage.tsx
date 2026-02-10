@@ -466,7 +466,7 @@ const ShipmentsPage = () => {
             setIsMapExpanded((v) => !v);
             window.scrollTo({ top: 0, behavior: "smooth" });
           }}
-          backgroundComponent={<ShipmentMap minimal={!isMapExpanded} />}
+          backgroundComponent={<ShipmentMap shipments={filteredShipments.active} isExpanded={isMapExpanded} />}
         />
 
         {/* Action Toolbar */}

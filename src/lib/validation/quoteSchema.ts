@@ -5,6 +5,7 @@ export const quoteStep1Schema = z.object({
     destination: z.string().min(2, "Destination is required"),
     serviceType: z.string(),
     cargoType: z.string(),
+    urgency: z.string(),
 });
 
 export const quoteStep2Schema = z.object({
@@ -21,11 +22,6 @@ export const quoteStep2Schema = z.object({
 });
 
 export const quoteStep3Schema = z.object({
-    urgency: z.string(),
-    additionalServices: z.array(z.string()),
-});
-
-export const quoteStep4Schema = z.object({
     contactInfo: z.object({
         name: z.string().min(2, "Full Name is required"),
         email: z.string().email("Invalid email address"),
@@ -37,5 +33,4 @@ export const quoteStep4Schema = z.object({
 // Combined schema for final submission if needed
 export const quoteFormSchema = quoteStep1Schema
     .merge(quoteStep2Schema)
-    .merge(quoteStep3Schema)
-    .merge(quoteStep4Schema);
+    .merge(quoteStep3Schema);

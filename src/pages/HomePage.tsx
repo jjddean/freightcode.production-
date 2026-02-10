@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import MediaCardHeader from '@/components/ui/media-card-header';
 import Modal from '@/components/ui/modal';
 import QuoteRequestForm from '@/components/forms/QuoteRequestForm';
+import MarketingFooter from '@/components/layout/MarketingFooter';
 
 import { toast } from 'sonner';
 
@@ -212,6 +213,8 @@ const HomePage = () => {
           />
         </Modal>
       </div>
+
+      <MarketingFooter />
     </div>
   );
 };

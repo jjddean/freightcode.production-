@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import AdminSidebar from './AdminSidebar';
 import { Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 
 interface AdminLayoutProps {
     children: React.ReactNode;
@@ -35,7 +36,9 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                 {/* Main Content Area */}
                 <main className="flex-1 p-6 md:p-8">
                     <div className="max-w-7xl mx-auto">
-                        {children}
+                        <Suspense fallback={<LoadingSpinner />}>
+                            {children}
+                        </Suspense>
                     </div>
                 </main>
             </div>

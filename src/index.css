@@ -4,6 +4,7 @@
 
 @layer base {
   :root {
+    --app-header-h: 64px;
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
@@ -224,6 +225,15 @@
   /* Navbar styles with Freightcode branding */
   .navbar {
     @apply fixed top-0 left-0 w-full bg-white shadow-lg z-[2000] border-b border-gray-100;
+  }
+
+  .app-header {
+    @apply sticky top-0 z-50 bg-background;
+    height: var(--app-header-h);
+  }
+
+  .app-page-content {
+    padding-top: var(--app-header-h);
   }
 
   .navbar-container {

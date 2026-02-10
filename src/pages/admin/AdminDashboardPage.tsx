@@ -17,6 +17,52 @@ import AdminPageHeader from '@/components/layout/admin/AdminPageHeader';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
+
+const StatCardSkeleton = () => (
+    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <div className="flex items-center justify-between mb-4">
+            <Skeleton className="h-12 w-12 rounded-lg" />
+            <Skeleton className="h-4 w-16" />
+        </div>
+        <Skeleton className="h-4 w-24 mb-2" />
+        <Skeleton className="h-8 w-32" />
+    </div>
+);
+
+const PendingActionsSkeleton = () => (
+    <div className="divide-y divide-gray-100">
+        {[1, 2, 3].map((i) => (
+            <div key={i} className="p-4 flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                    <Skeleton className="h-10 w-10 rounded-lg" />
+                    <div className="space-y-2">
+                        <Skeleton className="h-4 w-32" />
+                        <Skeleton className="h-3 w-48" />
+                    </div>
+                </div>
+                <div className="flex items-center gap-2">
+                    <Skeleton className="h-6 w-16 rounded-full" />
+                </div>
+            </div>
+        ))}
+    </div>
+);
+
+const RecentActivitySkeleton = () => (
+    <div className="space-y-4">
+        {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="flex items-start space-x-3 pb-3 border-b border-gray-50 last:border-0">
+                <Skeleton className="h-8 w-8 rounded-full" />
+                <div className="flex-1 space-y-2">
+                    <Skeleton className="h-4 w-48" />
+                    <Skeleton className="h-3 w-64" />
+                </div>
+                <Skeleton className="h-3 w-12" />
+            </div>
+        ))}
+    </div>
+);
 
 const StatCard = ({ title, value, change, icon: Icon, trend }: any) => (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
@@ -39,10 +85,6 @@ const AdminDashboardPage = () => {
     const navigate = useNavigate();
     const stats = useQuery(api.admin.getDashboardStats);
 
-    if (!stats) {
-        return <div className="p-8 text-center text-gray-500">Loading dashboard stats...</div>;
-    }
-
     return (
         <div className="space-y-8">
             {/* Header */}
@@ -54,34 +96,45 @@ const AdminDashboardPage = () => {
 
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <StatCard
-                    title="Total Bookings"
-                    value={stats.totalBookings.toLocaleString()}
-                    change={stats.trends.bookings}
-                    icon={ShoppingBag}
-                    trend="up"
-                />
-                <StatCard
-                    title="Active Shipments"
-                    value={stats.activeShipments.toString()}
-                    change={stats.trends.shipments}
-                    icon={TrendingUp}
-                    trend="up"
-                />
-                <StatCard
-                    title="Total Customers"
-                    value={stats.totalCustomers.toLocaleString()}
-                    change={stats.trends.customers}
-                    icon={Users}
-                    trend="up"
-                />
-                <StatCard
-                    title="Pending Approvals"
-                    value={stats.pendingApprovals.toString()}
-                    change={stats.trends.approvals}
-                    icon={AlertTriangle}
-                    trend={stats.pendingApprovals > 5 ? 'down' : 'up'}
-                />
+                {!stats ? (
+                    <>
+                        <StatCardSkeleton />
+                        <StatCardSkeleton />
+                        <StatCardSkeleton />
+                        <StatCardSkeleton />
+                    </>
+                ) : (
+                    <>
+                        <StatCard
+                            title="Total Bookings"
+                            value={stats.totalBookings.toLocaleString()}
+                            change={stats.trends.bookings}
+                            icon={ShoppingBag}
+                            trend="up"
+                        />
+                        <StatCard
+                            title="Active Shipments"
+                            value={stats.activeShipments.toString()}
+                            change={stats.trends.shipments}
+                            icon={TrendingUp}
+                            trend="up"
+                        />
+                        <StatCard
+                            title="Total Customers"
+                            value={stats.totalCustomers.toLocaleString()}
+                            change={stats.trends.customers}
+                            icon={Users}
+                            trend="up"
+                        />
+                        <StatCard
+                            title="Pending Approvals"
+                            value={stats.pendingApprovals.toString()}
+                            change={stats.trends.approvals}
+                            icon={AlertTriangle}
+                            trend={stats.pendingApprovals > 5 ? 'down' : 'up'}
+                        />
+                    </>
+                )}
             </div>
 
 
@@ -165,7 +218,11 @@ const AdminDashboardPage = () => {
 };
 
 const PendingActionsWidget = () => {
-    const actions = useQuery(api.admin.getPendingActions) || [];
+    const actions = useQuery(api.admin.getPendingActions);
+
+    if (actions === undefined) {
+        return <PendingActionsSkeleton />;
+    }
 
     if (actions.length === 0) {
         return <div className="p-8 text-center text-gray-500">All caught up! No pending actions.</div>;
@@ -207,7 +264,7 @@ const RecentActivityFeed = () => {
     const activity = useQuery(api.admin.getRecentActivity);
 
     if (activity === undefined) {
-        return <div className="text-sm text-gray-500 text-center py-8">Loading activity...</div>;
+        return <RecentActivitySkeleton />;
     }
 
     if (!activity || activity.length === 0) {

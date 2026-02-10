@@ -32,8 +32,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Check, ChevronsUpDown, Search } from 'lucide-react';
+import { Check, ChevronsUpDown, Search, Calendar as CalendarIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Calendar } from '@/components/ui/calendar';
+import { format } from 'date-fns';
 
 
 interface QuoteFormData {
@@ -49,7 +51,7 @@ interface QuoteFormData {
   };
   value: string;
   incoterms: string;
-  urgency: string;
+  targetDate: Date | undefined;
   additionalServices: string[];
   contactInfo: {
     name: string;
@@ -82,7 +84,7 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
         dimensions: initialData.dimensions || { length: '', width: '', height: '' },
         value: '',
         incoterms: 'FOB',
-        urgency: '',
+        targetDate: undefined,
         additionalServices: [],
         contactInfo: { name: '', email: '', phone: '', company: '' }
       } as QuoteFormData;
@@ -100,7 +102,7 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
       dimensions: { length: '120', width: '100', height: '100' },
       value: '5000',
       incoterms: 'FOB',
-      urgency: '',
+      targetDate: undefined,
       additionalServices: [],
       contactInfo: { name: 'Test Demo', email: 'demo@freightcode.co.uk', phone: '555-0123', company: 'Demo Corp' }
     };
@@ -389,23 +391,34 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Urgency</label>
-                <Select
-                  value={formData.urgency}
-                  onValueChange={(value) => handleInputChange('urgency', value)}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select urgency" />
-                  </SelectTrigger>
-                  <SelectContent className="z-[99999]">
-                    <SelectItem value="standard">Standard (7-14 days)</SelectItem>
-                    <SelectItem value="express">Express (3-7 days)</SelectItem>
-                    <SelectItem value="urgent">Urgent (1-3 days)</SelectItem>
-                  </SelectContent>
-                </Select>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Target Date</label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !formData.targetDate && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {formData.targetDate ? format(formData.targetDate, "PPP") : <span>Pick a date</span>}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0 z-[99999]" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={formData.targetDate}
+                        onSelect={(date) => handleInputChange('targetDate', date as any)}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
               </div>
             </div>
-          </div >
+          </div>
         );
 
       case 2:
@@ -576,8 +589,10 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
                   <span className="font-medium text-gray-900 capitalize">{formData.serviceType || '—'}</span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-500">Urgency</span>
-                  <span className="font-medium text-gray-900 capitalize">{formData.urgency || '—'}</span>
+                  <span className="text-gray-500">Target Date</span>
+                  <span className="font-medium text-gray-900 capitalize">
+                    {formData.targetDate ? format(formData.targetDate, 'PPP') : '—'}
+                  </span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-gray-500">Cargo / Weight</span>

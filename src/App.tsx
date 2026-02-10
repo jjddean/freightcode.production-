@@ -15,13 +15,12 @@ import { ConvexReactClient } from "convex/react";
 import { Toaster } from 'sonner';
 
 // Components
-import Navbar from './components/Navbar';
-import MobileNavigation from './components/mobile/MobileNavigation';
 import { AIAssistant } from './components/ai/AIAssistant';
 import AdminLayout from './components/layout/admin/AdminLayout';
 import ClientSidebar from './components/layout/ClientSidebar';
 import { useRole } from './hooks/useRole';
 import { LoadingSpinner } from './components/ui/LoadingSpinner';
+import PublicLayout from './components/layout/PublicLayout';
 
 // Pages - Lazy Loaded
 const HomePage = lazy(() => import('./pages/HomePage'));
@@ -78,27 +77,12 @@ if (!PUBLISHABLE_KEY) {
 }
 
 function Layout({ children }: LayoutProps) {
-  const location = useLocation();
-  const isAdmin = location.pathname.startsWith('/admin');
-
   useEffect(() => {
     // Service Worker registration moved to main.tsx
-
   }, []);
-
-  const isClientApp = [
-    '/dashboard', '/shipments', '/bookings', '/quotes',
-    '/payments', '/documents', '/compliance', '/reports', '/account', '/api',
-    '/access'
-  ].some(path => location.pathname.startsWith(path));
-
-  // Exclude navbar from georisk-demo (standalone dashboard page)
-  const isStandalonePage = location.pathname === '/georisk-demo';
 
   return (
     <>
-      {!isAdmin && !isClientApp && !isStandalonePage && <Navbar />}
-      {!isAdmin && !isClientApp && !isStandalonePage && <MobileNavigation />}
       <AIAssistant />
       <Toaster richColors position="bottom-right" style={{ zIndex: 99999 }} />
       <main className="min-h-screen">
@@ -179,22 +163,25 @@ export default function App() {
         <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
           <Layout>
             <Routes>
-              {/* Public Routes */}
-              <Route path="/" element={<HomePage />} />
-              <Route path="/services" element={<ServicesPage />} />
-              <Route path="/solutions" element={<SolutionsPage />} />
+              {/* Public Routes with Navbar */}
+              <Route element={<PublicLayout />}>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/services" element={<ServicesPage />} />
+                <Route path="/solutions" element={<SolutionsPage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/contact" element={<ContactPage />} />
+                <Route path="/platform" element={<PlatformPage />} />
+                <Route path="/resources" element={<ResourcesPage />} />
+                <Route path="/shared/:token" element={<SharedDocumentPage />} />
+                <Route path="/api/docusign/callback" element={<DocusignCallbackPage />} />
+              </Route>
 
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/contact" element={<ContactPage />} />
-
-
+              {/* Standalone Pages */}
               <Route path="/access" element={<WaitlistPage />} />
               <Route path="/test-dashboard" element={<TestDashboardPage />} />
               <Route path="/georisk-demo" element={<GeoRiskDemoPage />} />
               <Route path="/geo" element={<GeoRiskDemoPage />} />
-
-              <Route path="/shared/:token" element={<SharedDocumentPage />} />
-              <Route path="/api/docusign/callback" element={<DocusignCallbackPage />} />
+              <Route path="/documents/print/:documentId" element={<DocumentPrintPage />} />
 
               {/* Admin Routes (Wrapped in ProtectedRoute & AdminRoute & AdminLayout) */}
               <Route path="/admin/*" element={
@@ -241,7 +228,6 @@ export default function App() {
                 <Route path="/api" element={<ApiDocsPage />} />
               </Route>
 
-              <Route path="/documents/print/:documentId" element={<DocumentPrintPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </Layout>

@@ -5,7 +5,7 @@ export const quoteStep1Schema = z.object({
     destination: z.string().min(2, "Destination is required"),
     serviceType: z.string(),
     cargoType: z.string(),
-    urgency: z.string(),
+    targetDate: z.date(),
 });
 
 export const quoteStep2Schema = z.object({

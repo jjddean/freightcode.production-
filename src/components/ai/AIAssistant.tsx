@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sparkles, Send, X, MessageSquare, RefreshCw } from "lucide-react";
@@ -103,7 +104,7 @@ Answer briefly and professionally.
         };
     }, [isOpen]);
 
-    return (
+    const assistantUi = (
         <div className="fixed bottom-6 right-6 z-[9999]" ref={containerRef}>
             {isOpen ? (
                 <div className="bg-white rounded-xl shadow-2xl w-80 md:w-96 flex flex-col h-[500px] transition-all duration-200 ease-in-out">
@@ -169,4 +170,10 @@ Answer briefly and professionally.
             )}
         </div>
     );
+
+    if (typeof document === "undefined") {
+        return assistantUi;
+    }
+
+    return createPortal(assistantUi, document.body);
 }

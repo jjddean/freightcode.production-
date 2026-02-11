@@ -20,7 +20,7 @@ export function NavDocuments({
   }[]
 }) {
   return (
-    <SidebarGroup className="py-1 group-data-[collapsible=icon]:hidden">
+    <SidebarGroup className="mt-2 py-1 group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel className="h-6">Documents</SidebarGroupLabel>
       <SidebarGroupContent className="flex flex-col gap-0.5">
         <SidebarMenu>

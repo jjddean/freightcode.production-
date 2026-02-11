@@ -156,3 +156,16 @@ This log documents the major stages of development for the FreightCode / MarketL
 - **Frontend**: Fixed SeaRates credentials and added coordinate mapping for 18 major ports.
 - **Frontend**: Added `price.lineItems` to SeaRates rate response mapping (was returning flat cost only).
 - **Status**: COMPLETE. All carrier rates (mock + SeaRates) now include lineItems for price breakdown.
+
+### [2026-02-11] - Trade Tools & Compliance Upgrade
+- **Feature**: Implemented Offline HS Code Lookup (6-digit Harmonized System).
+  - **Data**: Converted official HS 2022 CSV to static `public/hs-codes.json` (5,613 records).
+  - **Performance**: Client-side search with lazy loading; zero API dependency.
+  - **UI**: Integrated into Compliance Page with clean "Customs Classification" interface.
+- **Feature**: Implemented Currency Converter Tool.
+  - **Data**: Static `public/exchange-rates.json` for base rates.
+  - **Update Mechanism**: Created `src/scripts/update_rates.js` to fetch live rates from OpenExchangeRates API (hourly/daily updates).
+  - **UI**: Created `CurrencyConverter.tsx` component (available for use, currently optional on Compliance Page).
+- **Refinement**: Reverted Layout Changes.
+  - **Action**: Restored Compliance Page to original single-column layout for HS Code tool after testing grid layout.
+  - **Status**: Stable. HS Code tool is live; Currency tool is codebase-ready but hidden by default.

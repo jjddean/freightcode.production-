@@ -9,7 +9,7 @@ import {
   ShieldCheck,
   BarChart3,
   Settings,
-  Terminal,
+  Wrench,
 } from "lucide-react"
 import { IconCirclePlusFilled, IconMail } from "@tabler/icons-react"
 
@@ -87,14 +87,21 @@ const navDocuments = [
 
 const navSecondary = [
   {
+    title: "Tools",
+    url: "/tools/hscode-lookup",
+    icon: Wrench,
+    items: [
+      { title: "HS Code Check", url: "/tools/hscode-lookup" },
+      { title: "Currency Converter", url: "/tools/currency-converter" },
+      { title: "Port Codes", url: "/tools/hscode-lookup" },
+      { title: "Tariff Calculator", url: "/tools/currency-converter" },
+      { title: "API Key", url: "/api" },
+    ],
+  },
+  {
     title: "Account",
     url: "/account",
     icon: Settings,
-  },
-  {
-    title: "Dev API",
-    url: "/api",
-    icon: Terminal,
   },
 ]
 
@@ -118,11 +125,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader className="border-b-0 px-2 pt-2">
-        <a href="/dashboard" className="flex items-center px-4 h-12 mb-2">
+      <SidebarHeader className="border-b-0 px-2 pt-1">
+        <a href="/dashboard" className="flex h-11 items-center px-4 mb-1">
           <BrandLogo />
         </a>
-        <SidebarMenu className="pb-0">
+        <SidebarMenu className="pt-0 pb-0">
           <SidebarMenuItem className="flex items-center gap-2">
             <Dialog>
               <DialogTrigger asChild>
@@ -171,9 +178,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent className="gap-0">
         <NavMain items={navMain} />
         <NavDocuments items={navDocuments} />
-        <NavSecondary items={navSecondary} className="mt-auto" />
+        <NavSecondary
+          items={navSecondary.map((item) =>
+            item.title === "Tools"
+              ? { ...item, isActive: location.pathname.startsWith("/tools") }
+              : item
+          )}
+        />
       </SidebarContent>
-      <SidebarFooter>
+      <SidebarFooter className="mt-auto border-t border-sidebar-border bg-sidebar">
         <NavUser user={userData} />
       </SidebarFooter>
     </Sidebar>

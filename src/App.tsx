@@ -41,6 +41,8 @@ const ClientQuotesPage = lazy(() => import('./pages/client/ClientQuotesPage'));
 const WaitlistPage = lazy(() => import('./pages/WaitlistPage'));
 const ClientBookingsPage = lazy(() => import('./pages/client/ClientBookingsPage'));
 const ApiDocsPage = lazy(() => import('./pages/ApiDocsPage'));
+const CurrencyPage = lazy(() => import('./pages/tools/CurrencyPage'));
+const HSCodePage = lazy(() => import('./pages/tools/HSCodePage'));
 const SharedDocumentPage = lazy(() => import('./pages/SharedDocumentPage'));
 const DocusignCallbackPage = lazy(() => import('./pages/DocusignCallbackPage'));
 const DocumentPrintPage = lazy(() => import('./pages/DocumentPrintPage'));
@@ -226,6 +228,8 @@ export default function App() {
                 <Route path="/compliance" element={<CompliancePage />} />
                 <Route path="/reports" element={<ReportsPage />} />
                 <Route path="/api" element={<ApiDocsPage />} />
+                <Route path="/tools/currency-converter" element={<CurrencyPage />} />
+                <Route path="/tools/hscode-lookup" element={<HSCodePage />} />
               </Route>
 
               <Route path="*" element={<Navigate to="/" replace />} />

@@ -15,18 +15,18 @@ export function NavMain({
   items: {
     title: string
     url: string
-    icon?: LucideIcon
+    icon: LucideIcon
   }[]
 }) {
   return (
-    <SidebarGroup className="py-1">
+    <SidebarGroup className="pt-0 pb-1">
       <SidebarGroupContent className="flex flex-col gap-0.5">
         <SidebarMenu>
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton asChild tooltip={item.title}>
                 <NavLink to={item.url}>
-                  {item.icon && <item.icon />}
+                  <item.icon />
                   <span>{item.title}</span>
                 </NavLink>
               </SidebarMenuButton>

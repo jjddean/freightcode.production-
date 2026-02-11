@@ -3,13 +3,19 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Search, Loader2, BookOpen, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
+import { cn } from '@/lib/utils';
 
 interface HSCode {
     code: string;
     desc: string;
 }
 
-export const HSCodeLookup = () => {
+interface HSCodeLookupProps {
+    variant?: 'default' | 'minimal';
+    className?: string;
+}
+
+export const HSCodeLookup = ({ variant = 'default', className }: HSCodeLookupProps) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [allCodes, setAllCodes] = useState<HSCode[]>([]);
     const [results, setResults] = useState<HSCode[]>([]);
@@ -54,8 +60,12 @@ export const HSCodeLookup = () => {
         }, 100);
     };
 
+    const containerClasses = variant === 'default'
+        ? "bg-white p-6 rounded-lg shadow-sm border border-gray-200"
+        : "";
+
     return (
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <div className={cn(containerClasses, className)}>
             <div className="flex items-center gap-2 mb-4">
                 <BookOpen className="w-5 h-5 text-blue-600" />
                 <h3 className="text-lg font-medium text-gray-900">HS Code Lookup</h3>

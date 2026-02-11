@@ -32,7 +32,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Check, ChevronsUpDown, Search, Calendar as CalendarIcon } from 'lucide-react';
+import { Check, ChevronsUpDown, Calendar as CalendarIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
@@ -184,14 +184,7 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
     }
   };
 
-  const handleServiceToggle = (service: string) => {
-    setFormData(prev => ({
-      ...prev,
-      additionalServices: prev.additionalServices.includes(service)
-        ? prev.additionalServices.filter(s => s !== service)
-        : [...prev.additionalServices, service]
-    }));
-  };
+
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -264,11 +257,11 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
                       variant="outline"
                       role="combobox"
                       aria-expanded={originOpen}
-                      className="w-full justify-between"
+                      className="w-full justify-between text-gray-900"
                     >
                       {formData.origin
                         ? SUPPORTED_PORTS.find((port) => port === formData.origin)
-                        : "Select origin..."}
+                        : <span className="text-muted-foreground">Select origin...</span>}
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                   </PopoverTrigger>
@@ -311,11 +304,11 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
                       variant="outline"
                       role="combobox"
                       aria-expanded={destOpen}
-                      className="w-full justify-between"
+                      className="w-full justify-between text-gray-900"
                     >
                       {formData.destination
                         ? SUPPORTED_PORTS.find((port) => port === formData.destination)
-                        : "Select destination..."}
+                        : <span className="text-muted-foreground">Select destination...</span>}
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                   </PopoverTrigger>
@@ -428,22 +421,21 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Total Weight (kg)</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Total Weight <span className="text-xs text-gray-500">(kg)</span></label>
                 <div className="relative">
                   <Input
                     type="number"
                     value={formData.weight}
                     onChange={(e) => handleInputChange('weight', e.target.value)}
-                    className="pr-10 text-lg"
+                    className="text-lg"
                     placeholder="0"
                   />
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm font-medium pointer-events-none">kg</span>
                 </div>
                 {errors.weight && <p className="text-red-500 text-xs mt-1">{errors.weight}</p>}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Dimensions (L x W x H)</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Dimensions <span className="text-xs text-gray-500">(cm)</span></label>
                 <div className="grid grid-cols-3 gap-2">
                   <div className="relative">
                     <Input
@@ -451,9 +443,8 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
                       placeholder="L"
                       value={formData.dimensions.length}
                       onChange={(e) => handleInputChange('dimensions.length', e.target.value)}
-                      className="pr-8"
+                      className="text-xs"
                     />
-                    <span className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground text-xs font-medium pointer-events-none">cm</span>
                   </div>
                   <div className="relative">
                     <Input
@@ -461,9 +452,8 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
                       placeholder="W"
                       value={formData.dimensions.width}
                       onChange={(e) => handleInputChange('dimensions.width', e.target.value)}
-                      className="pr-8"
+                      className="text-xs"
                     />
-                    <span className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground text-xs font-medium pointer-events-none">cm</span>
                   </div>
                   <div className="relative">
                     <Input
@@ -471,9 +461,8 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
                       placeholder="H"
                       value={formData.dimensions.height}
                       onChange={(e) => handleInputChange('dimensions.height', e.target.value)}
-                      className="pr-8"
+                      className="text-xs"
                     />
-                    <span className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground text-xs font-medium pointer-events-none">cm</span>
                   </div>
                 </div>
                 {(errors['dimensions.length'] || errors['dimensions.width'] || errors['dimensions.height']) && (
@@ -504,9 +493,16 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
                   </SelectTrigger>
                   <SelectContent className="z-[99999]">
                     <SelectItem value="EXW">EXW - Ex Works</SelectItem>
-                    <SelectItem value="FOB">FOB - Free on Board</SelectItem>
-                    <SelectItem value="CIF">CIF - Cost, Insurance & Freight</SelectItem>
+                    <SelectItem value="FCA">FCA - Free Carrier</SelectItem>
+                    <SelectItem value="CPT">CPT - Carriage Paid To</SelectItem>
+                    <SelectItem value="CIP">CIP - Carriage and Insurance Paid To</SelectItem>
+                    <SelectItem value="DAP">DAP - Delivered at Place</SelectItem>
+                    <SelectItem value="DPU">DPU - Delivered at Place Unloaded</SelectItem>
                     <SelectItem value="DDP">DDP - Delivered Duty Paid</SelectItem>
+                    <SelectItem value="FAS">FAS - Free Alongside Ship</SelectItem>
+                    <SelectItem value="FOB">FOB - Free on Board</SelectItem>
+                    <SelectItem value="CFR">CFR - Cost and Freight</SelectItem>
+                    <SelectItem value="CIF">CIF - Cost, Insurance & Freight</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

@@ -18,6 +18,8 @@ export interface TariffLine {
     isLeaf: boolean;
 }
 
+import { HS_CODES } from '@/lib/hsCodes';
+
 export const comtradeService = {
     /**
      * Get Tariff Line Data (HS Codes)
@@ -60,29 +62,17 @@ export const comtradeService = {
     },
 
     /**
-     * Search for HS Codes by text (Simulation/Mock for now as Comtrade Search is complex)
-     * Real implementation would use their metadata endpoint or a dedicated search index.
+     * Search for HS Codes by text using local database for speed and reliability.
      */
     searchHSCodes: async (searchTerm: string) => {
-        // For demo purposes, we'll return some common HS codes if the API is too complex/slow
-        // In a real app, we would query the `getClist` or metadata endpoints.
+        // Simulating network delay for realism (optional)
+        await new Promise(r => setTimeout(r, 200));
 
-        // Simulating delay
-        await new Promise(r => setTimeout(r, 500));
+        const lowerTerm = searchTerm.toLowerCase();
 
-        const MOCK_DB = [
-            { code: '0901', desc: 'Coffee, whether or not roasted or decaffeinated' },
-            { code: '8471', desc: 'Automatic data processing machines (computers)' },
-            { code: '8517', desc: 'Telephone sets, including smartphones' },
-            { code: '8703', desc: 'Motor cars and other motor vehicles' },
-            { code: '6109', desc: 'T-shirts, singlets and other vests, knitted or crocheted' },
-            { code: '9403', desc: 'Other furniture and parts thereof' },
-            { code: '9503', desc: 'Tricycles, scooters, pedal cars and similar wheeled toys' },
-        ];
-
-        return MOCK_DB.filter(item =>
-            item.desc.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            item.code.includes(searchTerm)
-        );
+        return HS_CODES.filter(item =>
+            item.desc.toLowerCase().includes(lowerTerm) ||
+            item.code.startsWith(lowerTerm)
+        ).slice(0, 20); // Limit results to top 20 matches
     }
 };

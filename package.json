@@ -56,6 +56,7 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "convex": "^1.31.5",
+    "csv-parse": "^6.1.0",
     "date-fns": "^4.1.0",
     "docusign-esign": "^8.5.0",
     "leaflet": "^1.9.4",

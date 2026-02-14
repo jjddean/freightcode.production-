@@ -163,9 +163,12 @@ export default defineSchema({
     customs: v.optional(v.object({
       brokerName: v.optional(v.string()), // e.g. "Flexport Customs LLC"
       brokerEmail: v.optional(v.string()),
-      filingStatus: v.optional(v.string()), // "pending", "filed", "cleared", "held"
-      entryNumber: v.optional(v.string()), // 7501 Entry Number
+      filingStatus: v.optional(v.string()),
+      entryNumber: v.optional(v.string()), // 7501 Entry Number or HMRC ref
       clearedAt: v.optional(v.number()),
+      filedAt: v.optional(v.number()),
+      docs: v.optional(v.array(v.id("documents"))),
+      notes: v.optional(v.string()),
     })),
 
     userId: v.optional(v.id("users")),
@@ -452,4 +455,23 @@ export default defineSchema({
   }).index("byUserId", ["userId"])
     .index("byTimestamp", ["timestamp"])
     .index("byRead", ["read"]), // Efficiently find unread messages
-}); 
+
+  compliance_audits: defineTable({
+    type: v.string(), // e.g. "commercial_invoice"
+    status: v.string(), // "passed" | "flagged"
+    extractedData: v.any(),
+    riskChecklist: v.array(v.object({
+      type: v.string(), // "mismatch" | "compliance" | "missing_data" | "system"
+      severity: v.string(), // "low" | "medium" | "high"
+      message: v.string(),
+      field: v.optional(v.string()),
+    })),
+    correctedData: v.optional(v.any()),
+    rawText: v.optional(v.string()),
+    shipmentId: v.optional(v.string()),
+    userId: v.optional(v.id("users")),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  }).index("byUserId", ["userId"])
+    .index("byShipmentId", ["shipmentId"]),
+});

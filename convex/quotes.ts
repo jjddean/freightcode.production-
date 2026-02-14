@@ -1,27 +1,10 @@
 import { internalMutation, mutation, query } from "./_generated/server"
 import { internal, api } from "./_generated/api"
 import { v } from "convex/values"
-import { calculateShippingPrice, estimateTransitTime } from "./pricing";
+import { calculateShippingPrice, estimateTransitTime, generateMockLineItems } from "./pricing";
 import { getFreightEstimates } from "./freightos";
 import { findLocode } from "./locations";
 
-// Helper to generate detailed price breakdown
-function generateMockLineItems(origin: string, destination: string) {
-  const currency = "USD";
-  return [
-    { category: "Origin", description: "Pick up", unit: "wm", price: 90, currency, minimum: 120, total: 180, vat: "%" },
-    { category: "Origin", description: "Documentation fee", unit: "shipment", price: 115, currency, total: 115, vat: "%" },
-    { category: "Main Transport", description: `Ocean freight ${origin} - HUB`, unit: "wm", price: 221.06, currency, minimum: 94, total: 442.12, vat: "%" },
-    { category: "Main Transport", description: `Ocean freight HUB - ${destination}`, unit: "wm", price: 73, currency, minimum: 73, total: 146, vat: "%" },
-    { category: "Destination", description: "Security Surcharge", unit: "wm", price: 11, currency, minimum: 40, total: 40, vat: "%" },
-    { category: "Destination", description: "Fuel Surcharge", unit: "wm", price: 18.5, currency, minimum: 20, total: 37, vat: "%" },
-    { category: "Destination", description: "Delivery order fee", unit: "shipment", price: 200, currency, total: 200, vat: "%" },
-    { category: "Destination", description: "Documentation fee", unit: "shipment", price: 10, currency, total: 10, vat: "%" },
-    { category: "Destination", description: "Delivery", unit: "wm", price: 70, currency, minimum: 110, total: 140, vat: "%" },
-    { category: "Destination", description: "Terminal Handling", unit: "wm", price: 25, currency, minimum: 50, total: 50, vat: "%" },
-    { category: "Destination", description: "Cargo handling charge", unit: "wm", price: 5, currency, minimum: 50, total: 50, vat: "%" },
-  ];
-}
 
 // ... (imports remain)
 export const createQuote = mutation({

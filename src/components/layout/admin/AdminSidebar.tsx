@@ -31,6 +31,7 @@ const navigation: { name: string; href: string; icon: any; badge?: number }[] = 
     { name: 'Audit Logs', href: '/admin/audit', icon: ShieldCheck },
     { name: 'Finance', href: '/admin/payments', icon: CreditCard },
     { name: 'Compliance', href: '/admin/compliance', icon: ShieldCheck },
+    { name: 'Customs Queue', href: '/admin/customs', icon: FileText },
     { name: 'Settings', href: '/admin/settings', icon: Settings },
 ];
 

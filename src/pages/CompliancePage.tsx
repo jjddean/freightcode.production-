@@ -5,12 +5,16 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Checkbox } from "@/components/ui/checkbox";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FileText, FileBadge, FileWarning, CheckCircle, Clock } from 'lucide-react';
-import { useQuery } from "convex/react";
+import { useQuery, useAction, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { Link } from 'react-router-dom';
 import { ComplianceKycModal } from "@/components/compliance/ComplianceKycModal";
 import { toast } from 'sonner';
 import { HSCodeLookup } from '@/components/tools/HSCodeLookup';
+import { AuditResultsView } from '@/components/ai/AuditResultsView';
+import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Loader2, Sparkles, Wand2 } from 'lucide-react';
 
 const CompliancePage = () => {
   // Live documents for compliance monitoring
@@ -252,9 +256,9 @@ const CompliancePage = () => {
             <HSCodeLookup />
           </div>
 
-          {/* 3. GATED: AI Risk Analysis Overlay example */}
+          {/* SmartAudit™ AI Auditor */}
           <div className="mb-8">
-            <AiRiskAnalysisSection />
+            <SmartAuditSection />
           </div>
 
           {/* 4. Document Templates (Bottom Row) */}
@@ -335,26 +339,134 @@ const CompliancePage = () => {
   );
 };
 
-function AiRiskAnalysisSection() {
+
+
+function SmartAuditSection() {
+  const [rawText, setRawText] = useState("");
+  const [docType, setDocType] = useState("commercial_invoice");
+  const [isAuditing, setIsAuditing] = useState(false);
+  const [auditResult, setAuditResult] = useState<any>(null);
+
+  const auditAction = useAction(api.smartaudit.auditDocument);
+  const saveAuditMutation = useMutation(api.smartaudit.saveAudit);
+
+  const handleAudit = async () => {
+    if (!rawText.trim()) {
+      toast.error("Input Required", { description: "Please paste document text to audit." });
+      return;
+    }
+
+    setIsAuditing(true);
+    setAuditResult(null);
+    try {
+      const result = await auditAction({ rawText, docType });
+      setAuditResult(result);
+      toast.success("Audit Complete", { description: "SmartAudit AI has finished the analysis." });
+
+      // Auto-save the audit result
+      await saveAuditMutation({
+        type: docType,
+        status: result.status,
+        extractedData: result.extractedData,
+        riskChecklist: result.riskChecklist,
+        correctedData: result.correctedData,
+        rawText: rawText,
+      });
+    } catch (error: any) {
+      console.error(error);
+      toast.error("Audit Failed", { description: error.message });
+    } finally {
+      setIsAuditing(false);
+    }
+  };
+
   return (
-    <Card className="bg-purple-50 border-purple-200">
-      <CardHeader>
-        <CardTitle className="text-purple-900 flex items-center gap-2">
-          <span>🤖</span> AI Compliance Analysis
-        </CardTitle>
-        <CardDescription className="text-purple-700"> Automated risk detection active.</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="flex items-center gap-3 p-3 bg-white rounded border border-purple-100 shadow-sm">
-          <CheckCircle className="text-green-500 w-5 h-5" />
+    <Card className="border-purple-200 overflow-hidden shadow-lg transition-all hover:shadow-purple-100/50">
+      <CardHeader className="bg-gradient-to-r from-purple-50 to-white pb-6">
+        <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-gray-900">No sanctions detected</p>
-            <p className="text-xs text-gray-500">All parties cleared against OFAC/EU lists.</p>
+            <CardTitle className="text-purple-900 flex items-center gap-2 text-2xl">
+              <Sparkles className="h-6 w-6 text-purple-600 animate-pulse" />
+              SmartAudit™
+            </CardTitle>
+            <CardDescription className="text-purple-700 mt-1">
+              Analyze Commercial Invoices & Packing Lists for customs compliance errors.
+            </CardDescription>
           </div>
+          <Badge className="bg-purple-600 hover:bg-purple-700 text-white border-0 py-1 px-3">BETA</Badge>
         </div>
+      </CardHeader>
+      <CardContent className="pt-6 space-y-6">
+        {!auditResult ? (
+          <div className="space-y-4">
+            <div className="flex gap-4">
+              <Select value={docType} onValueChange={setDocType}>
+                <SelectTrigger className="w-[200px] border-purple-100 focus:ring-purple-500">
+                  <SelectValue placeholder="Document Type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="commercial_invoice">Commercial Invoice</SelectItem>
+                  <SelectItem value="packing_list">Packing List</SelectItem>
+                  <SelectItem value="bol">Bill of Lading</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="relative">
+              <textarea
+                placeholder="Paste the text content of your document here for a compliance risk analysis..."
+                className="flex min-h-[200px] w-full rounded-md border border-purple-100 bg-gray-50/30 px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 font-mono"
+                value={rawText}
+                onChange={(e) => setRawText(e.target.value)}
+              />
+              {rawText.length > 0 && (
+                <div className="absolute bottom-2 right-2 text-[10px] text-gray-400">
+                  {rawText.length} characters
+                </div>
+              )}
+            </div>
+
+            <Button
+              className="w-full bg-purple-600 hover:bg-purple-700 text-white shadow-md transition-all active:scale-[0.98]"
+              disabled={isAuditing}
+              onClick={handleAudit}
+            >
+              {isAuditing ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Analyzing Risk Profiles...
+                </>
+              ) : (
+                <>
+                  <Wand2 className="mr-2 h-4 w-4" />
+                  Run SmartAudit™ Audit
+                </>
+              )}
+            </Button>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            <AuditResultsView {...auditResult} />
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                className="flex-1 border-purple-200 text-purple-700 hover:bg-purple-50"
+                onClick={() => setAuditResult(null)}
+              >
+                New Audit
+              </Button>
+              <Button
+                className="flex-1 bg-purple-600 text-white hover:bg-purple-700"
+                onClick={() => toast.info("Feature coming soon", { description: "You will be able to export the corrected document shortly." })}
+              >
+                Draft Correction
+              </Button>
+            </div>
+          </div>
+        )}
       </CardContent>
     </Card>
-  )
+  );
 }
 
 export default CompliancePage;

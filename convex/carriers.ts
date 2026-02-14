@@ -1,6 +1,7 @@
 import { action } from "./_generated/server";
 import { v } from "convex/values";
 import axios from "axios";
+import { generateMockLineItems } from "./pricing";
 
 // Types matching the frontend expectations
 interface CarrierRate {
@@ -111,7 +112,7 @@ export const fetchCarrierRates = action({
                         price: {
                             amount: cost,
                             currency: rate.currency,
-                            lineItems: [], // Placeholder
+                            lineItems: generateMockLineItems(args.origin.city, args.destination.city),
                         },
                     };
                 });
@@ -173,7 +174,7 @@ export const fetchCarrierRates = action({
                         price: {
                             amount: cost,
                             currency: quote.currency || "USD",
-                            lineItems: [],
+                            lineItems: generateMockLineItems(args.origin.city, args.destination.city),
                         },
                     };
                 });
@@ -236,7 +237,7 @@ export const fetchCarrierRates = action({
                         price: {
                             amount: cost,
                             currency: rate.currency,
-                            lineItems: [],
+                            lineItems: generateMockLineItems(args.origin.city, args.destination.city),
                         },
                     };
                 });
@@ -329,7 +330,7 @@ export const fetchCarrierRates = action({
                                 price: {
                                     amount: rate.totalPrice,
                                     currency: rate.totalCurrency || "USD",
-                                    lineItems: []
+                                    lineItems: generateMockLineItems(args.origin.city, args.destination.city)
                                 }
                             };
                         });
@@ -350,7 +351,7 @@ export const fetchCarrierRates = action({
                         transit_time: "32 days",
                         transitTime: "32 days",
                         provider: "searates",
-                        price: { amount: 2450, currency: "USD", lineItems: [] }
+                        price: { amount: 2450, currency: "USD", lineItems: generateMockLineItems(args.origin.city, args.destination.city) }
                     });
                 }
             }

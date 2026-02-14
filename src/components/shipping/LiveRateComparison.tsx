@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { type CarrierRate, type RateRequest } from '@/services/carriers';
 import { LandedCostTool } from '@/components/ui/landed-cost-tool';
 import { cn } from '@/lib/utils';
+import PriceBreakdownTable from "@/components/shipping/PriceBreakdownTable";
 
 interface LiveRateComparisonProps {
   rateRequest: RateRequest;
@@ -241,6 +242,24 @@ const LiveRateComparison: React.FC<LiveRateComparisonProps> = ({
                           Book This Rate
                         </Button>
                       </div>
+
+                      {/* Detailed Price Breakdown */}
+                      {rate.price?.lineItems && rate.price.lineItems.length > 0 && (
+                        <div className="mt-4 pt-4 border-t border-gray-100">
+                          <details className="group">
+                            <summary className="text-xs font-semibold text-blue-600 cursor-pointer hover:underline flex items-center">
+                              <span>View Detailed Price Breakdown</span>
+                              <span className="ml-2 transition-transform group-open:rotate-180">▼</span>
+                            </summary>
+                            <div className="mt-2">
+                              <PriceBreakdownTable
+                                lineItems={rate.price.lineItems}
+                                currency={rate.price.currency}
+                              />
+                            </div>
+                          </details>
+                        </div>
+                      )}
                     </div>
                   )}
 

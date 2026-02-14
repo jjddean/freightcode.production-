@@ -21,6 +21,7 @@ interface DataTableProps<T> {
   filterPanel?: React.ReactNode;
   className?: string;
   rowsPerPage?: number;
+  onRowClick?: (row: T) => void;
 }
 
 function DataTable<T extends Record<string, any>>({
@@ -33,7 +34,8 @@ function DataTable<T extends Record<string, any>>({
   toolbarActions,
   filterPanel,
   className,
-  rowsPerPage = 10
+  rowsPerPage = 10,
+  onRowClick
 }: DataTableProps<T>) {
   const [internalSearchTerm, setInternalSearchTerm] = useState('');
   const [sortColumn, setSortColumn] = useState<keyof T | null>(null);
@@ -173,7 +175,14 @@ function DataTable<T extends Record<string, any>>({
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {paginatedData.map((row, index) => (
-              <tr key={index} className="hover:bg-gray-50 transition-colors">
+              <tr
+                key={index}
+                className={cn(
+                  "hover:bg-gray-50 transition-colors",
+                  onRowClick && "cursor-pointer"
+                )}
+                onClick={() => onRowClick && onRowClick(row)}
+              >
                 {columns.map((column) => (
                   <td
                     key={String(column.key)}

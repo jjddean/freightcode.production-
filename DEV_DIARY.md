@@ -169,3 +169,15 @@ This log documents the major stages of development for the FreightCode / MarketL
 - **Refinement**: Reverted Layout Changes.
   - **Action**: Restored Compliance Page to original single-column layout for HS Code tool after testing grid layout.
   - **Status**: Stable. HS Code tool is live; Currency tool is codebase-ready but hidden by default.
+
+### [2026-02-14] - SmartAudit™ Rebranding & HMRC Live Integration
+- **Feature**: Rebranded "Docmate AI" to **SmartAudit™** across the entire stack.
+- **HMRC Integration (Phase 2)**:
+  - Transitioned from static HS code data to live **HMRC Trade Tariff API V2**.
+  - Implemented `searchCommodities` for official government classification.
+  - Added Section/Chapter notes and Estimated Duty calculations to the audit results.
+- **Bug Fixes**:
+  - Resolved 500 error on Compliance/Admin pages (missing imports & components).
+  - Fixed circular TypeScript references in audit actions.
+  - Synchronized Convex development environment with `npx convex codegen`.
+- **UI**: Added "Official" badges and live connectivity status to the HS Lookup tool.

@@ -1,13 +1,17 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { Search, Loader2, BookOpen, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { useAction } from "convex/react";
+import { api } from "../../../convex/_generated/api";
 
 interface HSCode {
     code: string;
-    desc: string;
+    description: string;
+    isOfficial?: boolean;
 }
 
 interface HSCodeLookupProps {
@@ -17,11 +21,13 @@ interface HSCodeLookupProps {
 
 export const HSCodeLookup = ({ variant = 'default', className }: HSCodeLookupProps) => {
     const [searchTerm, setSearchTerm] = useState('');
-    const [allCodes, setAllCodes] = useState<HSCode[]>([]);
+    const [allCodes, setAllCodes] = useState<{ code: string, desc: string }[]>([]);
     const [results, setResults] = useState<HSCode[]>([]);
     const [loading, setLoading] = useState(false);
     const [isDbLoaded, setIsDbLoaded] = useState(false);
     const [searched, setSearched] = useState(false);
+
+    const searchHMRC = useAction(api.hmrc_actions.searchHSCode);
 
     // Load HS Codes lazily on first interaction or mount
     useEffect(() => {
@@ -41,23 +47,54 @@ export const HSCodeLookup = ({ variant = 'default', className }: HSCodeLookupPro
         loadDatabase();
     }, []);
 
-    const handleSearch = () => {
+    const handleSearch = async () => {
         if (!searchTerm.trim()) return;
 
         setLoading(true);
         setSearched(true);
 
-        // Use timeout to allow UI to show loading state before heavy filter
-        setTimeout(() => {
+        try {
+            // 1. Try Live HMRC Search
+            const officialResults = await searchHMRC({ query: searchTerm });
+            const formattedOfficial = (officialResults || []).map((r: any) => ({
+                code: r.code,
+                description: r.description,
+                isOfficial: true
+            }));
+
+            // 2. Fallback/Supplement with Local DB
+            const lowerTerm = searchTerm.toLowerCase();
+            const localResults = allCodes.filter(item =>
+                item.desc.toLowerCase().includes(lowerTerm) ||
+                item.code.startsWith(lowerTerm)
+            ).slice(0, 50).map(item => ({
+                code: item.code,
+                description: item.desc,
+                isOfficial: false
+            }));
+
+            // Combine results, prioritizing official ones
+            const combined = [...formattedOfficial, ...localResults.filter(l =>
+                !formattedOfficial.some(o => o.code === l.code)
+            )].slice(0, 50);
+
+            setResults(combined);
+        } catch (error) {
+            console.error("HMRC Search failed:", error);
+            // Fallback to local only
             const lowerTerm = searchTerm.toLowerCase();
             const filtered = allCodes.filter(item =>
                 item.desc.toLowerCase().includes(lowerTerm) ||
                 item.code.startsWith(lowerTerm)
-            ).slice(0, 50); // Limit to 50 results for performance
-
+            ).slice(0, 50).map(item => ({
+                code: item.code,
+                description: item.desc,
+                isOfficial: false
+            }));
             setResults(filtered);
+        } finally {
             setLoading(false);
-        }, 100);
+        }
     };
 
     const containerClasses = variant === 'default'
@@ -100,10 +137,17 @@ export const HSCodeLookup = ({ variant = 'default', className }: HSCodeLookupPro
                             toast.success(`Code ${item.code} copied to clipboard`);
                         }}>
                             <div>
-                                <div className="font-mono text-sm font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded inline-block mb-1">
-                                    {item.code}
+                                <div className="flex items-center gap-2 mb-1">
+                                    <div className="font-mono text-sm font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded inline-block">
+                                        {item.code}
+                                    </div>
+                                    {item.isOfficial && (
+                                        <Badge variant="outline" className="text-[10px] bg-green-50 text-green-700 border-green-100 uppercase font-bold py-0">
+                                            Official
+                                        </Badge>
+                                    )}
                                 </div>
-                                <div className="text-sm text-gray-700 leading-snug">{item.desc}</div>
+                                <div className="text-sm text-gray-700 leading-snug">{item.description}</div>
                             </div>
                             <Button variant="ghost" size="sm" className="opacity-0 group-hover:opacity-100 h-8 text-xs">
                                 Copy
@@ -115,7 +159,7 @@ export const HSCodeLookup = ({ variant = 'default', className }: HSCodeLookupPro
 
             <div className="mt-4 text-xs text-gray-400 text-right flex justify-between items-center border-t pt-3">
                 <span>{isDbLoaded ? `Database Ready (${allCodes.length.toLocaleString()} codes)` : 'Initializing...'}</span>
-                <span>Source: WCO Harmonized System 2022</span>
+                <span>Source: HMRC Official Trade Tariff API</span>
             </div>
         </div>
     );

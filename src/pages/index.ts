@@ -19,7 +19,9 @@ export { default as PaymentsPage } from './PaymentsPage';
 export { default as CompliancePage } from './CompliancePage';
 export { default as ReportsPage } from './ReportsPage';
 export { default as DocumentsPage } from './DocumentsPage';
-export { default as AccountPage } from './AccountPage';
+// Admin Pages
+export { default as AdminDashboardPage } from './admin/AdminDashboardPage';
+export { default as AdminCustomsPage } from './admin/AdminCustomsPage';
 
 // Legacy Pages (keeping for reference)
 export { default as TeamPage } from './TeamPage';

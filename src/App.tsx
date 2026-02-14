@@ -63,6 +63,7 @@ const AdminDocumentsPage = lazy(() => import('./pages/admin/AdminDocumentsPage')
 const AdminCompliancePage = lazy(() => import('./pages/admin/AdminCompliancePage'));
 const AdminSettingsPage = lazy(() => import('./pages/admin/AdminSettingsPage'));
 const AdminMessagesPage = lazy(() => import('./pages/admin/AdminMessagesPage'));
+const AdminCustomsPage = lazy(() => import('./pages/admin/AdminCustomsPage'));
 
 
 // --- Helper Components ---
@@ -203,6 +204,7 @@ export default function App() {
                         <Route path="carriers" element={<AdminCarriersPage />} />
                         <Route path="documents" element={<AdminDocumentsPage />} />
                         <Route path="compliance" element={<AdminCompliancePage />} />
+                        <Route path="customs" element={<AdminCustomsPage />} />
                         <Route path="settings" element={<AdminSettingsPage />} />
                       </Routes>
                     </AdminLayout>

@@ -74,8 +74,8 @@ export const HSCodeLookup = ({ variant = 'default', className }: HSCodeLookupPro
             }));
 
             // Combine results, prioritizing official ones
-            const combined = [...formattedOfficial, ...localResults.filter(l =>
-                !formattedOfficial.some(o => o.code === l.code)
+            const combined = [...formattedOfficial, ...localResults.filter((l: any) =>
+                !formattedOfficial.some((o: any) => o.code === l.code)
             )].slice(0, 50);
 
             setResults(combined);

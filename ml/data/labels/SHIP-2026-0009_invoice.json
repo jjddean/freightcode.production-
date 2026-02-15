@@ -1,0 +1,30 @@
+{
+  "documentType": "commercial_invoice",
+  "documentNumber": "SHIP-2026-0009",
+  "rawText": "COMMERCIAL INVOICE\r\nShipmentRef: SHIP-2026-0009\r\nSELLER: Acme Shenzhen Ltd\r\nBUYER: UK Logistics Hub\r\nTOTAL: $39793.00",
+  "title": "COMMERCIAL INVOICE\r",
+  "shippingWeight": 0,
+  "totalValue": 39793,
+  "extractedFields": [
+    {
+      "key": "DocType",
+      "value": "commercial_invoice",
+      "confidence": 1
+    },
+    {
+      "key": "Reference",
+      "value": "SHIP-2026-0009",
+      "confidence": 1
+    },
+    {
+      "key": "Weight",
+      "value": 0,
+      "confidence": 1
+    },
+    {
+      "key": "TotalValue",
+      "value": 39793,
+      "confidence": 1
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+BILL OF LADING
+No: BOL-2026-0008
+SHIPPER: Global Cargo Hamburg
+CONSIGNEE: UK Logistics Hub
+GOODS: Electronics - 500kg

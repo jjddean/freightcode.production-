@@ -1,0 +1,5 @@
+PACKING LIST
+Ref: PKG-2026-0003
+SHIPPER: Tokyo Tech Exports
+GOODS: Textiles - 1200 units
+WEIGHT: 3404 KG

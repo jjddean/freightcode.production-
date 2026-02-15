@@ -1,0 +1,5 @@
+COMMERCIAL INVOICE
+ShipmentRef: SHIP-2026-0024
+SELLER: Acme Shenzhen Ltd
+BUYER: US Retail Corp
+TOTAL: $45360.00

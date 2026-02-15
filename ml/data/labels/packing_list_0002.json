@@ -1,0 +1,30 @@
+{
+  "documentType": "packing_list",
+  "documentNumber": "PKG-2026-0002",
+  "rawText": "PACKING LIST\r\nRef: PKG-2026-0002\r\nSHIPPER: Tokyo Tech Exports\r\nGOODS: Textiles - 1200 units\r\nWEIGHT: 4384 KG",
+  "title": "PACKING LIST\r",
+  "shippingWeight": 4384,
+  "totalValue": 0,
+  "extractedFields": [
+    {
+      "key": "DocType",
+      "value": "packing_list",
+      "confidence": 1
+    },
+    {
+      "key": "Reference",
+      "value": "PKG-2026-0002",
+      "confidence": 1
+    },
+    {
+      "key": "Weight",
+      "value": 4384,
+      "confidence": 1
+    },
+    {
+      "key": "TotalValue",
+      "value": 0,
+      "confidence": 1
+    }
+  ]
+}

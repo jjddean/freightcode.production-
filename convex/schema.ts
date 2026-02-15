@@ -96,6 +96,7 @@ export default defineSchema({
         lineItems: v.optional(v.array(lineItemSchema)),
       }),
       validUntil: v.string(),
+      marketScore: v.optional(v.number()), // 0-100 score of price competitiveness
     })),
     userId: v.optional(v.id("users")),
     guestId: v.optional(v.string()), // DFF: For public quoting
@@ -144,6 +145,7 @@ export default defineSchema({
       }),
     }),
     estimatedDelivery: v.string(),
+    predictedDelivery: v.optional(v.string()), // ML-modeled precision ETA
     carrier: v.string(),
     trackingNumber: v.string(),
     service: v.string(),
@@ -486,5 +488,6 @@ export default defineSchema({
     userId: v.optional(v.id("users")),
     createdAt: v.number(),
     status: v.string(),
+    correctedText: v.optional(v.string()),
   }),
 });

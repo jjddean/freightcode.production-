@@ -29,13 +29,7 @@ import PriceBreakdownTable from '@/components/shipping/PriceBreakdownTable';
 
 type Quote = any;
 
-function formatCurrency(amount: number, currency: string = 'USD') {
-    try {
-        return new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(amount);
-    } catch {
-        return `$${amount.toFixed(2)}`;
-    }
-}
+import { formatCurrency, convertCurrency } from '@/lib/currency';
 
 // GPS coordinates for common shipping cities
 function getCityCoordinates(cityOrOrigin?: string): { lat: number; lng: number } {
@@ -197,8 +191,13 @@ const BookingDialog = ({ quote, selectedCarrier }: { quote: any, selectedCarrier
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
 
-                    <div className="flex justify-between items-center text-sm">
-                        <span className="font-medium">{formatCurrency(basePrice, selectedCarrier.price?.currency)}</span>
+                    <div className="flex flex-col text-sm">
+                        <span className="text-gray-500 mb-1">Base Price</span>
+                        <span className="font-bold text-lg text-primary">{formatCurrency(basePrice, selectedCarrier.price?.currency)}</span>
+                        <div className="flex gap-2 text-[10px] text-gray-400 font-medium uppercase tracking-wider mt-1">
+                            <span>≈ {formatCurrency(convertCurrency(basePrice, selectedCarrier.price?.currency || 'USD', 'GBP'), 'GBP')}</span>
+                            <span>≈ {formatCurrency(convertCurrency(basePrice, selectedCarrier.price?.currency || 'USD', 'EUR'), 'EUR')}</span>
+                        </div>
                     </div>
 
                     <div className="space-y-4 border-t pt-4">
@@ -440,6 +439,9 @@ const ClientQuotesPage = () => {
                                                     <div className="text-right mr-4">
                                                         <div className="font-bold text-gray-900">
                                                             {formatCurrency(q.price?.amount || q.cost || q.amount || 0, q.price?.currency || q.currency)}
+                                                        </div>
+                                                        <div className="text-[10px] text-gray-400 font-medium uppercase tracking-wider mt-0.5">
+                                                            ≈ {formatCurrency(convertCurrency(q.price?.amount || q.cost || q.amount || 0, q.price?.currency || q.currency || 'USD', 'GBP'), 'GBP')}
                                                         </div>
                                                     </div>
                                                     <BookingDialog

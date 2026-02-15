@@ -1,0 +1,30 @@
+{
+  "documentType": "bill_of_lading",
+  "documentNumber": "BOL-2026-0010",
+  "rawText": "BILL OF LADING\r\nNo: BOL-2026-0010\r\nSHIPPER: Tokyo Tech Exports\r\nCONSIGNEE: Berlin Imports Gmbh\r\nGOODS: Electronics - 500kg",
+  "title": "BILL OF LADING\r",
+  "shippingWeight": 0,
+  "totalValue": 0,
+  "extractedFields": [
+    {
+      "key": "DocType",
+      "value": "bill_of_lading",
+      "confidence": 1
+    },
+    {
+      "key": "Reference",
+      "value": "BOL-2026-0010",
+      "confidence": 1
+    },
+    {
+      "key": "Weight",
+      "value": 0,
+      "confidence": 1
+    },
+    {
+      "key": "TotalValue",
+      "value": 0,
+      "confidence": 1
+    }
+  ]
+}

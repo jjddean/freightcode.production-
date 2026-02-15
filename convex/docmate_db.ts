@@ -10,6 +10,7 @@ export const saveProcessedDocument = mutation({
         tables: v.any(),
         confidence: v.number(),
         auditResult: v.any(),
+        correctedText: v.optional(v.string()),
     },
     handler: async (ctx, args) => {
         const identity = await ctx.auth.getUserIdentity();

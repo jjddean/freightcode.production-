@@ -1,0 +1,5 @@
+BILL OF LADING
+No: BOL-2026-0004
+SHIPPER: Acme Shenzhen Ltd
+CONSIGNEE: US Retail Corp
+GOODS: Auto Parts - 5 crates

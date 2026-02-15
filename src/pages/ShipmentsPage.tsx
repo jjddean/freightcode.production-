@@ -39,6 +39,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useFeature } from '@/hooks/useFeature';
 import { Link } from 'react-router-dom'; // Ensure Link is imported for upgrade redo
+import { formatCurrency, parseCurrencyString, convertCurrency } from '@/lib/currency';
 
 import {
   Sheet,
@@ -354,7 +355,7 @@ const ShipmentsPage = () => {
             case 'status':
               return Array.isArray(value) ? value.includes(shipment.status) : shipment.status === value;
             case 'value':
-              const shipmentValue = parseFloat(shipment.value.replace(/[£$,]/g, ''));
+              const shipmentValue = parseCurrencyString(shipment.value);
               const min = value.min ? parseFloat(value.min) : 0;
               const max = value.max ? parseFloat(value.max) : Infinity;
               return shipmentValue >= min && shipmentValue <= max;
@@ -395,7 +396,12 @@ const ShipmentsPage = () => {
       render: (value: string) => <StatusBadge status={value} />
     },
     { key: 'eta' as keyof ShipmentRow, header: 'ETA', sortable: true },
-    { key: 'value' as keyof ShipmentRow, header: 'Value', sortable: true },
+    {
+      key: 'value' as keyof ShipmentRow,
+      header: 'Value',
+      sortable: true,
+      render: (value: string) => <span className="font-semibold text-gray-900">{formatCurrency(value)}</span>
+    },
     {
       key: 'container' as keyof ShipmentRow,
       header: 'Actions',
@@ -741,7 +747,15 @@ const ShipmentsPage = () => {
                       </div>
                       <div>
                         <span className="text-gray-500 block mb-1">Value</span>
-                        <span className="font-medium text-gray-900">{selectedShipment.value || 'N/A'}</span>
+                        <div className="space-y-1">
+                          <span className="font-semibold text-gray-900 block">{selectedShipment.value ? formatCurrency(selectedShipment.value) : 'N/A'}</span>
+                          {selectedShipment.value && (
+                            <div className="flex gap-2 text-[10px] text-gray-400 font-medium uppercase tracking-wider">
+                              <span>≈ {formatCurrency(convertCurrency(parseCurrencyString(selectedShipment.value), 'GBP', 'USD'), 'USD')}</span>
+                              <span>≈ {formatCurrency(convertCurrency(parseCurrencyString(selectedShipment.value), 'GBP', 'EUR'), 'EUR')}</span>
+                            </div>
+                          )}
+                        </div>
                       </div>
                       <div>
                         <span className="text-gray-500 block mb-1">ETA</span>

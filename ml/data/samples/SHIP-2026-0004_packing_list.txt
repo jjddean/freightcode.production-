@@ -1,0 +1,4 @@
+PACKING LIST
+ShipmentRef: SHIP-2026-0004
+SHIPPER: Global Cargo Hamburg
+WEIGHT: 4186 KG

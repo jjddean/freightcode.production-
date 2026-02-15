@@ -67,3 +67,80 @@ export const validateHSCode = action({
         }
     },
 });
+
+export const validateEORI = action({
+    args: {
+        eori: v.string(),
+    },
+    handler: async (ctx, args) => {
+        if (!HMRC_CLIENT_ID || !HMRC_CLIENT_SECRET) {
+            return {
+                valid: true,
+                companyName: "MOCK: Global Logistics Ltd",
+                address: "10 Downing Street, London",
+                eori: args.eori
+            };
+        }
+
+        const hmrc = HMRCService.create(HMRC_CLIENT_ID, HMRC_CLIENT_SECRET, HMRC_REDIRECT_URI, HMRC_ENVIRONMENT);
+
+        try {
+            return await hmrc.validateEORI(args.eori);
+        } catch (error: any) {
+            console.error("HMRC EORI Action Error:", error);
+            throw new Error(error.message);
+        }
+    },
+});
+
+export const getENSStatus = action({
+    args: {
+        mrn: v.string(),
+    },
+    handler: async (ctx, args) => {
+        if (!HMRC_CLIENT_ID || !HMRC_CLIENT_SECRET) {
+            return {
+                success: true,
+                status: "ACCEPTED",
+                receivedDateTime: new Date().toISOString(),
+                mrn: args.mrn
+            };
+        }
+
+        const hmrc = HMRCService.create(HMRC_CLIENT_ID, HMRC_CLIENT_SECRET, HMRC_REDIRECT_URI, HMRC_ENVIRONMENT);
+
+        try {
+            return await hmrc.checkENSStatus(args.mrn);
+        } catch (error: any) {
+            console.error("HMRC ENS Action Error:", error);
+            throw new Error(error.message);
+        }
+    },
+});
+
+export const getDutyDeferment = action({
+    args: {
+        eori: v.string(),
+    },
+    handler: async (ctx, args) => {
+        if (!HMRC_CLIENT_ID || !HMRC_CLIENT_SECRET) {
+            return {
+                success: true,
+                accountNumber: "MOCK-DDA-9988",
+                creditLimit: 25000,
+                availableCredit: 4500.00,
+                currency: "GBP",
+                status: "ACTIVE"
+            };
+        }
+
+        const hmrc = HMRCService.create(HMRC_CLIENT_ID, HMRC_CLIENT_SECRET, HMRC_REDIRECT_URI, HMRC_ENVIRONMENT);
+
+        try {
+            return await hmrc.getDutyDefermentBalance(args.eori);
+        } catch (error: any) {
+            console.error("HMRC DDA Action Error:", error);
+            throw new Error(error.message);
+        }
+    },
+});

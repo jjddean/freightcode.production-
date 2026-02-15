@@ -1,0 +1,5 @@
+COMMERCIAL INVOICE
+ShipmentRef: SHIP-2026-0023
+SELLER: Global Cargo Hamburg
+BUYER: Berlin Imports Gmbh
+TOTAL: $38502.00

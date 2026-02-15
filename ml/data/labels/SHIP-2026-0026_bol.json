@@ -1,0 +1,30 @@
+{
+  "documentType": "bill_of_lading",
+  "documentNumber": "SHIP-2026-0026",
+  "rawText": "BILL OF LADING\r\nShipmentRef: SHIP-2026-0026\r\nSHIPPER: Global Cargo Hamburg\r\nCONSIGNEE: UK Logistics Hub\r\nWEIGHT: 1579 KG",
+  "title": "BILL OF LADING\r",
+  "shippingWeight": 1579,
+  "totalValue": 0,
+  "extractedFields": [
+    {
+      "key": "DocType",
+      "value": "bill_of_lading",
+      "confidence": 1
+    },
+    {
+      "key": "Reference",
+      "value": "SHIP-2026-0026",
+      "confidence": 1
+    },
+    {
+      "key": "Weight",
+      "value": 1579,
+      "confidence": 1
+    },
+    {
+      "key": "TotalValue",
+      "value": 0,
+      "confidence": 1
+    }
+  ]
+}

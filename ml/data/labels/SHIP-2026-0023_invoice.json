@@ -1,0 +1,30 @@
+{
+  "documentType": "commercial_invoice",
+  "documentNumber": "SHIP-2026-0023",
+  "rawText": "COMMERCIAL INVOICE\r\nShipmentRef: SHIP-2026-0023\r\nSELLER: Global Cargo Hamburg\r\nBUYER: Berlin Imports Gmbh\r\nTOTAL: $38502.00",
+  "title": "COMMERCIAL INVOICE\r",
+  "shippingWeight": 0,
+  "totalValue": 38502,
+  "extractedFields": [
+    {
+      "key": "DocType",
+      "value": "commercial_invoice",
+      "confidence": 1
+    },
+    {
+      "key": "Reference",
+      "value": "SHIP-2026-0023",
+      "confidence": 1
+    },
+    {
+      "key": "Weight",
+      "value": 0,
+      "confidence": 1
+    },
+    {
+      "key": "TotalValue",
+      "value": 38502,
+      "confidence": 1
+    }
+  ]
+}

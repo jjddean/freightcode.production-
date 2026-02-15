@@ -1,0 +1,5 @@
+BILL OF LADING
+No: BOL-2026-0007
+SHIPPER: Tokyo Tech Exports
+CONSIGNEE: UK Logistics Hub
+GOODS: Textiles - 1200 units

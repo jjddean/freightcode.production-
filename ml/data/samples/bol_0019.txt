@@ -1,0 +1,16 @@
+BILL OF LADING
+No: BOL-2026-0019
+Date: 2026-02-15
+
+SHIPPER:
+Acme Logistics Ltd.
+123 Industry Way, Shenzhen, CN
+
+CONSIGNEE:
+Tech Distribution Inc
+555 Innovation Blvd, San Jose, CA, US
+
+DESCRIPTION OF GOODS:
+Machinery Parts - 5 Case - 1500kg
+
+FREIGHT PREPAID

@@ -1,6 +1,7 @@
 import { useAction } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { toast } from "sonner";
+import { formatCurrency } from "@/lib/currency";
 
 export const useStripeCheckout = () => {
     const createCheckout = useAction(api.billing.createCheckoutSession);

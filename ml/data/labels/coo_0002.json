@@ -1,0 +1,30 @@
+{
+  "documentType": "certificate_of_origin",
+  "documentNumber": "COO-2026-0002",
+  "rawText": "CERTIFICATE OF ORIGIN\r\nNo: COO-2026-0002\r\nORIGIN: CHINA\r\nGOODS: Textiles - 1200 units",
+  "title": "CERTIFICATE OF ORIGIN\r",
+  "shippingWeight": 0,
+  "totalValue": 0,
+  "extractedFields": [
+    {
+      "key": "DocType",
+      "value": "certificate_of_origin",
+      "confidence": 1
+    },
+    {
+      "key": "Reference",
+      "value": "COO-2026-0002",
+      "confidence": 1
+    },
+    {
+      "key": "Weight",
+      "value": 0,
+      "confidence": 1
+    },
+    {
+      "key": "TotalValue",
+      "value": 0,
+      "confidence": 1
+    }
+  ]
+}

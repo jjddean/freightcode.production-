@@ -1,0 +1,30 @@
+{
+  "documentType": "bill_of_lading",
+  "documentNumber": "SHIP-2026-0014",
+  "rawText": "BILL OF LADING\r\nShipmentRef: SHIP-2026-0014\r\nSHIPPER: Tokyo Tech Exports\r\nCONSIGNEE: Berlin Imports Gmbh\r\nWEIGHT: 617 KG",
+  "title": "BILL OF LADING\r",
+  "shippingWeight": 617,
+  "totalValue": 0,
+  "extractedFields": [
+    {
+      "key": "DocType",
+      "value": "bill_of_lading",
+      "confidence": 1
+    },
+    {
+      "key": "Reference",
+      "value": "SHIP-2026-0014",
+      "confidence": 1
+    },
+    {
+      "key": "Weight",
+      "value": 617,
+      "confidence": 1
+    },
+    {
+      "key": "TotalValue",
+      "value": 0,
+      "confidence": 1
+    }
+  ]
+}

@@ -41,6 +41,7 @@ export class SmartAuditAuditor {
     3. INCOTERMS: Verify the 3-letter code (EXW, FOB, CIF, DDP, etc.).
     4. VALUE: Flag if the value seems unusually low for the described goods.
     5. SHIPPER/CONSIGNEE: Flag if company names or addresses seem incomplete or missing.
+    6. ENS/MRN: Identification of safety and security (ENS) Movement Reference Numbers (18-character string).
     
     Return a JSON object:
     {
@@ -49,7 +50,15 @@ export class SmartAuditAuditor {
       "riskChecklist": [
         { "type": "mismatch" | "compliance" | "missing_data", "severity": "low" | "medium" | "high", "message": "string", "field": "string" }
       ],
-      "extractedData": { ...normalized fields... },
+      "extractedData": { 
+        "hsCode": "string",
+        "description": "string",
+        "incoterms": "string",
+        "value": number,
+        "ensMRN": "string (optional)",
+        "eoriNumber": "string (optional)",
+        ...normalized fields... 
+      },
       "correctedData": { ...suggested fixes for the fields... }
     }`;
 

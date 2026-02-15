@@ -1,0 +1,5 @@
+BILL OF LADING
+ShipmentRef: SHIP-2026-0013
+SHIPPER: Global Cargo Hamburg
+CONSIGNEE: Berlin Imports Gmbh
+WEIGHT: 4677 KG

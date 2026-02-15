@@ -1,0 +1,6002 @@
+[
+  {
+    "service_type": "trucking",
+    "weight": 3043.4194041636024,
+    "distance": 2308.154405457987,
+    "price": 1331.68
+  },
+  {
+    "service_type": "express_air",
+    "weight": 2557.987287442443,
+    "distance": 13131.946171835649,
+    "price": 8436.66
+  },
+  {
+    "service_type": "trucking",
+    "weight": 8059.5199699229315,
+    "distance": 11780.953284559551,
+    "price": 4316.72
+  },
+  {
+    "service_type": "express_air",
+    "weight": 4815.313527314903,
+    "distance": 8722.191596398934,
+    "price": 9690.74
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 16395.718057545426,
+    "distance": 5450.6278116003405,
+    "price": 2050.14
+  },
+  {
+    "service_type": "trucking",
+    "weight": 7142.830715722705,
+    "distance": 7362.4354905838045,
+    "price": 3239.88
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 5436.40476260208,
+    "distance": 10263.562101491088,
+    "price": 1057.55
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 10402.78652407572,
+    "distance": 14647.109574157153,
+    "price": 1881.22
+  },
+  {
+    "service_type": "trucking",
+    "weight": 11982.774714351886,
+    "distance": 9737.237216785661,
+    "price": 5407.13
+  },
+  {
+    "service_type": "trucking",
+    "weight": 16942.042826362052,
+    "distance": 7369.095144325586,
+    "price": 6197.68
+  },
+  {
+    "service_type": "trucking",
+    "weight": 14831.801152765382,
+    "distance": 14030.149357022307,
+    "price": 6616.02
+  },
+  {
+    "service_type": "trucking",
+    "weight": 6537.189422363628,
+    "distance": 5534.968607978675,
+    "price": 2607.18
+  },
+  {
+    "service_type": "trucking",
+    "weight": 13065.49449450798,
+    "distance": 12262.950909282757,
+    "price": 5477.25
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 1285.3523280488753,
+    "distance": 6704.117570787807,
+    "price": 496.29
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 959.704812048953,
+    "distance": 3697.219223007996,
+    "price": 302.44
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 5709.217154469615,
+    "distance": 13597.291970661943,
+    "price": 1230.05
+  },
+  {
+    "service_type": "trucking",
+    "weight": 886.8268735428239,
+    "distance": 14426.04823813405,
+    "price": 2560.55
+  },
+  {
+    "service_type": "trucking",
+    "weight": 13761.827804101198,
+    "distance": 2842.4662605767944,
+    "price": 4482.67
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 18104.02609808303,
+    "distance": 683.5344245807182,
+    "price": 1775.38
+  },
+  {
+    "service_type": "express_air",
+    "weight": 19165.14194103448,
+    "distance": 6995.313405358256,
+    "price": 24700.45
+  },
+  {
+    "service_type": "trucking",
+    "weight": 19920.24627810807,
+    "distance": 1336.2402761192743,
+    "price": 5879.67
+  },
+  {
+    "service_type": "express_air",
+    "weight": 14081.30311958887,
+    "distance": 10843.063906982077,
+    "price": 20259.91
+  },
+  {
+    "service_type": "trucking",
+    "weight": 15207.452615894257,
+    "distance": 7459.965287759245,
+    "price": 6029.28
+  },
+  {
+    "service_type": "trucking",
+    "weight": 16161.089290964892,
+    "distance": 11205.063655235052,
+    "price": 6086.56
+  },
+  {
+    "service_type": "express_air",
+    "weight": 12573.40395434969,
+    "distance": 3840.819342309461,
+    "price": 15331.63
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 14141.814423653972,
+    "distance": 3978.0132901324337,
+    "price": 1716.2
+  },
+  {
+    "service_type": "express_air",
+    "weight": 17469.77768088336,
+    "distance": 13902.862909104104,
+    "price": 23653.25
+  },
+  {
+    "service_type": "express_air",
+    "weight": 8227.09455919862,
+    "distance": 10127.821565349113,
+    "price": 13609.26
+  },
+  {
+    "service_type": "trucking",
+    "weight": 4390.168042251957,
+    "distance": 12153.671928397971,
+    "price": 3082.95
+  },
+  {
+    "service_type": "express_air",
+    "weight": 17544.772368321308,
+    "distance": 9657.20571867307,
+    "price": 24472.74
+  },
+  {
+    "service_type": "trucking",
+    "weight": 8557.019900913423,
+    "distance": 6178.244218237403,
+    "price": 3610.17
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 11700.189974464874,
+    "distance": 12094.620923994062,
+    "price": 1845.86
+  },
+  {
+    "service_type": "trucking",
+    "weight": 14723.68548377418,
+    "distance": 6717.397863081723,
+    "price": 5722.05
+  },
+  {
+    "service_type": "express_air",
+    "weight": 12572.164985641766,
+    "distance": 2260.31401649458,
+    "price": 13454.61
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 11955.12554724249,
+    "distance": 7689.1549408985165,
+    "price": 1450.3
+  },
+  {
+    "service_type": "trucking",
+    "weight": 18897.61342062115,
+    "distance": 13396.872475576178,
+    "price": 8096.86
+  },
+  {
+    "service_type": "trucking",
+    "weight": 18848.370326522327,
+    "distance": 1522.0006836133052,
+    "price": 5649.97
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 6386.770247645317,
+    "distance": 9729.215350128587,
+    "price": 1095.43
+  },
+  {
+    "service_type": "express_air",
+    "weight": 12710.623000456026,
+    "distance": 13447.860347412314,
+    "price": 19367.23
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 17353.43813824726,
+    "distance": 2834.936744314068,
+    "price": 1783.11
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 13457.608588544443,
+    "distance": 10416.084948293903,
+    "price": 1724.16
+  },
+  {
+    "service_type": "express_air",
+    "weight": 14226.966591290897,
+    "distance": 7301.592002181809,
+    "price": 16558.57
+  },
+  {
+    "service_type": "express_air",
+    "weight": 19716.078453614202,
+    "distance": 2310.661332211915,
+    "price": 22361.51
+  },
+  {
+    "service_type": "trucking",
+    "weight": 7203.627775124127,
+    "distance": 11922.202643529894,
+    "price": 4042.83
+  },
+  {
+    "service_type": "trucking",
+    "weight": 2311.5017808816783,
+    "distance": 5899.298750385108,
+    "price": 1525.98
+  },
+  {
+    "service_type": "express_air",
+    "weight": 17798.67008474482,
+    "distance": 12773.14486940018,
+    "price": 23791.69
+  },
+  {
+    "service_type": "trucking",
+    "weight": 13831.635491084478,
+    "distance": 8821.958338459304,
+    "price": 5864.03
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 10596.657342170978,
+    "distance": 1552.9969166263174,
+    "price": 1177.48
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 4643.222338828937,
+    "distance": 6721.114816426455,
+    "price": 805.16
+  },
+  {
+    "service_type": "express_air",
+    "weight": 4955.88270041372,
+    "distance": 12875.423401526552,
+    "price": 12290.83
+  },
+  {
+    "service_type": "express_air",
+    "weight": 12967.944882876302,
+    "distance": 4568.738005035937,
+    "price": 15549.71
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 4187.317151386009,
+    "distance": 5456.429153204848,
+    "price": 661.23
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 2296.3360710835786,
+    "distance": 1301.8993212662515,
+    "price": 287.4
+  },
+  {
+    "service_type": "trucking",
+    "weight": 2110.122839773693,
+    "distance": 2261.607933846036,
+    "price": 980.94
+  },
+  {
+    "service_type": "express_air",
+    "weight": 18147.890243861766,
+    "distance": 2156.1007121860926,
+    "price": 18907.03
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 15261.383329557884,
+    "distance": 2878.83317420392,
+    "price": 1589.52
+  },
+  {
+    "service_type": "trucking",
+    "weight": 602.3858794733716,
+    "distance": 12159.732511861497,
+    "price": 1921.62
+  },
+  {
+    "service_type": "express_air",
+    "weight": 15060.052484113283,
+    "distance": 11745.499000303607,
+    "price": 19099.46
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 12251.953652863336,
+    "distance": 1816.9027518861408,
+    "price": 1217.46
+  },
+  {
+    "service_type": "trucking",
+    "weight": 7287.71603049225,
+    "distance": 4237.244651130126,
+    "price": 2851.67
+  },
+  {
+    "service_type": "express_air",
+    "weight": 7264.428798992133,
+    "distance": 7227.8458496314715,
+    "price": 11932.36
+  },
+  {
+    "service_type": "express_air",
+    "weight": 3379.416690375014,
+    "distance": 3406.117901069491,
+    "price": 5346.98
+  },
+  {
+    "service_type": "express_air",
+    "weight": 17875.30634206646,
+    "distance": 8183.622823730073,
+    "price": 23681.69
+  },
+  {
+    "service_type": "trucking",
+    "weight": 5464.358042153876,
+    "distance": 11657.440999978297,
+    "price": 3637.79
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 14122.647216885898,
+    "distance": 14099.201449800623,
+    "price": 2072.04
+  },
+  {
+    "service_type": "express_air",
+    "weight": 19536.683195166075,
+    "distance": 14571.316196496788,
+    "price": 25281.14
+  },
+  {
+    "service_type": "express_air",
+    "weight": 6476.729382520056,
+    "distance": 14074.93576971024,
+    "price": 12612.25
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 6971.96280716626,
+    "distance": 13011.444038362415,
+    "price": 1303.01
+  },
+  {
+    "service_type": "trucking",
+    "weight": 18182.420347351388,
+    "distance": 6267.585362260713,
+    "price": 6950.88
+  },
+  {
+    "service_type": "express_air",
+    "weight": 14175.069108898939,
+    "distance": 5658.613823882722,
+    "price": 16291.04
+  },
+  {
+    "service_type": "trucking",
+    "weight": 19922.60486344013,
+    "distance": 5944.6648512489655,
+    "price": 6936.51
+  },
+  {
+    "service_type": "trucking",
+    "weight": 8713.892276053295,
+    "distance": 7505.144247256964,
+    "price": 3879.37
+  },
+  {
+    "service_type": "express_air",
+    "weight": 17432.30893637334,
+    "distance": 14232.136725940038,
+    "price": 22663.09
+  },
+  {
+    "service_type": "express_air",
+    "weight": 9083.56157334741,
+    "distance": 2148.9717206724345,
+    "price": 10749.86
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 17602.037519169797,
+    "distance": 13238.090537892922,
+    "price": 2325.11
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 1590.158863537591,
+    "distance": 4743.134279102655,
+    "price": 394.16
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 2787.76642174902,
+    "distance": 14084.341737703044,
+    "price": 1037.61
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 14914.067873025842,
+    "distance": 7873.9068764089125,
+    "price": 2067.83
+  },
+  {
+    "service_type": "express_air",
+    "weight": 9675.994332193008,
+    "distance": 4505.206653790703,
+    "price": 10867.48
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 10481.883214208061,
+    "distance": 2168.144979592742,
+    "price": 1120.11
+  },
+  {
+    "service_type": "trucking",
+    "weight": 10175.679148008527,
+    "distance": 3140.3246736559977,
+    "price": 3761.86
+  },
+  {
+    "service_type": "express_air",
+    "weight": 8905.228591435245,
+    "distance": 14756.811431765918,
+    "price": 16821.07
+  },
+  {
+    "service_type": "trucking",
+    "weight": 5943.761856669236,
+    "distance": 1583.3578183003501,
+    "price": 2055.36
+  },
+  {
+    "service_type": "trucking",
+    "weight": 12193.638792137917,
+    "distance": 2878.5027751692714,
+    "price": 4417.93
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 11298.733557710482,
+    "distance": 11319.192472676086,
+    "price": 1668.15
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 4776.306766484061,
+    "distance": 5402.196964225524,
+    "price": 673.98
+  },
+  {
+    "service_type": "trucking",
+    "weight": 9213.433903081721,
+    "distance": 1548.2647949668676,
+    "price": 2709.94
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 8676.30903049439,
+    "distance": 3895.061080184911,
+    "price": 1055.41
+  },
+  {
+    "service_type": "trucking",
+    "weight": 10383.056423951384,
+    "distance": 5838.321799746341,
+    "price": 3757.28
+  },
+  {
+    "service_type": "trucking",
+    "weight": 11487.466616654438,
+    "distance": 837.9274131708316,
+    "price": 3447.37
+  },
+  {
+    "service_type": "trucking",
+    "weight": 4828.211690965656,
+    "distance": 3474.18947647937,
+    "price": 1826.71
+  },
+  {
+    "service_type": "express_air",
+    "weight": 15158.426824838823,
+    "distance": 7146.167786193132,
+    "price": 17165.81
+  },
+  {
+    "service_type": "trucking",
+    "weight": 14896.745611522729,
+    "distance": 6509.552213315621,
+    "price": 5699.83
+  },
+  {
+    "service_type": "express_air",
+    "weight": 8511.15388794577,
+    "distance": 7846.207415420459,
+    "price": 12794.76
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 938.3959862921351,
+    "distance": 13548.459512667203,
+    "price": 737.79
+  },
+  {
+    "service_type": "express_air",
+    "weight": 8653.786106908336,
+    "distance": 8339.706214718852,
+    "price": 12972.64
+  },
+  {
+    "service_type": "trucking",
+    "weight": 9918.006564601976,
+    "distance": 6926.155944675887,
+    "price": 3904.42
+  },
+  {
+    "service_type": "express_air",
+    "weight": 12475.677726416776,
+    "distance": 6750.361703880937,
+    "price": 16796.54
+  },
+  {
+    "service_type": "trucking",
+    "weight": 1190.2034494776753,
+    "distance": 14792.038523323705,
+    "price": 2339.05
+  },
+  {
+    "service_type": "trucking",
+    "weight": 18992.404050273642,
+    "distance": 6649.376652413382,
+    "price": 6743.98
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 17068.863803842716,
+    "distance": 14731.282859866029,
+    "price": 2537.82
+  },
+  {
+    "service_type": "express_air",
+    "weight": 18391.482210370334,
+    "distance": 9646.477071872485,
+    "price": 24722.15
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 7402.687913716553,
+    "distance": 12469.821817310403,
+    "price": 1423.12
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 7783.505728785223,
+    "distance": 8434.748146560421,
+    "price": 1106.41
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 19893.793612942885,
+    "distance": 958.269468301131,
+    "price": 2033.04
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 2576.1843001983093,
+    "distance": 10498.276320894152,
+    "price": 809.25
+  },
+  {
+    "service_type": "express_air",
+    "weight": 14995.017886610403,
+    "distance": 1606.7871056013105,
+    "price": 16259.85
+  },
+  {
+    "service_type": "express_air",
+    "weight": 14304.522325570406,
+    "distance": 578.0792109473349,
+    "price": 15352.68
+  },
+  {
+    "service_type": "trucking",
+    "weight": 3884.001723454855,
+    "distance": 7615.613352369052,
+    "price": 2284.44
+  },
+  {
+    "service_type": "trucking",
+    "weight": 19667.98290159959,
+    "distance": 14036.680909664361,
+    "price": 8242.93
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 1531.365796972388,
+    "distance": 2800.332619514477,
+    "price": 268.77
+  },
+  {
+    "service_type": "trucking",
+    "weight": 8110.688520078926,
+    "distance": 3327.6333736097386,
+    "price": 3048.12
+  },
+  {
+    "service_type": "express_air",
+    "weight": 2318.25895212582,
+    "distance": 3993.4239179579918,
+    "price": 4499.91
+  },
+  {
+    "service_type": "express_air",
+    "weight": 13614.72279749924,
+    "distance": 7058.335765178352,
+    "price": 18797.6
+  },
+  {
+    "service_type": "trucking",
+    "weight": 12298.811677278949,
+    "distance": 1274.7597154006603,
+    "price": 4097.59
+  },
+  {
+    "service_type": "express_air",
+    "weight": 4863.870005734518,
+    "distance": 1991.5273350076725,
+    "price": 5879.96
+  },
+  {
+    "service_type": "trucking",
+    "weight": 16471.655338288427,
+    "distance": 11336.354761302258,
+    "price": 7237.49
+  },
+  {
+    "service_type": "express_air",
+    "weight": 4149.087962990465,
+    "distance": 9897.182092784098,
+    "price": 9270.35
+  },
+  {
+    "service_type": "trucking",
+    "weight": 8133.993102861776,
+    "distance": 10184.931293247182,
+    "price": 4018.26
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 14891.375420323071,
+    "distance": 8935.090474122502,
+    "price": 1995.06
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 11247.47563166797,
+    "distance": 4265.823697858001,
+    "price": 1375.83
+  },
+  {
+    "service_type": "express_air",
+    "weight": 7306.886758282916,
+    "distance": 9006.170302655353,
+    "price": 12226.33
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 12697.93532909904,
+    "distance": 10766.890992229813,
+    "price": 1979.34
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 3317.79008418712,
+    "distance": 3923.4307153747563,
+    "price": 561.0
+  },
+  {
+    "service_type": "trucking",
+    "weight": 15033.592642507763,
+    "distance": 6751.075372883283,
+    "price": 5323.58
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 4628.794846803111,
+    "distance": 4441.303425727321,
+    "price": 677.12
+  },
+  {
+    "service_type": "express_air",
+    "weight": 6264.074684171828,
+    "distance": 11553.209731799156,
+    "price": 12062.28
+  },
+  {
+    "service_type": "trucking",
+    "weight": 9278.67202191644,
+    "distance": 2162.964368028555,
+    "price": 3223.99
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 3444.589734808885,
+    "distance": 2851.2958802571716,
+    "price": 469.9
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 18253.305482288248,
+    "distance": 5722.450578113058,
+    "price": 1972.04
+  },
+  {
+    "service_type": "trucking",
+    "weight": 16852.870920490983,
+    "distance": 13530.535122122672,
+    "price": 7270.16
+  },
+  {
+    "service_type": "trucking",
+    "weight": 18620.77104573062,
+    "distance": 500.40881621612584,
+    "price": 6026.84
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 13449.193520120372,
+    "distance": 7576.912851413846,
+    "price": 1667.38
+  },
+  {
+    "service_type": "trucking",
+    "weight": 9587.13641913637,
+    "distance": 12401.652493281885,
+    "price": 4733.09
+  },
+  {
+    "service_type": "trucking",
+    "weight": 18039.151271776343,
+    "distance": 14087.365520547874,
+    "price": 6843.7
+  },
+  {
+    "service_type": "express_air",
+    "weight": 19174.701489182917,
+    "distance": 14164.010240968897,
+    "price": 26232.17
+  },
+  {
+    "service_type": "express_air",
+    "weight": 18658.47038091655,
+    "distance": 2582.822127364105,
+    "price": 21759.92
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 19308.21115756022,
+    "distance": 6304.827165411138,
+    "price": 2428.41
+  },
+  {
+    "service_type": "trucking",
+    "weight": 9252.273249756874,
+    "distance": 3733.8384884884063,
+    "price": 3240.28
+  },
+  {
+    "service_type": "express_air",
+    "weight": 14394.797864633492,
+    "distance": 10102.652410318517,
+    "price": 19890.92
+  },
+  {
+    "service_type": "express_air",
+    "weight": 5829.138862325539,
+    "distance": 8112.519612893067,
+    "price": 8897.78
+  },
+  {
+    "service_type": "trucking",
+    "weight": 12199.945820808074,
+    "distance": 1575.284108744497,
+    "price": 4264.4
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 11198.957363826452,
+    "distance": 12013.018399557215,
+    "price": 1875.08
+  },
+  {
+    "service_type": "trucking",
+    "weight": 9613.134760452534,
+    "distance": 7048.961910657744,
+    "price": 4023.38
+  },
+  {
+    "service_type": "trucking",
+    "weight": 12320.287623167116,
+    "distance": 6638.127833864216,
+    "price": 4939.89
+  },
+  {
+    "service_type": "express_air",
+    "weight": 13498.311585399826,
+    "distance": 8520.468568651737,
+    "price": 16213.98
+  },
+  {
+    "service_type": "trucking",
+    "weight": 11895.461163388565,
+    "distance": 11521.172074674883,
+    "price": 5270.68
+  },
+  {
+    "service_type": "trucking",
+    "weight": 2376.9500563191186,
+    "distance": 10008.05657369171,
+    "price": 2143.75
+  },
+  {
+    "service_type": "trucking",
+    "weight": 7389.653028348687,
+    "distance": 5455.834213157331,
+    "price": 3259.91
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 11862.537511587045,
+    "distance": 6413.5163331065105,
+    "price": 1649.62
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 19187.813823752087,
+    "distance": 12357.463989898,
+    "price": 2592.45
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 13616.12578939906,
+    "distance": 13543.854109300892,
+    "price": 2084.71
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 3006.860351388898,
+    "distance": 8302.225291791437,
+    "price": 757.88
+  },
+  {
+    "service_type": "trucking",
+    "weight": 891.9887652869627,
+    "distance": 13974.004478710789,
+    "price": 2567.07
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 18889.272600305547,
+    "distance": 10066.474167754777,
+    "price": 2541.04
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 11891.716495455188,
+    "distance": 6258.439052577318,
+    "price": 1406.84
+  },
+  {
+    "service_type": "express_air",
+    "weight": 7055.6500692383215,
+    "distance": 13558.084002341035,
+    "price": 13205.23
+  },
+  {
+    "service_type": "trucking",
+    "weight": 4392.319018671055,
+    "distance": 4404.655440210468,
+    "price": 1922.55
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 8360.208875157809,
+    "distance": 2456.011067434218,
+    "price": 982.15
+  },
+  {
+    "service_type": "trucking",
+    "weight": 13730.09949226701,
+    "distance": 10135.8092234734,
+    "price": 5610.89
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 2809.3389789521184,
+    "distance": 5057.15090367688,
+    "price": 532.54
+  },
+  {
+    "service_type": "trucking",
+    "weight": 15944.43601073095,
+    "distance": 12367.662682591486,
+    "price": 7137.02
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 11310.128653026262,
+    "distance": 8360.639031125223,
+    "price": 1669.38
+  },
+  {
+    "service_type": "trucking",
+    "weight": 5058.513367862537,
+    "distance": 5205.133060724546,
+    "price": 2333.07
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 1693.9176349858278,
+    "distance": 2647.8096504916316,
+    "price": 294.21
+  },
+  {
+    "service_type": "express_air",
+    "weight": 1586.5751461047187,
+    "distance": 1961.141186967947,
+    "price": 2611.78
+  },
+  {
+    "service_type": "express_air",
+    "weight": 1326.7033329080114,
+    "distance": 5225.5801722022725,
+    "price": 4042.96
+  },
+  {
+    "service_type": "express_air",
+    "weight": 2950.33493666717,
+    "distance": 2480.990014084135,
+    "price": 4607.97
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 3970.571094313459,
+    "distance": 8309.457294923477,
+    "price": 747.83
+  },
+  {
+    "service_type": "express_air",
+    "weight": 6925.404637073941,
+    "distance": 8100.208842363881,
+    "price": 11798.19
+  },
+  {
+    "service_type": "trucking",
+    "weight": 18903.965144820195,
+    "distance": 5567.454592495439,
+    "price": 6547.26
+  },
+  {
+    "service_type": "express_air",
+    "weight": 13581.257148258255,
+    "distance": 678.8590282433736,
+    "price": 13624.65
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 18774.78693025179,
+    "distance": 1657.3437521139876,
+    "price": 1881.62
+  },
+  {
+    "service_type": "express_air",
+    "weight": 19020.934989146168,
+    "distance": 1284.8877173813182,
+    "price": 21085.66
+  },
+  {
+    "service_type": "trucking",
+    "weight": 18027.580523353095,
+    "distance": 8190.246025555577,
+    "price": 6343.61
+  },
+  {
+    "service_type": "trucking",
+    "weight": 2258.5629962224994,
+    "distance": 2612.0059567475873,
+    "price": 1162.72
+  },
+  {
+    "service_type": "express_air",
+    "weight": 11420.107092199116,
+    "distance": 10330.062917656302,
+    "price": 16781.9
+  },
+  {
+    "service_type": "trucking",
+    "weight": 16898.52080978602,
+    "distance": 5846.6165703145625,
+    "price": 6479.89
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 4171.61601206569,
+    "distance": 4343.6276130564,
+    "price": 657.58
+  },
+  {
+    "service_type": "express_air",
+    "weight": 11583.515098004122,
+    "distance": 5727.520441043936,
+    "price": 15258.82
+  },
+  {
+    "service_type": "express_air",
+    "weight": 8437.566782942473,
+    "distance": 5697.805081497167,
+    "price": 11948.35
+  },
+  {
+    "service_type": "trucking",
+    "weight": 773.757792456049,
+    "distance": 9644.278562372741,
+    "price": 1799.26
+  },
+  {
+    "service_type": "express_air",
+    "weight": 4762.096946904532,
+    "distance": 2513.835561474718,
+    "price": 6095.46
+  },
+  {
+    "service_type": "trucking",
+    "weight": 8345.262086385761,
+    "distance": 12018.856881936874,
+    "price": 4577.48
+  },
+  {
+    "service_type": "express_air",
+    "weight": 12837.911061728624,
+    "distance": 14768.479006751606,
+    "price": 19192.28
+  },
+  {
+    "service_type": "trucking",
+    "weight": 7687.524607965396,
+    "distance": 8327.739156887277,
+    "price": 3653.06
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 9445.009603851122,
+    "distance": 3228.704318423541,
+    "price": 1095.24
+  },
+  {
+    "service_type": "trucking",
+    "weight": 7732.475383143923,
+    "distance": 6799.188013727642,
+    "price": 3353.24
+  },
+  {
+    "service_type": "trucking",
+    "weight": 11597.556016455805,
+    "distance": 9898.22945503264,
+    "price": 4800.97
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 6543.970995018583,
+    "distance": 7380.583221029021,
+    "price": 1016.86
+  },
+  {
+    "service_type": "trucking",
+    "weight": 13902.738343621733,
+    "distance": 3484.224806233385,
+    "price": 5093.79
+  },
+  {
+    "service_type": "trucking",
+    "weight": 14811.845558300072,
+    "distance": 14504.308074546889,
+    "price": 6520.5
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 18817.497071484544,
+    "distance": 3490.8103936993057,
+    "price": 2057.53
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 3922.820351853364,
+    "distance": 5288.740474696331,
+    "price": 602.87
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 7326.7182348076685,
+    "distance": 9724.497003648357,
+    "price": 1272.51
+  },
+  {
+    "service_type": "express_air",
+    "weight": 6779.643144233659,
+    "distance": 4292.917245901606,
+    "price": 9120.07
+  },
+  {
+    "service_type": "trucking",
+    "weight": 12005.56756478457,
+    "distance": 13724.764015543877,
+    "price": 5875.79
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 17283.01747765522,
+    "distance": 2124.204399328552,
+    "price": 1879.56
+  },
+  {
+    "service_type": "trucking",
+    "weight": 8026.839212608712,
+    "distance": 9354.443564580091,
+    "price": 3858.57
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 15142.311655017653,
+    "distance": 7791.6860923818895,
+    "price": 1871.26
+  },
+  {
+    "service_type": "express_air",
+    "weight": 3096.590558680498,
+    "distance": 13999.862810537721,
+    "price": 9265.63
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 11914.02343038193,
+    "distance": 9773.390854037465,
+    "price": 1753.07
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 6248.715721982815,
+    "distance": 1192.154145274527,
+    "price": 643.76
+  },
+  {
+    "service_type": "trucking",
+    "weight": 7145.842690582588,
+    "distance": 8576.57157339378,
+    "price": 3696.7
+  },
+  {
+    "service_type": "trucking",
+    "weight": 12057.21288713121,
+    "distance": 13699.237983611867,
+    "price": 5444.01
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 16726.64917533697,
+    "distance": 11875.844653857965,
+    "price": 2327.85
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 5510.486897148688,
+    "distance": 7766.098922251382,
+    "price": 981.82
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 11198.707779563774,
+    "distance": 4687.506824063909,
+    "price": 1258.81
+  },
+  {
+    "service_type": "trucking",
+    "weight": 5575.9286785405875,
+    "distance": 9971.2685324724,
+    "price": 3036.52
+  },
+  {
+    "service_type": "express_air",
+    "weight": 14149.402072193108,
+    "distance": 8355.816385672379,
+    "price": 17872.15
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 14876.583874878974,
+    "distance": 7893.468315276891,
+    "price": 1763.81
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 13519.576616927923,
+    "distance": 12751.843998622568,
+    "price": 1879.59
+  },
+  {
+    "service_type": "trucking",
+    "weight": 14572.227652693839,
+    "distance": 9617.830224046971,
+    "price": 5251.79
+  },
+  {
+    "service_type": "express_air",
+    "weight": 9597.02235215971,
+    "distance": 8618.285799805051,
+    "price": 15109.88
+  },
+  {
+    "service_type": "express_air",
+    "weight": 7392.032305822577,
+    "distance": 10427.827733851414,
+    "price": 13182.35
+  },
+  {
+    "service_type": "express_air",
+    "weight": 16954.358720516953,
+    "distance": 7287.12761114949,
+    "price": 19328.55
+  },
+  {
+    "service_type": "trucking",
+    "weight": 8710.535685064495,
+    "distance": 12216.209390741817,
+    "price": 4866.63
+  },
+  {
+    "service_type": "trucking",
+    "weight": 15714.006583061295,
+    "distance": 3355.7821492243675,
+    "price": 4755.39
+  },
+  {
+    "service_type": "trucking",
+    "weight": 8120.215146894071,
+    "distance": 10550.637565878334,
+    "price": 4373.28
+  },
+  {
+    "service_type": "express_air",
+    "weight": 16659.12619234506,
+    "distance": 10427.979538615258,
+    "price": 23580.16
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 3008.4409808791916,
+    "distance": 7941.471674760345,
+    "price": 702.17
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 9173.421513616515,
+    "distance": 11208.699069644003,
+    "price": 1518.17
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 10739.414558113596,
+    "distance": 14451.340858785237,
+    "price": 1689.09
+  },
+  {
+    "service_type": "express_air",
+    "weight": 13017.167236914469,
+    "distance": 1496.427796605958,
+    "price": 14966.21
+  },
+  {
+    "service_type": "express_air",
+    "weight": 11549.094104080184,
+    "distance": 14272.047582998479,
+    "price": 18564.16
+  },
+  {
+    "service_type": "express_air",
+    "weight": 2842.3230456907013,
+    "distance": 8893.074248197137,
+    "price": 7544.8
+  },
+  {
+    "service_type": "trucking",
+    "weight": 19382.63032826923,
+    "distance": 11251.972495450871,
+    "price": 7855.58
+  },
+  {
+    "service_type": "trucking",
+    "weight": 2951.425954937087,
+    "distance": 4176.942254414734,
+    "price": 1455.36
+  },
+  {
+    "service_type": "trucking",
+    "weight": 19749.792830152423,
+    "distance": 6373.913840483171,
+    "price": 7228.16
+  },
+  {
+    "service_type": "trucking",
+    "weight": 5604.476597002833,
+    "distance": 2295.3903159270512,
+    "price": 1961.04
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 7922.509306525922,
+    "distance": 14705.929022303275,
+    "price": 1644.83
+  },
+  {
+    "service_type": "express_air",
+    "weight": 9925.965211797602,
+    "distance": 4302.211700180522,
+    "price": 12221.34
+  },
+  {
+    "service_type": "trucking",
+    "weight": 12575.32028116267,
+    "distance": 2268.8006512861825,
+    "price": 4263.39
+  },
+  {
+    "service_type": "trucking",
+    "weight": 13668.527479244403,
+    "distance": 2334.620350721786,
+    "price": 4541.33
+  },
+  {
+    "service_type": "trucking",
+    "weight": 1540.499418447605,
+    "distance": 13120.95854960417,
+    "price": 2671.01
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 2571.5522772025192,
+    "distance": 9202.19727767038,
+    "price": 781.28
+  },
+  {
+    "service_type": "express_air",
+    "weight": 3987.061356337833,
+    "distance": 13838.143857712774,
+    "price": 10045.24
+  },
+  {
+    "service_type": "trucking",
+    "weight": 2457.0891842352303,
+    "distance": 6685.823098002366,
+    "price": 1792.89
+  },
+  {
+    "service_type": "express_air",
+    "weight": 16873.898311889116,
+    "distance": 9817.623273147745,
+    "price": 21206.45
+  },
+  {
+    "service_type": "trucking",
+    "weight": 3501.261675223129,
+    "distance": 10880.545698909616,
+    "price": 2786.13
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 19107.67076814543,
+    "distance": 13503.801636069107,
+    "price": 2616.38
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 8557.06982266278,
+    "distance": 14564.212010277832,
+    "price": 1655.05
+  },
+  {
+    "service_type": "express_air",
+    "weight": 8653.61974337779,
+    "distance": 7010.705883385667,
+    "price": 13184.13
+  },
+  {
+    "service_type": "express_air",
+    "weight": 6083.224904883292,
+    "distance": 14271.286885606474,
+    "price": 13784.05
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 19307.11258362408,
+    "distance": 13401.949391520502,
+    "price": 2764.15
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 9754.560709678852,
+    "distance": 5412.8958540644735,
+    "price": 1292.7
+  },
+  {
+    "service_type": "express_air",
+    "weight": 19810.778566272482,
+    "distance": 12058.814753439692,
+    "price": 27934.3
+  },
+  {
+    "service_type": "trucking",
+    "weight": 4796.114581495114,
+    "distance": 2403.511590145087,
+    "price": 1748.42
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 3654.5338155740933,
+    "distance": 2883.7475267828645,
+    "price": 548.8
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 8059.012389262829,
+    "distance": 3676.205174938776,
+    "price": 989.04
+  },
+  {
+    "service_type": "trucking",
+    "weight": 18041.024689463713,
+    "distance": 12601.384251359226,
+    "price": 6870.38
+  },
+  {
+    "service_type": "express_air",
+    "weight": 1311.930829614143,
+    "distance": 7742.681032131863,
+    "price": 5406.75
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 18530.399187385523,
+    "distance": 1185.765756636376,
+    "price": 1946.77
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 12813.388009892604,
+    "distance": 4938.5990574649895,
+    "price": 1525.68
+  },
+  {
+    "service_type": "trucking",
+    "weight": 9902.20753762604,
+    "distance": 12269.750514047155,
+    "price": 5016.77
+  },
+  {
+    "service_type": "trucking",
+    "weight": 10523.472145213955,
+    "distance": 5437.163712105634,
+    "price": 3664.21
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 11516.63182929762,
+    "distance": 14341.077131716636,
+    "price": 1964.49
+  },
+  {
+    "service_type": "express_air",
+    "weight": 16250.855182170932,
+    "distance": 11692.872763525322,
+    "price": 22951.11
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 18926.129049374216,
+    "distance": 13273.50387388287,
+    "price": 2516.23
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 4548.816331559718,
+    "distance": 12850.140880965664,
+    "price": 1045.55
+  },
+  {
+    "service_type": "express_air",
+    "weight": 19476.779119682204,
+    "distance": 9910.117502478068,
+    "price": 25551.11
+  },
+  {
+    "service_type": "trucking",
+    "weight": 11443.083380309716,
+    "distance": 4350.372120385806,
+    "price": 4025.44
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 9889.721643616496,
+    "distance": 10594.795870982174,
+    "price": 1388.6
+  },
+  {
+    "service_type": "trucking",
+    "weight": 14207.744807639237,
+    "distance": 13090.85443845695,
+    "price": 5963.06
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 5241.801063814554,
+    "distance": 5771.042865759429,
+    "price": 849.99
+  },
+  {
+    "service_type": "trucking",
+    "weight": 10416.229006685957,
+    "distance": 2452.817828260904,
+    "price": 3438.47
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 12217.465712422601,
+    "distance": 5837.621587106972,
+    "price": 1409.16
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 19479.428498916586,
+    "distance": 12499.365822644262,
+    "price": 2674.92
+  },
+  {
+    "service_type": "trucking",
+    "weight": 12376.020571974177,
+    "distance": 9531.35688090204,
+    "price": 5176.73
+  },
+  {
+    "service_type": "trucking",
+    "weight": 13856.879457877953,
+    "distance": 8859.831014870631,
+    "price": 6007.21
+  },
+  {
+    "service_type": "trucking",
+    "weight": 19376.89606711784,
+    "distance": 1587.2472737532066,
+    "price": 6469.27
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 13940.42874891096,
+    "distance": 5827.587406173367,
+    "price": 1704.08
+  },
+  {
+    "service_type": "trucking",
+    "weight": 10901.422648400585,
+    "distance": 11939.951968720556,
+    "price": 4817.36
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 16665.650122351362,
+    "distance": 13968.925795377285,
+    "price": 2453.59
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 17726.148457524843,
+    "distance": 3671.8639649327993,
+    "price": 2128.34
+  },
+  {
+    "service_type": "express_air",
+    "weight": 3048.0492744867092,
+    "distance": 2999.7599762094715,
+    "price": 4888.47
+  },
+  {
+    "service_type": "express_air",
+    "weight": 7370.845509701187,
+    "distance": 2486.3333330010682,
+    "price": 7921.59
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 4087.269732865056,
+    "distance": 3497.5933595564593,
+    "price": 630.83
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 4317.801461999403,
+    "distance": 6951.8099783928055,
+    "price": 771.3
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 17777.988499331124,
+    "distance": 6011.579427245107,
+    "price": 1878.05
+  },
+  {
+    "service_type": "express_air",
+    "weight": 3899.6804116041512,
+    "distance": 2112.614071623713,
+    "price": 4950.76
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 9281.349815958223,
+    "distance": 6823.489091264098,
+    "price": 1254.09
+  },
+  {
+    "service_type": "trucking",
+    "weight": 9789.038179464225,
+    "distance": 9178.029115878962,
+    "price": 4491.68
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 8545.158897024627,
+    "distance": 6505.752778138165,
+    "price": 1194.03
+  },
+  {
+    "service_type": "express_air",
+    "weight": 18353.43885349598,
+    "distance": 1377.1336931341475,
+    "price": 18658.8
+  },
+  {
+    "service_type": "express_air",
+    "weight": 2957.974158605235,
+    "distance": 6608.20999973589,
+    "price": 5763.54
+  },
+  {
+    "service_type": "trucking",
+    "weight": 18262.728247591123,
+    "distance": 4925.155369711118,
+    "price": 6259.86
+  },
+  {
+    "service_type": "trucking",
+    "weight": 16457.944790079924,
+    "distance": 1279.8765935427718,
+    "price": 5609.07
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 13228.170056946328,
+    "distance": 12348.028051748746,
+    "price": 1760.81
+  },
+  {
+    "service_type": "trucking",
+    "weight": 16709.076476478265,
+    "distance": 12248.587602579237,
+    "price": 6971.79
+  },
+  {
+    "service_type": "express_air",
+    "weight": 8781.76742776342,
+    "distance": 10151.19153522847,
+    "price": 12615.68
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 17074.239553332423,
+    "distance": 12237.056410252188,
+    "price": 2242.27
+  },
+  {
+    "service_type": "express_air",
+    "weight": 16100.109391983724,
+    "distance": 8929.559533818527,
+    "price": 19774.65
+  },
+  {
+    "service_type": "trucking",
+    "weight": 3044.405677870502,
+    "distance": 5679.240588566114,
+    "price": 1688.58
+  },
+  {
+    "service_type": "express_air",
+    "weight": 7149.256903276781,
+    "distance": 7868.047096431822,
+    "price": 11036.61
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 10824.906325950038,
+    "distance": 8200.74885296585,
+    "price": 1579.55
+  },
+  {
+    "service_type": "trucking",
+    "weight": 11772.461935529267,
+    "distance": 5117.496220699866,
+    "price": 4288.13
+  },
+  {
+    "service_type": "express_air",
+    "weight": 6345.702943550751,
+    "distance": 7061.9920109582345,
+    "price": 9363.34
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 8283.926931979435,
+    "distance": 8321.744210747602,
+    "price": 1305.15
+  },
+  {
+    "service_type": "trucking",
+    "weight": 9371.28934658014,
+    "distance": 9234.762869085313,
+    "price": 4349.42
+  },
+  {
+    "service_type": "express_air",
+    "weight": 8212.953908156005,
+    "distance": 698.3494112045069,
+    "price": 8527.97
+  },
+  {
+    "service_type": "express_air",
+    "weight": 16189.910119262062,
+    "distance": 7967.828557788116,
+    "price": 20466.42
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 7281.3464083928475,
+    "distance": 10244.499690897183,
+    "price": 1211.18
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 17336.76977631435,
+    "distance": 8026.59492334665,
+    "price": 1963.59
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 17814.576806929035,
+    "distance": 2101.6779398219587,
+    "price": 1852.25
+  },
+  {
+    "service_type": "express_air",
+    "weight": 10999.521666938246,
+    "distance": 3702.7730586734765,
+    "price": 12831.64
+  },
+  {
+    "service_type": "trucking",
+    "weight": 19311.671508378717,
+    "distance": 9277.90098168129,
+    "price": 6816.98
+  },
+  {
+    "service_type": "trucking",
+    "weight": 19188.179341397463,
+    "distance": 4518.6639161522435,
+    "price": 6807.29
+  },
+  {
+    "service_type": "express_air",
+    "weight": 3207.705952563292,
+    "distance": 6341.354134891585,
+    "price": 5832.01
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 4231.258201361543,
+    "distance": 8767.114619696304,
+    "price": 853.17
+  },
+  {
+    "service_type": "trucking",
+    "weight": 18426.94954598528,
+    "distance": 5086.09609970217,
+    "price": 6540.23
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 9076.128574697592,
+    "distance": 7449.483112063006,
+    "price": 1273.28
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 2771.724269493631,
+    "distance": 8398.94553926334,
+    "price": 756.82
+  },
+  {
+    "service_type": "trucking",
+    "weight": 19041.40004241281,
+    "distance": 7191.232054790187,
+    "price": 7324.61
+  },
+  {
+    "service_type": "trucking",
+    "weight": 3382.3609734281304,
+    "distance": 8108.732602712165,
+    "price": 2256.88
+  },
+  {
+    "service_type": "trucking",
+    "weight": 14752.70725707481,
+    "distance": 1261.8757641001794,
+    "price": 4923.23
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 16629.65004948907,
+    "distance": 14481.994854265506,
+    "price": 2600.55
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 8626.921297849129,
+    "distance": 7793.824157725758,
+    "price": 1181.22
+  },
+  {
+    "service_type": "trucking",
+    "weight": 2110.654907825,
+    "distance": 1129.9259138344405,
+    "price": 783.45
+  },
+  {
+    "service_type": "express_air",
+    "weight": 14265.803768640271,
+    "distance": 5849.594884269522,
+    "price": 17623.59
+  },
+  {
+    "service_type": "trucking",
+    "weight": 8554.703132094488,
+    "distance": 9752.650451292557,
+    "price": 3937.89
+  },
+  {
+    "service_type": "trucking",
+    "weight": 11260.018342745863,
+    "distance": 11818.23524496842,
+    "price": 5616.33
+  },
+  {
+    "service_type": "trucking",
+    "weight": 4457.582052939839,
+    "distance": 3553.513600572946,
+    "price": 1717.85
+  },
+  {
+    "service_type": "trucking",
+    "weight": 16829.02208004381,
+    "distance": 2240.0369278474413,
+    "price": 5872.88
+  },
+  {
+    "service_type": "trucking",
+    "weight": 7148.9953683166195,
+    "distance": 9944.075842627297,
+    "price": 3903.99
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 14681.556224957732,
+    "distance": 9893.797945435888,
+    "price": 2158.06
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 13533.033660510337,
+    "distance": 6439.165468776879,
+    "price": 1837.05
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 11397.404954512132,
+    "distance": 13759.111593212258,
+    "price": 1948.63
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 7939.808985504522,
+    "distance": 7736.903344572561,
+    "price": 1158.49
+  },
+  {
+    "service_type": "trucking",
+    "weight": 7364.533974744305,
+    "distance": 835.5299034477507,
+    "price": 2362.98
+  },
+  {
+    "service_type": "trucking",
+    "weight": 15313.657155280038,
+    "distance": 2086.744559732313,
+    "price": 4542.45
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 14244.258246046837,
+    "distance": 9753.759707485255,
+    "price": 1931.16
+  },
+  {
+    "service_type": "trucking",
+    "weight": 17260.61332562756,
+    "distance": 3441.6273398432854,
+    "price": 5425.73
+  },
+  {
+    "service_type": "express_air",
+    "weight": 13725.00226226149,
+    "distance": 11176.058366742407,
+    "price": 20249.67
+  },
+  {
+    "service_type": "express_air",
+    "weight": 19583.499583853507,
+    "distance": 3150.206083299457,
+    "price": 23149.71
+  },
+  {
+    "service_type": "trucking",
+    "weight": 7508.251951913983,
+    "distance": 4385.082416922055,
+    "price": 2994.95
+  },
+  {
+    "service_type": "express_air",
+    "weight": 12241.707718566986,
+    "distance": 12270.64984395859,
+    "price": 17853.65
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 5297.31428399002,
+    "distance": 7309.218479141386,
+    "price": 892.66
+  },
+  {
+    "service_type": "trucking",
+    "weight": 14101.124230154694,
+    "distance": 9646.82214013116,
+    "price": 5802.51
+  },
+  {
+    "service_type": "express_air",
+    "weight": 16611.419898565477,
+    "distance": 10457.223847476838,
+    "price": 22069.26
+  },
+  {
+    "service_type": "express_air",
+    "weight": 2392.391333010665,
+    "distance": 13484.566995822042,
+    "price": 9198.36
+  },
+  {
+    "service_type": "trucking",
+    "weight": 5647.777708840322,
+    "distance": 13565.99205088875,
+    "price": 3853.7
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 13339.795619868823,
+    "distance": 5322.142914535149,
+    "price": 1490.37
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 16501.466755092057,
+    "distance": 13252.085062458289,
+    "price": 2504.24
+  },
+  {
+    "service_type": "express_air",
+    "weight": 519.4201377452779,
+    "distance": 2962.646974137913,
+    "price": 1982.72
+  },
+  {
+    "service_type": "express_air",
+    "weight": 19042.502896501464,
+    "distance": 2931.8794231204397,
+    "price": 21786.9
+  },
+  {
+    "service_type": "express_air",
+    "weight": 16357.341951901839,
+    "distance": 13762.136221440034,
+    "price": 21521.98
+  },
+  {
+    "service_type": "trucking",
+    "weight": 19455.404888106237,
+    "distance": 8046.753204121742,
+    "price": 7114.89
+  },
+  {
+    "service_type": "express_air",
+    "weight": 3569.4754045954287,
+    "distance": 11070.734938175636,
+    "price": 9286.45
+  },
+  {
+    "service_type": "trucking",
+    "weight": 6277.374962858137,
+    "distance": 6366.900465984384,
+    "price": 2591.19
+  },
+  {
+    "service_type": "trucking",
+    "weight": 2971.687602545882,
+    "distance": 5487.5202474394255,
+    "price": 1640.35
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 4626.492135961324,
+    "distance": 3733.2681833441275,
+    "price": 653.19
+  },
+  {
+    "service_type": "express_air",
+    "weight": 13522.582754260973,
+    "distance": 11047.709226634635,
+    "price": 17956.65
+  },
+  {
+    "service_type": "trucking",
+    "weight": 12411.93842015863,
+    "distance": 1865.9431960577647,
+    "price": 3892.16
+  },
+  {
+    "service_type": "trucking",
+    "weight": 18744.21943563991,
+    "distance": 9575.437010852636,
+    "price": 7591.5
+  },
+  {
+    "service_type": "trucking",
+    "weight": 15272.543775649612,
+    "distance": 8457.76707770681,
+    "price": 6331.81
+  },
+  {
+    "service_type": "trucking",
+    "weight": 17390.999184522876,
+    "distance": 10078.595333285535,
+    "price": 6619.93
+  },
+  {
+    "service_type": "express_air",
+    "weight": 17561.43132809654,
+    "distance": 2811.735607573912,
+    "price": 17074.87
+  },
+  {
+    "service_type": "express_air",
+    "weight": 14908.325824489264,
+    "distance": 12665.057534636255,
+    "price": 20494.41
+  },
+  {
+    "service_type": "trucking",
+    "weight": 16637.02692717703,
+    "distance": 6266.631251365885,
+    "price": 5840.88
+  },
+  {
+    "service_type": "express_air",
+    "weight": 14073.434385570741,
+    "distance": 1734.9351304159277,
+    "price": 14628.44
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 759.279791154604,
+    "distance": 8766.790381539713,
+    "price": 479.83
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 18798.918389196595,
+    "distance": 618.9783777497322,
+    "price": 2058.69
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 6840.904744131736,
+    "distance": 7430.747773252736,
+    "price": 1091.54
+  },
+  {
+    "service_type": "express_air",
+    "weight": 9050.658766294593,
+    "distance": 782.704072533728,
+    "price": 8522.66
+  },
+  {
+    "service_type": "express_air",
+    "weight": 2283.851606588277,
+    "distance": 3452.241644983994,
+    "price": 4052.21
+  },
+  {
+    "service_type": "trucking",
+    "weight": 5674.91426123846,
+    "distance": 6367.407610075333,
+    "price": 2487.34
+  },
+  {
+    "service_type": "express_air",
+    "weight": 15143.951493998899,
+    "distance": 8005.887366708758,
+    "price": 20914.16
+  },
+  {
+    "service_type": "express_air",
+    "weight": 17678.721366746813,
+    "distance": 12033.841013835761,
+    "price": 21885.67
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 5936.122550703499,
+    "distance": 5003.479437901233,
+    "price": 778.66
+  },
+  {
+    "service_type": "trucking",
+    "weight": 18106.275184215097,
+    "distance": 12183.681634234406,
+    "price": 7696.14
+  },
+  {
+    "service_type": "trucking",
+    "weight": 10079.357013173658,
+    "distance": 11728.639761402199,
+    "price": 4495.47
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 8211.533884777395,
+    "distance": 987.9620087054373,
+    "price": 955.85
+  },
+  {
+    "service_type": "trucking",
+    "weight": 2429.8447398670605,
+    "distance": 4235.443818929323,
+    "price": 1257.11
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 13248.940650936045,
+    "distance": 14919.763634134795,
+    "price": 2267.14
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 11745.224743643561,
+    "distance": 7768.3179669606825,
+    "price": 1711.95
+  },
+  {
+    "service_type": "express_air",
+    "weight": 8289.108318684543,
+    "distance": 6122.1622705113905,
+    "price": 10230.51
+  },
+  {
+    "service_type": "express_air",
+    "weight": 6719.099244957787,
+    "distance": 14795.943578817993,
+    "price": 12850.51
+  },
+  {
+    "service_type": "trucking",
+    "weight": 1635.9560790844462,
+    "distance": 7672.965587480734,
+    "price": 1507.39
+  },
+  {
+    "service_type": "trucking",
+    "weight": 8846.820897958974,
+    "distance": 1443.4398356391075,
+    "price": 3010.77
+  },
+  {
+    "service_type": "express_air",
+    "weight": 1237.2469110287993,
+    "distance": 7943.6583833804525,
+    "price": 4984.11
+  },
+  {
+    "service_type": "express_air",
+    "weight": 11218.272560938094,
+    "distance": 1193.3287993553436,
+    "price": 11101.05
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 2503.0575316463596,
+    "distance": 9668.10632329655,
+    "price": 699.14
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 1277.942011123715,
+    "distance": 10941.484113915658,
+    "price": 659.17
+  },
+  {
+    "service_type": "express_air",
+    "weight": 10051.896256297794,
+    "distance": 14646.626656381599,
+    "price": 16664.25
+  },
+  {
+    "service_type": "express_air",
+    "weight": 2098.087262238517,
+    "distance": 13414.306318958159,
+    "price": 8107.11
+  },
+  {
+    "service_type": "express_air",
+    "weight": 11298.175039613943,
+    "distance": 12884.309576743986,
+    "price": 16930.01
+  },
+  {
+    "service_type": "trucking",
+    "weight": 7280.853036128434,
+    "distance": 5661.3904078718015,
+    "price": 3069.92
+  },
+  {
+    "service_type": "express_air",
+    "weight": 16862.026083714904,
+    "distance": 5967.620516319367,
+    "price": 21644.71
+  },
+  {
+    "service_type": "trucking",
+    "weight": 555.2808178567083,
+    "distance": 8677.632235804243,
+    "price": 1606.65
+  },
+  {
+    "service_type": "trucking",
+    "weight": 9074.32887850435,
+    "distance": 13005.816643532637,
+    "price": 4395.26
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 12108.744137866212,
+    "distance": 12743.792358342871,
+    "price": 1846.33
+  },
+  {
+    "service_type": "express_air",
+    "weight": 4943.007540160287,
+    "distance": 2223.400334785017,
+    "price": 6477.92
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 9452.906032162677,
+    "distance": 7326.589036903048,
+    "price": 1365.85
+  },
+  {
+    "service_type": "express_air",
+    "weight": 5406.750788822928,
+    "distance": 9753.029835456135,
+    "price": 10496.94
+  },
+  {
+    "service_type": "express_air",
+    "weight": 15065.883369932437,
+    "distance": 1705.8584020194783,
+    "price": 16942.73
+  },
+  {
+    "service_type": "express_air",
+    "weight": 16497.30735403394,
+    "distance": 3286.3000975042255,
+    "price": 16599.82
+  },
+  {
+    "service_type": "trucking",
+    "weight": 12764.456162278779,
+    "distance": 4473.3940079206295,
+    "price": 4143.99
+  },
+  {
+    "service_type": "express_air",
+    "weight": 13842.853623198951,
+    "distance": 14175.032557885383,
+    "price": 22775.27
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 8771.232080986045,
+    "distance": 14898.614884013756,
+    "price": 1697.74
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 6125.95682067158,
+    "distance": 12092.865686223826,
+    "price": 1140.33
+  },
+  {
+    "service_type": "express_air",
+    "weight": 11951.351339846979,
+    "distance": 591.3759205775261,
+    "price": 11878.39
+  },
+  {
+    "service_type": "trucking",
+    "weight": 14073.252799916372,
+    "distance": 9491.704761675037,
+    "price": 5702.36
+  },
+  {
+    "service_type": "trucking",
+    "weight": 6870.005374740622,
+    "distance": 5863.096400374718,
+    "price": 3165.27
+  },
+  {
+    "service_type": "trucking",
+    "weight": 5205.972843569827,
+    "distance": 5392.3740101307185,
+    "price": 2213.71
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 843.4121268960648,
+    "distance": 4409.506098519538,
+    "price": 307.07
+  },
+  {
+    "service_type": "trucking",
+    "weight": 4544.68932617969,
+    "distance": 995.131264182488,
+    "price": 1470.97
+  },
+  {
+    "service_type": "trucking",
+    "weight": 18870.45554723562,
+    "distance": 12952.312266356528,
+    "price": 7419.81
+  },
+  {
+    "service_type": "trucking",
+    "weight": 11331.012270491528,
+    "distance": 12771.465004526954,
+    "price": 5081.11
+  },
+  {
+    "service_type": "trucking",
+    "weight": 7696.284028655862,
+    "distance": 9740.59176947849,
+    "price": 3737.41
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 19241.319518760713,
+    "distance": 7395.573237773928,
+    "price": 2393.4
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 12288.167885034822,
+    "distance": 11652.185862083452,
+    "price": 1885.33
+  },
+  {
+    "service_type": "express_air",
+    "weight": 16036.603780378768,
+    "distance": 11995.843256017693,
+    "price": 22433.95
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 15512.613613588712,
+    "distance": 12739.503593639698,
+    "price": 1999.67
+  },
+  {
+    "service_type": "express_air",
+    "weight": 7513.259596244122,
+    "distance": 11231.660148979843,
+    "price": 13664.0
+  },
+  {
+    "service_type": "trucking",
+    "weight": 12819.34638506297,
+    "distance": 13066.430003839136,
+    "price": 5592.89
+  },
+  {
+    "service_type": "trucking",
+    "weight": 4278.446366133221,
+    "distance": 13851.044557086705,
+    "price": 3489.79
+  },
+  {
+    "service_type": "express_air",
+    "weight": 12782.161732070828,
+    "distance": 11015.103371364761,
+    "price": 19772.37
+  },
+  {
+    "service_type": "trucking",
+    "weight": 5892.711863836411,
+    "distance": 7188.530471498132,
+    "price": 2636.79
+  },
+  {
+    "service_type": "trucking",
+    "weight": 2260.813831561708,
+    "distance": 2152.866790289343,
+    "price": 1049.87
+  },
+  {
+    "service_type": "express_air",
+    "weight": 11055.491628749933,
+    "distance": 4638.858983183991,
+    "price": 12749.94
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 9331.961803839558,
+    "distance": 12404.606960952842,
+    "price": 1473.68
+  },
+  {
+    "service_type": "express_air",
+    "weight": 8239.649582678347,
+    "distance": 13813.086377611433,
+    "price": 15301.43
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 4497.6076087710535,
+    "distance": 13353.072570534328,
+    "price": 1190.09
+  },
+  {
+    "service_type": "express_air",
+    "weight": 19571.515713974943,
+    "distance": 9216.535702599747,
+    "price": 26445.82
+  },
+  {
+    "service_type": "express_air",
+    "weight": 724.5015117059137,
+    "distance": 3466.178782348245,
+    "price": 2421.92
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 16736.057518831512,
+    "distance": 9037.627418824153,
+    "price": 2278.37
+  },
+  {
+    "service_type": "express_air",
+    "weight": 18357.107000430864,
+    "distance": 10617.686154743635,
+    "price": 23652.03
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 16885.444587281312,
+    "distance": 10194.505985096675,
+    "price": 2301.61
+  },
+  {
+    "service_type": "trucking",
+    "weight": 13191.30905945663,
+    "distance": 11137.465106211794,
+    "price": 5568.19
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 8640.564960150814,
+    "distance": 11034.466199460161,
+    "price": 1419.72
+  },
+  {
+    "service_type": "express_air",
+    "weight": 4662.927773751485,
+    "distance": 2467.4945114976945,
+    "price": 5675.02
+  },
+  {
+    "service_type": "trucking",
+    "weight": 4690.61462713533,
+    "distance": 8623.09961271647,
+    "price": 2566.58
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 9212.943018553515,
+    "distance": 10705.788076316638,
+    "price": 1497.78
+  },
+  {
+    "service_type": "express_air",
+    "weight": 10981.478701339664,
+    "distance": 14057.151147646116,
+    "price": 18373.22
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 8315.091407797841,
+    "distance": 5250.645813657376,
+    "price": 1152.35
+  },
+  {
+    "service_type": "trucking",
+    "weight": 11863.904207766653,
+    "distance": 2083.4286708281793,
+    "price": 3643.71
+  },
+  {
+    "service_type": "trucking",
+    "weight": 2819.418633183845,
+    "distance": 3623.3097551164697,
+    "price": 1422.52
+  },
+  {
+    "service_type": "trucking",
+    "weight": 8532.252207688347,
+    "distance": 11202.973832250824,
+    "price": 4401.56
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 19333.986257651974,
+    "distance": 9318.062835953724,
+    "price": 2572.85
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 9379.707307379053,
+    "distance": 2769.305661298818,
+    "price": 1102.93
+  },
+  {
+    "service_type": "express_air",
+    "weight": 2432.0996248948627,
+    "distance": 14152.765658184866,
+    "price": 9082.13
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 15865.941237582985,
+    "distance": 14752.02616163492,
+    "price": 2238.37
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 3357.9701837158836,
+    "distance": 1144.0013744764474,
+    "price": 386.31
+  },
+  {
+    "service_type": "trucking",
+    "weight": 1451.3617395932497,
+    "distance": 7956.354015110026,
+    "price": 1595.14
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 14838.00675116453,
+    "distance": 5858.978585090944,
+    "price": 1721.05
+  },
+  {
+    "service_type": "express_air",
+    "weight": 4829.719873065421,
+    "distance": 9691.883870791837,
+    "price": 9142.27
+  },
+  {
+    "service_type": "express_air",
+    "weight": 6981.019135952099,
+    "distance": 11135.393010622052,
+    "price": 13359.62
+  },
+  {
+    "service_type": "trucking",
+    "weight": 4514.318745772198,
+    "distance": 6569.964190853743,
+    "price": 2538.4
+  },
+  {
+    "service_type": "express_air",
+    "weight": 2381.033018147405,
+    "distance": 7945.95130293699,
+    "price": 5760.95
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 6932.172963297913,
+    "distance": 14261.773932092648,
+    "price": 1488.99
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 16610.163130487068,
+    "distance": 13625.599535200667,
+    "price": 2421.01
+  },
+  {
+    "service_type": "express_air",
+    "weight": 4279.709136458649,
+    "distance": 8341.639971672445,
+    "price": 7694.88
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 15656.14461046533,
+    "distance": 7191.472535449527,
+    "price": 1881.78
+  },
+  {
+    "service_type": "trucking",
+    "weight": 18782.833888771776,
+    "distance": 14095.916372651393,
+    "price": 7558.83
+  },
+  {
+    "service_type": "trucking",
+    "weight": 13576.025199331978,
+    "distance": 2149.080080600712,
+    "price": 4188.99
+  },
+  {
+    "service_type": "trucking",
+    "weight": 8481.286048398513,
+    "distance": 4997.539098610875,
+    "price": 3383.42
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 10833.351334882585,
+    "distance": 13607.484060535555,
+    "price": 1802.18
+  },
+  {
+    "service_type": "express_air",
+    "weight": 8232.551771288985,
+    "distance": 6486.3651861682965,
+    "price": 12217.71
+  },
+  {
+    "service_type": "trucking",
+    "weight": 1932.2295472334004,
+    "distance": 10986.276057137835,
+    "price": 2354.45
+  },
+  {
+    "service_type": "express_air",
+    "weight": 16791.49798824517,
+    "distance": 9346.697849940887,
+    "price": 23369.35
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 14989.984649565558,
+    "distance": 941.1110366541902,
+    "price": 1428.12
+  },
+  {
+    "service_type": "express_air",
+    "weight": 19330.000013185556,
+    "distance": 14819.647049017194,
+    "price": 29249.96
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 15255.395282354555,
+    "distance": 12413.104061347665,
+    "price": 2084.02
+  },
+  {
+    "service_type": "express_air",
+    "weight": 9787.7741314645,
+    "distance": 7794.488642294409,
+    "price": 14736.72
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 970.9896722772021,
+    "distance": 8253.434614055781,
+    "price": 492.52
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 2605.673041377812,
+    "distance": 5838.148469177909,
+    "price": 606.78
+  },
+  {
+    "service_type": "trucking",
+    "weight": 5224.9681892041845,
+    "distance": 7366.117114365938,
+    "price": 2436.97
+  },
+  {
+    "service_type": "trucking",
+    "weight": 3950.7818614867606,
+    "distance": 8243.090177664337,
+    "price": 2341.32
+  },
+  {
+    "service_type": "trucking",
+    "weight": 12774.014948041688,
+    "distance": 1467.7391656505329,
+    "price": 4436.34
+  },
+  {
+    "service_type": "trucking",
+    "weight": 9410.913006902094,
+    "distance": 2238.970606657941,
+    "price": 3057.97
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 12649.125643999154,
+    "distance": 1708.476744132218,
+    "price": 1468.44
+  },
+  {
+    "service_type": "trucking",
+    "weight": 11366.171171814647,
+    "distance": 6620.841827538327,
+    "price": 4443.85
+  },
+  {
+    "service_type": "trucking",
+    "weight": 11393.87871625216,
+    "distance": 11788.240444410714,
+    "price": 4834.22
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 6236.746609787591,
+    "distance": 9856.325450224631,
+    "price": 1210.65
+  },
+  {
+    "service_type": "trucking",
+    "weight": 14256.535373090053,
+    "distance": 3526.866262208473,
+    "price": 4388.41
+  },
+  {
+    "service_type": "trucking",
+    "weight": 2630.234485863575,
+    "distance": 10790.294031528085,
+    "price": 2592.77
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 14908.309841906444,
+    "distance": 6521.865951359805,
+    "price": 1674.64
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 6329.202235621372,
+    "distance": 3282.160144136919,
+    "price": 805.87
+  },
+  {
+    "service_type": "express_air",
+    "weight": 2768.1263258365534,
+    "distance": 6343.619840601256,
+    "price": 6106.83
+  },
+  {
+    "service_type": "trucking",
+    "weight": 11531.555738565106,
+    "distance": 7212.984586900937,
+    "price": 4297.21
+  },
+  {
+    "service_type": "trucking",
+    "weight": 2495.1034819818333,
+    "distance": 13291.12814834627,
+    "price": 2980.42
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 3562.6465977196017,
+    "distance": 14301.759138736588,
+    "price": 1134.13
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 19124.059628394676,
+    "distance": 7091.340111580007,
+    "price": 2143.3
+  },
+  {
+    "service_type": "trucking",
+    "weight": 12644.143311092217,
+    "distance": 1882.4844676808784,
+    "price": 4360.72
+  },
+  {
+    "service_type": "trucking",
+    "weight": 17415.378442435136,
+    "distance": 6458.931387061756,
+    "price": 6364.85
+  },
+  {
+    "service_type": "express_air",
+    "weight": 1288.9623983941044,
+    "distance": 11515.648105373499,
+    "price": 6891.65
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 2542.917418902506,
+    "distance": 13568.341213471524,
+    "price": 994.52
+  },
+  {
+    "service_type": "trucking",
+    "weight": 8568.043142625354,
+    "distance": 4635.297394286985,
+    "price": 3521.39
+  },
+  {
+    "service_type": "trucking",
+    "weight": 11975.304645868546,
+    "distance": 2147.1237646524855,
+    "price": 4083.02
+  },
+  {
+    "service_type": "trucking",
+    "weight": 7302.69650625168,
+    "distance": 5627.703767956035,
+    "price": 2733.69
+  },
+  {
+    "service_type": "express_air",
+    "weight": 10580.680685165713,
+    "distance": 5325.231053623269,
+    "price": 14103.83
+  },
+  {
+    "service_type": "express_air",
+    "weight": 15784.882640282101,
+    "distance": 570.74401304564,
+    "price": 14669.43
+  },
+  {
+    "service_type": "express_air",
+    "weight": 7337.895740988682,
+    "distance": 6702.704585244175,
+    "price": 10325.78
+  },
+  {
+    "service_type": "trucking",
+    "weight": 14024.143060107677,
+    "distance": 14519.476492576778,
+    "price": 6342.82
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 15071.981002331955,
+    "distance": 4953.758823603183,
+    "price": 1829.27
+  },
+  {
+    "service_type": "express_air",
+    "weight": 15948.829272820318,
+    "distance": 3207.797672304854,
+    "price": 19204.99
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 6014.128425345525,
+    "distance": 5494.859181246308,
+    "price": 957.52
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 10722.3899773349,
+    "distance": 3829.7175227162925,
+    "price": 1316.67
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 10013.684348786868,
+    "distance": 1911.5607362897047,
+    "price": 1146.0
+  },
+  {
+    "service_type": "trucking",
+    "weight": 16725.318459181726,
+    "distance": 5713.883713149607,
+    "price": 6093.58
+  },
+  {
+    "service_type": "trucking",
+    "weight": 11412.13709876396,
+    "distance": 12361.503735388987,
+    "price": 5447.99
+  },
+  {
+    "service_type": "express_air",
+    "weight": 15683.003373726715,
+    "distance": 4637.916619773584,
+    "price": 16796.47
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 13286.200542996834,
+    "distance": 10449.783698330577,
+    "price": 1992.66
+  },
+  {
+    "service_type": "trucking",
+    "weight": 2260.230197621466,
+    "distance": 1258.244573298833,
+    "price": 913.69
+  },
+  {
+    "service_type": "express_air",
+    "weight": 8341.289414946457,
+    "distance": 2504.3755264281417,
+    "price": 9766.21
+  },
+  {
+    "service_type": "trucking",
+    "weight": 16795.723342636957,
+    "distance": 1628.7942383206562,
+    "price": 5343.54
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 4625.434109686245,
+    "distance": 5113.63774583715,
+    "price": 675.07
+  },
+  {
+    "service_type": "trucking",
+    "weight": 6230.456656205146,
+    "distance": 7424.925080019783,
+    "price": 3101.25
+  },
+  {
+    "service_type": "trucking",
+    "weight": 16488.862984363208,
+    "distance": 2164.1778361646775,
+    "price": 5170.55
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 12127.170930019163,
+    "distance": 5993.607266832676,
+    "price": 1437.47
+  },
+  {
+    "service_type": "trucking",
+    "weight": 3462.9997350040003,
+    "distance": 10811.910693685171,
+    "price": 2408.92
+  },
+  {
+    "service_type": "trucking",
+    "weight": 17875.823259331537,
+    "distance": 14053.242415077904,
+    "price": 8211.66
+  },
+  {
+    "service_type": "express_air",
+    "weight": 10944.42396851164,
+    "distance": 8238.769061649837,
+    "price": 16563.5
+  },
+  {
+    "service_type": "express_air",
+    "weight": 11552.404383914478,
+    "distance": 6759.533656105347,
+    "price": 13673.52
+  },
+  {
+    "service_type": "express_air",
+    "weight": 15201.606527044247,
+    "distance": 8142.90112906899,
+    "price": 19133.31
+  },
+  {
+    "service_type": "express_air",
+    "weight": 4041.9363351588004,
+    "distance": 9093.700820704664,
+    "price": 8037.66
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 11864.8171065856,
+    "distance": 9268.045487669418,
+    "price": 1565.92
+  },
+  {
+    "service_type": "trucking",
+    "weight": 1040.3221798337381,
+    "distance": 4262.222479988157,
+    "price": 958.36
+  },
+  {
+    "service_type": "trucking",
+    "weight": 16036.072988867483,
+    "distance": 6218.7106045259825,
+    "price": 5737.49
+  },
+  {
+    "service_type": "trucking",
+    "weight": 3864.599561383404,
+    "distance": 13838.784506254271,
+    "price": 3279.69
+  },
+  {
+    "service_type": "trucking",
+    "weight": 12551.400598686278,
+    "distance": 3842.04711095669,
+    "price": 3994.2
+  },
+  {
+    "service_type": "trucking",
+    "weight": 18408.582085371945,
+    "distance": 2743.4959829357995,
+    "price": 6023.32
+  },
+  {
+    "service_type": "trucking",
+    "weight": 16873.29796157038,
+    "distance": 4320.751150662421,
+    "price": 6085.31
+  },
+  {
+    "service_type": "trucking",
+    "weight": 9121.076249719421,
+    "distance": 807.0184305848052,
+    "price": 2719.16
+  },
+  {
+    "service_type": "express_air",
+    "weight": 812.9290326886577,
+    "distance": 10625.962665261877,
+    "price": 5811.6
+  },
+  {
+    "service_type": "trucking",
+    "weight": 1427.2084273693335,
+    "distance": 1150.3660076586575,
+    "price": 654.05
+  },
+  {
+    "service_type": "express_air",
+    "weight": 15512.825437931586,
+    "distance": 14000.384228035295,
+    "price": 21968.2
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 17381.103469787366,
+    "distance": 530.9569370436238,
+    "price": 1760.46
+  },
+  {
+    "service_type": "express_air",
+    "weight": 17190.119360241722,
+    "distance": 1681.509353752917,
+    "price": 18517.1
+  },
+  {
+    "service_type": "trucking",
+    "weight": 15886.775240637224,
+    "distance": 9276.16783969266,
+    "price": 5727.06
+  },
+  {
+    "service_type": "express_air",
+    "weight": 527.3666406942775,
+    "distance": 4781.644602847256,
+    "price": 3047.13
+  },
+  {
+    "service_type": "trucking",
+    "weight": 8706.184750208628,
+    "distance": 3298.2312536810978,
+    "price": 2926.22
+  },
+  {
+    "service_type": "express_air",
+    "weight": 3629.4061689490677,
+    "distance": 9277.955963596438,
+    "price": 9035.44
+  },
+  {
+    "service_type": "trucking",
+    "weight": 3906.3093038879997,
+    "distance": 4955.9202427592745,
+    "price": 2030.52
+  },
+  {
+    "service_type": "trucking",
+    "weight": 16925.722869378642,
+    "distance": 11579.096359557143,
+    "price": 6953.65
+  },
+  {
+    "service_type": "trucking",
+    "weight": 4351.618225189895,
+    "distance": 3976.0765822546355,
+    "price": 1930.6
+  },
+  {
+    "service_type": "express_air",
+    "weight": 10445.968236402705,
+    "distance": 9675.00342331708,
+    "price": 16266.66
+  },
+  {
+    "service_type": "express_air",
+    "weight": 6978.02524005661,
+    "distance": 7880.930426052173,
+    "price": 10508.33
+  },
+  {
+    "service_type": "express_air",
+    "weight": 5407.085235042614,
+    "distance": 9054.565658142825,
+    "price": 9482.17
+  },
+  {
+    "service_type": "express_air",
+    "weight": 11863.446556343933,
+    "distance": 9425.20402084371,
+    "price": 15450.84
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 2271.170608471309,
+    "distance": 10814.76502578976,
+    "price": 696.16
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 5123.681423748445,
+    "distance": 5961.245331330609,
+    "price": 880.98
+  },
+  {
+    "service_type": "express_air",
+    "weight": 17752.432549230827,
+    "distance": 1227.4729295045759,
+    "price": 19189.4
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 4207.372324823125,
+    "distance": 1415.2067921233356,
+    "price": 489.73
+  },
+  {
+    "service_type": "trucking",
+    "weight": 14228.057590865172,
+    "distance": 813.1235801214915,
+    "price": 4502.26
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 3513.5340073401267,
+    "distance": 8148.576703142694,
+    "price": 780.88
+  },
+  {
+    "service_type": "trucking",
+    "weight": 4501.026115868569,
+    "distance": 12591.74595965011,
+    "price": 3417.14
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 16249.87779427189,
+    "distance": 8598.558197685341,
+    "price": 2052.01
+  },
+  {
+    "service_type": "express_air",
+    "weight": 10724.88240555392,
+    "distance": 4965.611226630239,
+    "price": 14390.43
+  },
+  {
+    "service_type": "express_air",
+    "weight": 15562.507085928422,
+    "distance": 14739.325051220527,
+    "price": 22545.66
+  },
+  {
+    "service_type": "trucking",
+    "weight": 3033.836638391127,
+    "distance": 8708.651016886914,
+    "price": 2047.49
+  },
+  {
+    "service_type": "trucking",
+    "weight": 1640.645147061227,
+    "distance": 3494.2337376965465,
+    "price": 1023.3
+  },
+  {
+    "service_type": "trucking",
+    "weight": 16286.17833629355,
+    "distance": 3495.547376736459,
+    "price": 4926.57
+  },
+  {
+    "service_type": "trucking",
+    "weight": 18869.883454089835,
+    "distance": 1685.7315942001956,
+    "price": 6434.79
+  },
+  {
+    "service_type": "trucking",
+    "weight": 9862.936209863114,
+    "distance": 7267.572504318084,
+    "price": 3975.93
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 15981.733788155803,
+    "distance": 13338.753095189079,
+    "price": 2458.73
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 19814.641347455767,
+    "distance": 6410.287773893998,
+    "price": 2470.37
+  },
+  {
+    "service_type": "trucking",
+    "weight": 7864.661908071965,
+    "distance": 13182.448628531634,
+    "price": 4346.24
+  },
+  {
+    "service_type": "express_air",
+    "weight": 3389.9387845468405,
+    "distance": 3423.5387241906847,
+    "price": 5036.45
+  },
+  {
+    "service_type": "trucking",
+    "weight": 14397.031096113891,
+    "distance": 1540.4205896485203,
+    "price": 4370.11
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 5706.551956235972,
+    "distance": 10150.678894589968,
+    "price": 980.65
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 12199.912371535731,
+    "distance": 1745.1262769522452,
+    "price": 1281.85
+  },
+  {
+    "service_type": "trucking",
+    "weight": 8594.87273537047,
+    "distance": 6054.382513185258,
+    "price": 3384.58
+  },
+  {
+    "service_type": "express_air",
+    "weight": 13914.494437829593,
+    "distance": 13500.755126403354,
+    "price": 22276.44
+  },
+  {
+    "service_type": "trucking",
+    "weight": 4247.217447875021,
+    "distance": 6589.11948438032,
+    "price": 2074.94
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 10182.458089576845,
+    "distance": 6700.42940765879,
+    "price": 1335.62
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 15725.767517020671,
+    "distance": 884.3799125769197,
+    "price": 1714.57
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 14500.336085697132,
+    "distance": 13220.276232767847,
+    "price": 2000.25
+  },
+  {
+    "service_type": "trucking",
+    "weight": 10809.304358516016,
+    "distance": 3024.8499579131194,
+    "price": 4005.12
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 15881.848170127887,
+    "distance": 13679.435870988544,
+    "price": 2051.83
+  },
+  {
+    "service_type": "trucking",
+    "weight": 3430.1720311577246,
+    "distance": 14131.729636941936,
+    "price": 2841.15
+  },
+  {
+    "service_type": "trucking",
+    "weight": 3617.4242950955977,
+    "distance": 3071.983117983348,
+    "price": 1458.61
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 10560.340477881764,
+    "distance": 13253.604228536007,
+    "price": 1708.96
+  },
+  {
+    "service_type": "express_air",
+    "weight": 1459.779198156793,
+    "distance": 10994.712998415414,
+    "price": 7514.97
+  },
+  {
+    "service_type": "trucking",
+    "weight": 19051.36612612536,
+    "distance": 8720.376164920559,
+    "price": 7084.84
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 850.4865909291752,
+    "distance": 696.7567776372605,
+    "price": 111.66
+  },
+  {
+    "service_type": "express_air",
+    "weight": 19192.722666392314,
+    "distance": 3255.706915140693,
+    "price": 19360.95
+  },
+  {
+    "service_type": "express_air",
+    "weight": 10366.699151230172,
+    "distance": 4373.290372242653,
+    "price": 12749.34
+  },
+  {
+    "service_type": "trucking",
+    "weight": 7202.7645592727185,
+    "distance": 3287.115152255589,
+    "price": 2408.19
+  },
+  {
+    "service_type": "trucking",
+    "weight": 8493.939284863523,
+    "distance": 2812.1282891554356,
+    "price": 2961.47
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 13741.420852831317,
+    "distance": 11601.198008811314,
+    "price": 1858.22
+  },
+  {
+    "service_type": "trucking",
+    "weight": 2989.36608761717,
+    "distance": 3107.024657528264,
+    "price": 1455.19
+  },
+  {
+    "service_type": "express_air",
+    "weight": 16259.229359725621,
+    "distance": 13155.789064349146,
+    "price": 21607.66
+  },
+  {
+    "service_type": "express_air",
+    "weight": 3295.2845198687946,
+    "distance": 4631.023443867723,
+    "price": 5314.52
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 11179.497312899513,
+    "distance": 10504.571983499613,
+    "price": 1766.08
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 5068.6926042449095,
+    "distance": 8168.874273431214,
+    "price": 940.07
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 14191.165931362,
+    "distance": 8096.414230574349,
+    "price": 1714.94
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 5076.575688435827,
+    "distance": 10425.325190511732,
+    "price": 990.37
+  },
+  {
+    "service_type": "trucking",
+    "weight": 13470.436367563358,
+    "distance": 4784.0737235597735,
+    "price": 4476.82
+  },
+  {
+    "service_type": "trucking",
+    "weight": 3422.8289563441463,
+    "distance": 5486.173116458116,
+    "price": 1981.79
+  },
+  {
+    "service_type": "express_air",
+    "weight": 16004.848400488578,
+    "distance": 8910.373571490107,
+    "price": 18667.11
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 17757.611535584656,
+    "distance": 1565.0256356150207,
+    "price": 2018.74
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 13760.49420701155,
+    "distance": 6220.866234173245,
+    "price": 1534.45
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 13995.18879732052,
+    "distance": 13448.804002987314,
+    "price": 2084.35
+  },
+  {
+    "service_type": "trucking",
+    "weight": 5596.306464075969,
+    "distance": 7389.762898568201,
+    "price": 2701.04
+  },
+  {
+    "service_type": "express_air",
+    "weight": 13193.997200445325,
+    "distance": 3447.766906310437,
+    "price": 15414.21
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 18411.433565481548,
+    "distance": 5132.696380726665,
+    "price": 1939.88
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 7700.393858146079,
+    "distance": 7825.094898052662,
+    "price": 1047.68
+  },
+  {
+    "service_type": "trucking",
+    "weight": 16869.6212108142,
+    "distance": 10077.09532536032,
+    "price": 6232.42
+  },
+  {
+    "service_type": "trucking",
+    "weight": 4339.851135882611,
+    "distance": 9808.214179657396,
+    "price": 2971.82
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 14204.039926936246,
+    "distance": 10348.61026579354,
+    "price": 1953.68
+  },
+  {
+    "service_type": "express_air",
+    "weight": 4263.363462081417,
+    "distance": 4244.019454055938,
+    "price": 6264.19
+  },
+  {
+    "service_type": "express_air",
+    "weight": 7544.762315498201,
+    "distance": 4464.083163508776,
+    "price": 10517.88
+  },
+  {
+    "service_type": "express_air",
+    "weight": 13425.667927691477,
+    "distance": 14309.470566518974,
+    "price": 21465.47
+  },
+  {
+    "service_type": "trucking",
+    "weight": 8596.571009341553,
+    "distance": 12996.430931061645,
+    "price": 4776.98
+  },
+  {
+    "service_type": "trucking",
+    "weight": 7439.469281360932,
+    "distance": 12647.729908206795,
+    "price": 3912.69
+  },
+  {
+    "service_type": "trucking",
+    "weight": 19899.894169883115,
+    "distance": 1176.0572204565126,
+    "price": 6676.32
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 3298.2753656024856,
+    "distance": 11609.41669330607,
+    "price": 969.57
+  },
+  {
+    "service_type": "trucking",
+    "weight": 6665.54282190737,
+    "distance": 1703.2038312943575,
+    "price": 2041.7
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 4191.03253384012,
+    "distance": 14576.675820353692,
+    "price": 1207.77
+  },
+  {
+    "service_type": "trucking",
+    "weight": 11161.56553359449,
+    "distance": 7449.071745434467,
+    "price": 4619.23
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 10656.736847648646,
+    "distance": 8203.296753492534,
+    "price": 1386.73
+  },
+  {
+    "service_type": "express_air",
+    "weight": 14169.476403902185,
+    "distance": 12971.310750891516,
+    "price": 22483.89
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 19902.694675939256,
+    "distance": 6211.0058145587645,
+    "price": 2218.5
+  },
+  {
+    "service_type": "express_air",
+    "weight": 13085.564257258293,
+    "distance": 6553.514162773653,
+    "price": 17911.02
+  },
+  {
+    "service_type": "trucking",
+    "weight": 19052.746932877482,
+    "distance": 9787.835501286287,
+    "price": 7901.04
+  },
+  {
+    "service_type": "express_air",
+    "weight": 10947.79965687135,
+    "distance": 12212.815944684868,
+    "price": 16543.35
+  },
+  {
+    "service_type": "express_air",
+    "weight": 17062.755864269624,
+    "distance": 11503.275093177552,
+    "price": 20635.54
+  },
+  {
+    "service_type": "trucking",
+    "weight": 16999.503577874308,
+    "distance": 9308.196546009956,
+    "price": 7137.5
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 7846.678113763923,
+    "distance": 8471.269582051615,
+    "price": 1204.87
+  },
+  {
+    "service_type": "express_air",
+    "weight": 12787.175580328636,
+    "distance": 13129.722524512286,
+    "price": 17683.46
+  },
+  {
+    "service_type": "trucking",
+    "weight": 14879.960909118294,
+    "distance": 2384.232747531474,
+    "price": 5249.39
+  },
+  {
+    "service_type": "express_air",
+    "weight": 11045.420188138929,
+    "distance": 3938.0403629064363,
+    "price": 13923.54
+  },
+  {
+    "service_type": "trucking",
+    "weight": 11004.689464606352,
+    "distance": 7151.567058493913,
+    "price": 4536.26
+  },
+  {
+    "service_type": "trucking",
+    "weight": 8499.84267015546,
+    "distance": 6680.46400941453,
+    "price": 3905.54
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 6331.720071906225,
+    "distance": 4656.158385176253,
+    "price": 860.62
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 16560.153291281204,
+    "distance": 10698.062644450663,
+    "price": 2161.32
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 8992.003305247694,
+    "distance": 3026.74414961562,
+    "price": 961.56
+  },
+  {
+    "service_type": "trucking",
+    "weight": 10442.5932228658,
+    "distance": 7077.513427771463,
+    "price": 3869.03
+  },
+  {
+    "service_type": "trucking",
+    "weight": 16529.002174208883,
+    "distance": 2768.973506475235,
+    "price": 5722.09
+  },
+  {
+    "service_type": "express_air",
+    "weight": 17190.476960550044,
+    "distance": 6965.326177711432,
+    "price": 20209.84
+  },
+  {
+    "service_type": "express_air",
+    "weight": 12539.22470068542,
+    "distance": 13192.859060999297,
+    "price": 19349.25
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 9938.598306121508,
+    "distance": 3260.9632414871685,
+    "price": 1253.57
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 18100.88658971066,
+    "distance": 13645.892769682268,
+    "price": 2447.88
+  },
+  {
+    "service_type": "trucking",
+    "weight": 8747.920294250509,
+    "distance": 10904.102515105476,
+    "price": 4306.33
+  },
+  {
+    "service_type": "express_air",
+    "weight": 15314.68174932754,
+    "distance": 7350.120636872914,
+    "price": 18526.43
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 8168.351409599253,
+    "distance": 13516.75942653789,
+    "price": 1409.25
+  },
+  {
+    "service_type": "trucking",
+    "weight": 12881.018339045078,
+    "distance": 7621.087670183918,
+    "price": 4738.73
+  },
+  {
+    "service_type": "express_air",
+    "weight": 2169.967702805424,
+    "distance": 10125.412331531492,
+    "price": 7044.6
+  },
+  {
+    "service_type": "trucking",
+    "weight": 13431.833808757277,
+    "distance": 3187.294162064279,
+    "price": 4539.0
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 12050.076031412445,
+    "distance": 2715.300333289711,
+    "price": 1429.68
+  },
+  {
+    "service_type": "express_air",
+    "weight": 5287.325311263391,
+    "distance": 6988.606950185634,
+    "price": 8803.1
+  },
+  {
+    "service_type": "trucking",
+    "weight": 3181.442342399993,
+    "distance": 8298.487098988091,
+    "price": 2367.19
+  },
+  {
+    "service_type": "express_air",
+    "weight": 1541.7682779977147,
+    "distance": 11806.263375405155,
+    "price": 7342.51
+  },
+  {
+    "service_type": "express_air",
+    "weight": 14722.421456772125,
+    "distance": 7029.015159686795,
+    "price": 18423.05
+  },
+  {
+    "service_type": "trucking",
+    "weight": 10311.617547733138,
+    "distance": 14760.632732802738,
+    "price": 4812.87
+  },
+  {
+    "service_type": "express_air",
+    "weight": 17097.82411606325,
+    "distance": 6379.511455363559,
+    "price": 19289.67
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 8732.765194154405,
+    "distance": 14643.76346407869,
+    "price": 1580.46
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 10825.48294896461,
+    "distance": 2328.057133937285,
+    "price": 1213.25
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 12541.027044176788,
+    "distance": 6188.963729186569,
+    "price": 1544.73
+  },
+  {
+    "service_type": "trucking",
+    "weight": 4662.360205884347,
+    "distance": 2503.7874484028935,
+    "price": 1597.92
+  },
+  {
+    "service_type": "express_air",
+    "weight": 18967.316381962482,
+    "distance": 6998.822967897356,
+    "price": 21131.5
+  },
+  {
+    "service_type": "express_air",
+    "weight": 13810.476345718133,
+    "distance": 8371.641232582111,
+    "price": 16564.05
+  },
+  {
+    "service_type": "express_air",
+    "weight": 18051.723535639627,
+    "distance": 3904.2680766585804,
+    "price": 21548.13
+  },
+  {
+    "service_type": "express_air",
+    "weight": 3573.7474937398974,
+    "distance": 1292.9540997344807,
+    "price": 4544.4
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 17587.344184416943,
+    "distance": 6222.177312353242,
+    "price": 2072.49
+  },
+  {
+    "service_type": "express_air",
+    "weight": 16480.052462255186,
+    "distance": 8262.661541059155,
+    "price": 22308.18
+  },
+  {
+    "service_type": "trucking",
+    "weight": 860.5153745818068,
+    "distance": 13115.331313965447,
+    "price": 2392.32
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 15678.93660266582,
+    "distance": 3278.7063813103805,
+    "price": 1795.14
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 10881.022328361107,
+    "distance": 8812.709126310328,
+    "price": 1568.1
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 4442.707879890471,
+    "distance": 8242.024475233586,
+    "price": 881.21
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 10400.746299870187,
+    "distance": 14644.372012491183,
+    "price": 1707.35
+  },
+  {
+    "service_type": "trucking",
+    "weight": 2616.252162258423,
+    "distance": 8227.847516703936,
+    "price": 1914.53
+  },
+  {
+    "service_type": "express_air",
+    "weight": 12868.901886034753,
+    "distance": 14312.93104427628,
+    "price": 19959.29
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 6604.4155771662445,
+    "distance": 9869.96664355341,
+    "price": 1168.04
+  },
+  {
+    "service_type": "express_air",
+    "weight": 7896.910849639018,
+    "distance": 12142.084562775128,
+    "price": 15189.45
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 9703.762724492639,
+    "distance": 7106.250899640462,
+    "price": 1206.02
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 10794.13266559279,
+    "distance": 6641.1724071484305,
+    "price": 1494.88
+  },
+  {
+    "service_type": "express_air",
+    "weight": 7089.944043520764,
+    "distance": 13482.953787688039,
+    "price": 12651.31
+  },
+  {
+    "service_type": "express_air",
+    "weight": 2074.855067067231,
+    "distance": 7953.002630187891,
+    "price": 6612.17
+  },
+  {
+    "service_type": "trucking",
+    "weight": 12033.211171016426,
+    "distance": 8389.148192128017,
+    "price": 4392.35
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 19909.083507489708,
+    "distance": 2926.4785323746505,
+    "price": 1977.15
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 10994.606580565947,
+    "distance": 6596.632833695984,
+    "price": 1384.8
+  },
+  {
+    "service_type": "express_air",
+    "weight": 2989.6388646380365,
+    "distance": 4056.1034411425258,
+    "price": 5191.91
+  },
+  {
+    "service_type": "express_air",
+    "weight": 10580.49772743525,
+    "distance": 6538.715740146813,
+    "price": 13665.89
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 15152.45370208008,
+    "distance": 10507.417885816276,
+    "price": 1845.75
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 8743.877272736718,
+    "distance": 11608.88642597371,
+    "price": 1311.17
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 14026.592080406328,
+    "distance": 13956.920284590342,
+    "price": 1908.2
+  },
+  {
+    "service_type": "trucking",
+    "weight": 17329.23990358023,
+    "distance": 3714.1934590544265,
+    "price": 6318.2
+  },
+  {
+    "service_type": "express_air",
+    "weight": 14251.871594420134,
+    "distance": 960.042463877727,
+    "price": 15473.16
+  },
+  {
+    "service_type": "express_air",
+    "weight": 9343.115856989285,
+    "distance": 11669.493866536397,
+    "price": 14609.67
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 9522.659118583722,
+    "distance": 9393.741995293653,
+    "price": 1482.39
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 8891.519248922183,
+    "distance": 9824.344288887207,
+    "price": 1309.03
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 6100.224947648693,
+    "distance": 14931.745594035261,
+    "price": 1337.51
+  },
+  {
+    "service_type": "trucking",
+    "weight": 12044.221906118359,
+    "distance": 11754.166850201918,
+    "price": 5068.42
+  },
+  {
+    "service_type": "express_air",
+    "weight": 7733.077344664217,
+    "distance": 6186.34157119374,
+    "price": 10363.34
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 3842.4797373194533,
+    "distance": 5467.16209572027,
+    "price": 660.07
+  },
+  {
+    "service_type": "trucking",
+    "weight": 8029.070062878746,
+    "distance": 4991.397334743759,
+    "price": 3020.72
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 11686.911990298682,
+    "distance": 3027.8367420297704,
+    "price": 1227.07
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 16922.602698026527,
+    "distance": 2212.929835538289,
+    "price": 1898.16
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 19986.78482991742,
+    "distance": 13153.411799027077,
+    "price": 2852.19
+  },
+  {
+    "service_type": "express_air",
+    "weight": 13204.718256338088,
+    "distance": 8559.649567589708,
+    "price": 17718.95
+  },
+  {
+    "service_type": "express_air",
+    "weight": 11121.475030073883,
+    "distance": 11058.430853208323,
+    "price": 15509.64
+  },
+  {
+    "service_type": "trucking",
+    "weight": 11311.47106514029,
+    "distance": 3473.2657041334032,
+    "price": 4192.84
+  },
+  {
+    "service_type": "trucking",
+    "weight": 4533.1354710603455,
+    "distance": 14242.215386643189,
+    "price": 3674.09
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 15270.891537895102,
+    "distance": 4172.165848593236,
+    "price": 1863.95
+  },
+  {
+    "service_type": "express_air",
+    "weight": 3985.0572562330917,
+    "distance": 6194.464458956477,
+    "price": 6464.17
+  },
+  {
+    "service_type": "express_air",
+    "weight": 13314.615941749164,
+    "distance": 4947.527193078939,
+    "price": 14581.62
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 15518.082423680453,
+    "distance": 4349.030676788601,
+    "price": 1676.43
+  },
+  {
+    "service_type": "trucking",
+    "weight": 13262.134560765542,
+    "distance": 12832.499179288803,
+    "price": 5630.65
+  },
+  {
+    "service_type": "trucking",
+    "weight": 8469.429779858065,
+    "distance": 6107.086712951788,
+    "price": 3501.7
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 1875.8414177072343,
+    "distance": 12618.63091023724,
+    "price": 762.53
+  },
+  {
+    "service_type": "trucking",
+    "weight": 12089.509382880911,
+    "distance": 12130.44444975755,
+    "price": 5613.7
+  },
+  {
+    "service_type": "express_air",
+    "weight": 3369.7624782088196,
+    "distance": 8571.078697622968,
+    "price": 7393.48
+  },
+  {
+    "service_type": "trucking",
+    "weight": 8711.484984842271,
+    "distance": 11758.591007668982,
+    "price": 4599.65
+  },
+  {
+    "service_type": "express_air",
+    "weight": 15904.397547980478,
+    "distance": 7659.428455188121,
+    "price": 20337.94
+  },
+  {
+    "service_type": "express_air",
+    "weight": 12640.402369887588,
+    "distance": 1889.3317177901417,
+    "price": 12540.64
+  },
+  {
+    "service_type": "trucking",
+    "weight": 13887.376366788414,
+    "distance": 11262.989863168663,
+    "price": 6265.36
+  },
+  {
+    "service_type": "trucking",
+    "weight": 9822.740206521676,
+    "distance": 2960.8141054653893,
+    "price": 3518.63
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 16403.571527127082,
+    "distance": 11198.161475071032,
+    "price": 2161.92
+  },
+  {
+    "service_type": "trucking",
+    "weight": 10698.378536909811,
+    "distance": 7758.587195978326,
+    "price": 4728.54
+  },
+  {
+    "service_type": "express_air",
+    "weight": 8430.663626799578,
+    "distance": 13216.946980395134,
+    "price": 13742.28
+  },
+  {
+    "service_type": "express_air",
+    "weight": 905.264916900739,
+    "distance": 9445.197390001613,
+    "price": 5292.13
+  },
+  {
+    "service_type": "express_air",
+    "weight": 514.3169336447492,
+    "distance": 1571.8785104981705,
+    "price": 1352.69
+  },
+  {
+    "service_type": "express_air",
+    "weight": 5520.882409322653,
+    "distance": 14879.716592634108,
+    "price": 12072.69
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 5495.598456724782,
+    "distance": 5980.5377142365105,
+    "price": 833.16
+  },
+  {
+    "service_type": "trucking",
+    "weight": 4303.278735273492,
+    "distance": 8596.20421313252,
+    "price": 2606.66
+  },
+  {
+    "service_type": "express_air",
+    "weight": 18833.913395359246,
+    "distance": 7690.157408586321,
+    "price": 22193.93
+  },
+  {
+    "service_type": "express_air",
+    "weight": 18708.702909473697,
+    "distance": 4875.613080080949,
+    "price": 22745.5
+  },
+  {
+    "service_type": "express_air",
+    "weight": 3496.296780102184,
+    "distance": 12424.15118194087,
+    "price": 9728.86
+  },
+  {
+    "service_type": "trucking",
+    "weight": 12578.158251257551,
+    "distance": 4119.076136390358,
+    "price": 4072.04
+  },
+  {
+    "service_type": "trucking",
+    "weight": 1759.3230287038448,
+    "distance": 975.7327069163707,
+    "price": 696.99
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 8469.384780075154,
+    "distance": 6752.69415962001,
+    "price": 1229.24
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 16496.708704434637,
+    "distance": 13523.200474812022,
+    "price": 2416.62
+  },
+  {
+    "service_type": "express_air",
+    "weight": 19156.298544339308,
+    "distance": 9177.17624217137,
+    "price": 21814.44
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 16746.287849383116,
+    "distance": 732.2094875315235,
+    "price": 1657.31
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 14167.749918759237,
+    "distance": 3567.7665266436397,
+    "price": 1754.57
+  },
+  {
+    "service_type": "trucking",
+    "weight": 8692.646535104639,
+    "distance": 9756.99152596946,
+    "price": 3735.66
+  },
+  {
+    "service_type": "trucking",
+    "weight": 19801.587139591207,
+    "distance": 5335.320428966941,
+    "price": 6204.45
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 9955.829502198547,
+    "distance": 3352.1967908140123,
+    "price": 1170.72
+  },
+  {
+    "service_type": "express_air",
+    "weight": 4898.569446999169,
+    "distance": 10466.523654818255,
+    "price": 11036.35
+  },
+  {
+    "service_type": "trucking",
+    "weight": 1267.5413715492202,
+    "distance": 1430.7578468359059,
+    "price": 562.18
+  },
+  {
+    "service_type": "express_air",
+    "weight": 15618.243060459405,
+    "distance": 11467.293289576344,
+    "price": 20375.24
+  },
+  {
+    "service_type": "trucking",
+    "weight": 15814.486974056466,
+    "distance": 7085.205490404369,
+    "price": 5792.91
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 11120.163116112819,
+    "distance": 8758.83496696551,
+    "price": 1622.67
+  },
+  {
+    "service_type": "trucking",
+    "weight": 17594.866566109253,
+    "distance": 7994.824247241312,
+    "price": 7072.24
+  },
+  {
+    "service_type": "express_air",
+    "weight": 3359.4038920810626,
+    "distance": 8936.452781280837,
+    "price": 7392.82
+  },
+  {
+    "service_type": "trucking",
+    "weight": 11460.772170662874,
+    "distance": 1183.249043186183,
+    "price": 3803.88
+  },
+  {
+    "service_type": "trucking",
+    "weight": 15333.45702838416,
+    "distance": 8019.061853133884,
+    "price": 6151.22
+  },
+  {
+    "service_type": "express_air",
+    "weight": 16502.72355771371,
+    "distance": 2250.2381630776335,
+    "price": 16405.61
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 10846.521466119877,
+    "distance": 10906.333008381305,
+    "price": 1533.7
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 1327.5877503936395,
+    "distance": 13877.580769100245,
+    "price": 752.09
+  },
+  {
+    "service_type": "express_air",
+    "weight": 5090.968158034368,
+    "distance": 8754.80485710004,
+    "price": 9627.57
+  },
+  {
+    "service_type": "trucking",
+    "weight": 18712.1697635165,
+    "distance": 13054.248013985065,
+    "price": 7589.22
+  },
+  {
+    "service_type": "express_air",
+    "weight": 10730.626703795662,
+    "distance": 3494.1707503802363,
+    "price": 12357.2
+  },
+  {
+    "service_type": "trucking",
+    "weight": 7153.1285978589685,
+    "distance": 2515.826495261441,
+    "price": 2289.18
+  },
+  {
+    "service_type": "trucking",
+    "weight": 6069.986892428807,
+    "distance": 503.7212968588179,
+    "price": 1912.05
+  },
+  {
+    "service_type": "trucking",
+    "weight": 2420.791115604219,
+    "distance": 5528.619064433066,
+    "price": 1499.31
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 1065.4193502068692,
+    "distance": 2699.1596770012807,
+    "price": 242.39
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 3855.378462781176,
+    "distance": 1030.5486598318203,
+    "price": 397.21
+  },
+  {
+    "service_type": "express_air",
+    "weight": 10101.830341089157,
+    "distance": 5349.200168583747,
+    "price": 12002.37
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 3060.452107694242,
+    "distance": 7712.104380335642,
+    "price": 684.56
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 4077.5272855903695,
+    "distance": 978.0692929118234,
+    "price": 461.57
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 2126.678015516726,
+    "distance": 11631.3697246129,
+    "price": 783.37
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 10379.93881147193,
+    "distance": 11039.819426851504,
+    "price": 1503.06
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 2125.799636464272,
+    "distance": 1595.9358242682742,
+    "price": 314.84
+  },
+  {
+    "service_type": "express_air",
+    "weight": 18163.507283865656,
+    "distance": 8803.614431333192,
+    "price": 23610.47
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 12314.604374460587,
+    "distance": 2075.764004015788,
+    "price": 1296.06
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 7796.079596079702,
+    "distance": 10254.169824259867,
+    "price": 1309.23
+  },
+  {
+    "service_type": "trucking",
+    "weight": 7937.858869328006,
+    "distance": 13192.799150965617,
+    "price": 4371.92
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 6770.875275361458,
+    "distance": 6976.9494679022155,
+    "price": 1025.25
+  },
+  {
+    "service_type": "express_air",
+    "weight": 9183.67309742087,
+    "distance": 4118.275530828417,
+    "price": 10428.78
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 539.2326058214101,
+    "distance": 4144.110719167087,
+    "price": 239.68
+  },
+  {
+    "service_type": "express_air",
+    "weight": 5356.737951433403,
+    "distance": 8128.421998799695,
+    "price": 9033.31
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 16072.680260515306,
+    "distance": 5755.217814550517,
+    "price": 2008.87
+  },
+  {
+    "service_type": "express_air",
+    "weight": 18362.35768103339,
+    "distance": 13278.237781369015,
+    "price": 23957.89
+  },
+  {
+    "service_type": "express_air",
+    "weight": 13620.519614788695,
+    "distance": 1338.9815979084296,
+    "price": 13612.98
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 2451.4215218835816,
+    "distance": 7891.291251796956,
+    "price": 688.57
+  },
+  {
+    "service_type": "trucking",
+    "weight": 15080.094891941035,
+    "distance": 11672.170974420918,
+    "price": 5762.93
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 8794.993061833919,
+    "distance": 4994.43888050274,
+    "price": 1231.97
+  },
+  {
+    "service_type": "express_air",
+    "weight": 9083.46526394502,
+    "distance": 9532.009576416029,
+    "price": 15214.85
+  },
+  {
+    "service_type": "express_air",
+    "weight": 767.9823560518616,
+    "distance": 4290.921240850079,
+    "price": 2753.94
+  },
+  {
+    "service_type": "trucking",
+    "weight": 17322.354229194883,
+    "distance": 7450.71637787723,
+    "price": 6001.89
+  },
+  {
+    "service_type": "express_air",
+    "weight": 4926.801606355451,
+    "distance": 1310.1796191273766,
+    "price": 5987.31
+  },
+  {
+    "service_type": "express_air",
+    "weight": 18729.816101598055,
+    "distance": 9278.593997445607,
+    "price": 25589.55
+  },
+  {
+    "service_type": "trucking",
+    "weight": 11666.360346118565,
+    "distance": 13826.270200797166,
+    "price": 5185.47
+  },
+  {
+    "service_type": "trucking",
+    "weight": 10417.521395531567,
+    "distance": 1865.5841738544048,
+    "price": 3626.51
+  },
+  {
+    "service_type": "express_air",
+    "weight": 5622.379348826672,
+    "distance": 5947.696673080016,
+    "price": 8531.5
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 4745.749953616139,
+    "distance": 11611.071310737201,
+    "price": 1069.12
+  },
+  {
+    "service_type": "trucking",
+    "weight": 15303.979483000167,
+    "distance": 11701.94711843116,
+    "price": 6470.34
+  },
+  {
+    "service_type": "trucking",
+    "weight": 8281.170021104619,
+    "distance": 6086.955514197214,
+    "price": 3652.43
+  },
+  {
+    "service_type": "express_air",
+    "weight": 11765.09953926816,
+    "distance": 12959.429905550434,
+    "price": 19980.76
+  },
+  {
+    "service_type": "trucking",
+    "weight": 7070.912071590925,
+    "distance": 1957.4129542725286,
+    "price": 2482.89
+  },
+  {
+    "service_type": "express_air",
+    "weight": 8655.59677692307,
+    "distance": 5244.103223600202,
+    "price": 10802.03
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 17583.83275450211,
+    "distance": 11231.365390336878,
+    "price": 2328.93
+  },
+  {
+    "service_type": "trucking",
+    "weight": 11578.461104483895,
+    "distance": 5178.663853507129,
+    "price": 3885.75
+  },
+  {
+    "service_type": "trucking",
+    "weight": 2341.2155705714226,
+    "distance": 14248.725679325886,
+    "price": 2873.56
+  },
+  {
+    "service_type": "express_air",
+    "weight": 9649.070319998109,
+    "distance": 13232.609941923549,
+    "price": 15265.46
+  },
+  {
+    "service_type": "trucking",
+    "weight": 4747.387757977029,
+    "distance": 14791.299182155788,
+    "price": 3725.95
+  },
+  {
+    "service_type": "trucking",
+    "weight": 9286.666921716736,
+    "distance": 10410.685874265095,
+    "price": 4331.1
+  },
+  {
+    "service_type": "trucking",
+    "weight": 13061.944909616534,
+    "distance": 11146.469848981124,
+    "price": 5527.24
+  },
+  {
+    "service_type": "express_air",
+    "weight": 17878.0997088991,
+    "distance": 11469.231976280076,
+    "price": 24361.61
+  },
+  {
+    "service_type": "trucking",
+    "weight": 19127.217275225703,
+    "distance": 12138.265014306195,
+    "price": 7042.39
+  },
+  {
+    "service_type": "trucking",
+    "weight": 18362.211674208975,
+    "distance": 3532.562204072843,
+    "price": 5994.57
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 6625.065396880562,
+    "distance": 719.6585636877647,
+    "price": 693.83
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 1729.0189169297705,
+    "distance": 11165.809083957785,
+    "price": 713.72
+  },
+  {
+    "service_type": "express_air",
+    "weight": 1966.813943935314,
+    "distance": 6864.919290239111,
+    "price": 5449.4
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 12731.873744913719,
+    "distance": 6419.486419284847,
+    "price": 1651.23
+  },
+  {
+    "service_type": "trucking",
+    "weight": 2101.631196390118,
+    "distance": 6788.036144743381,
+    "price": 1531.83
+  },
+  {
+    "service_type": "trucking",
+    "weight": 18145.062755033123,
+    "distance": 6036.9897815424765,
+    "price": 5974.13
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 13625.654806034425,
+    "distance": 7531.452220441468,
+    "price": 1727.86
+  },
+  {
+    "service_type": "trucking",
+    "weight": 18991.42233507023,
+    "distance": 11415.029977745042,
+    "price": 7966.54
+  },
+  {
+    "service_type": "express_air",
+    "weight": 14958.774260258639,
+    "distance": 1957.4599707930797,
+    "price": 16128.21
+  },
+  {
+    "service_type": "trucking",
+    "weight": 4523.479993842086,
+    "distance": 1115.5268216640147,
+    "price": 1552.4
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 4964.102493897954,
+    "distance": 13508.664272492382,
+    "price": 1233.89
+  },
+  {
+    "service_type": "express_air",
+    "weight": 4117.94827376588,
+    "distance": 9836.105405248927,
+    "price": 8791.28
+  },
+  {
+    "service_type": "trucking",
+    "weight": 13842.431579943232,
+    "distance": 8230.89423163763,
+    "price": 5886.94
+  },
+  {
+    "service_type": "trucking",
+    "weight": 11447.24979136606,
+    "distance": 4082.150535442848,
+    "price": 3978.35
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 2406.3833709789055,
+    "distance": 12327.733035074896,
+    "price": 850.01
+  },
+  {
+    "service_type": "express_air",
+    "weight": 7032.477279926413,
+    "distance": 11671.196009135214,
+    "price": 13640.38
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 19515.26994799201,
+    "distance": 5755.4658545143875,
+    "price": 2064.24
+  },
+  {
+    "service_type": "trucking",
+    "weight": 19637.13928125414,
+    "distance": 7867.539664640625,
+    "price": 7591.89
+  },
+  {
+    "service_type": "express_air",
+    "weight": 6540.126531456854,
+    "distance": 3966.4736875438534,
+    "price": 9031.63
+  },
+  {
+    "service_type": "trucking",
+    "weight": 1232.5881911563633,
+    "distance": 11613.245299100136,
+    "price": 2224.59
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 9094.617310278356,
+    "distance": 11414.095254573256,
+    "price": 1608.3
+  },
+  {
+    "service_type": "express_air",
+    "weight": 3668.3879513018505,
+    "distance": 13914.779965132597,
+    "price": 11152.73
+  },
+  {
+    "service_type": "express_air",
+    "weight": 10950.774625708344,
+    "distance": 14397.957101049864,
+    "price": 19004.07
+  },
+  {
+    "service_type": "trucking",
+    "weight": 4769.043309687336,
+    "distance": 3150.5986150223703,
+    "price": 1982.28
+  },
+  {
+    "service_type": "trucking",
+    "weight": 7351.393739468159,
+    "distance": 11462.694870810566,
+    "price": 3909.02
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 2657.843391889627,
+    "distance": 6768.887432456435,
+    "price": 662.22
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 17717.848480761895,
+    "distance": 13796.270305953843,
+    "price": 2333.32
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 19765.883608292195,
+    "distance": 6529.14433289969,
+    "price": 2159.99
+  },
+  {
+    "service_type": "express_air",
+    "weight": 8336.828826454896,
+    "distance": 12332.672588078816,
+    "price": 13252.68
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 1694.9521537992262,
+    "distance": 9515.191484674348,
+    "price": 648.36
+  },
+  {
+    "service_type": "express_air",
+    "weight": 11952.060477337156,
+    "distance": 10758.445476677136,
+    "price": 17764.99
+  },
+  {
+    "service_type": "express_air",
+    "weight": 13309.256406389388,
+    "distance": 14551.860007131698,
+    "price": 19149.16
+  },
+  {
+    "service_type": "trucking",
+    "weight": 9114.10424521939,
+    "distance": 3390.266902296873,
+    "price": 3111.87
+  },
+  {
+    "service_type": "trucking",
+    "weight": 12463.860574928294,
+    "distance": 6754.0731218848605,
+    "price": 5129.81
+  },
+  {
+    "service_type": "trucking",
+    "weight": 14900.333723235077,
+    "distance": 6577.438229426261,
+    "price": 5960.13
+  },
+  {
+    "service_type": "trucking",
+    "weight": 9143.813151403192,
+    "distance": 3344.9060014641655,
+    "price": 3428.98
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 14654.10819094187,
+    "distance": 3653.9207115984404,
+    "price": 1764.47
+  },
+  {
+    "service_type": "express_air",
+    "weight": 7552.107052920226,
+    "distance": 7546.151139787893,
+    "price": 10733.6
+  },
+  {
+    "service_type": "express_air",
+    "weight": 15851.67472386096,
+    "distance": 629.8794231896668,
+    "price": 14796.79
+  },
+  {
+    "service_type": "express_air",
+    "weight": 13382.549274719482,
+    "distance": 3708.4861995012657,
+    "price": 16389.41
+  },
+  {
+    "service_type": "trucking",
+    "weight": 13690.340478293321,
+    "distance": 3066.3476802576506,
+    "price": 4990.45
+  },
+  {
+    "service_type": "express_air",
+    "weight": 12259.326895721366,
+    "distance": 9301.37790961765,
+    "price": 16831.72
+  },
+  {
+    "service_type": "trucking",
+    "weight": 19184.209400031403,
+    "distance": 2846.0033198384303,
+    "price": 6402.59
+  },
+  {
+    "service_type": "trucking",
+    "weight": 13077.07341114389,
+    "distance": 11449.26645351527,
+    "price": 5882.08
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 10217.032627436753,
+    "distance": 5556.134339908435,
+    "price": 1307.54
+  },
+  {
+    "service_type": "trucking",
+    "weight": 15102.889975341564,
+    "distance": 8654.458393722733,
+    "price": 6235.54
+  },
+  {
+    "service_type": "express_air",
+    "weight": 14391.578321188137,
+    "distance": 9634.283235982444,
+    "price": 19736.93
+  },
+  {
+    "service_type": "express_air",
+    "weight": 7276.265119413615,
+    "distance": 9324.36294361114,
+    "price": 12861.51
+  },
+  {
+    "service_type": "express_air",
+    "weight": 5193.815097383183,
+    "distance": 5224.144628776847,
+    "price": 8259.56
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 17352.085663794405,
+    "distance": 10450.37305415489,
+    "price": 2064.95
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 9950.961046323915,
+    "distance": 13985.13559059373,
+    "price": 1635.19
+  },
+  {
+    "service_type": "express_air",
+    "weight": 19823.500519379093,
+    "distance": 7904.985759850213,
+    "price": 21641.52
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 8355.575268258352,
+    "distance": 9951.972278837506,
+    "price": 1217.27
+  },
+  {
+    "service_type": "trucking",
+    "weight": 3842.1626399757197,
+    "distance": 6709.265963786211,
+    "price": 2054.17
+  },
+  {
+    "service_type": "express_air",
+    "weight": 6545.372867767342,
+    "distance": 11492.278470482783,
+    "price": 12788.9
+  },
+  {
+    "service_type": "trucking",
+    "weight": 6632.466179740876,
+    "distance": 10907.687006300486,
+    "price": 3584.43
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 11984.13138007831,
+    "distance": 12284.540286660344,
+    "price": 1965.0
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 11219.755939454466,
+    "distance": 5467.654452855244,
+    "price": 1491.61
+  },
+  {
+    "service_type": "express_air",
+    "weight": 6295.312491631598,
+    "distance": 4394.735315353204,
+    "price": 8756.4
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 14242.922387138413,
+    "distance": 5076.3969096148985,
+    "price": 1648.86
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 6817.92785173854,
+    "distance": 630.5607319798631,
+    "price": 757.43
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 5557.048779791353,
+    "distance": 12350.69562096388,
+    "price": 1246.11
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 19647.71148191794,
+    "distance": 13358.623063765657,
+    "price": 2735.71
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 1395.2247100406912,
+    "distance": 8143.483180960219,
+    "price": 582.3
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 6103.311385706568,
+    "distance": 2252.611908671905,
+    "price": 754.83
+  },
+  {
+    "service_type": "express_air",
+    "weight": 6170.520076471587,
+    "distance": 11716.705231714466,
+    "price": 11753.5
+  },
+  {
+    "service_type": "trucking",
+    "weight": 13053.049205058356,
+    "distance": 1638.9951257731607,
+    "price": 4453.16
+  },
+  {
+    "service_type": "trucking",
+    "weight": 12539.826405824046,
+    "distance": 7537.405142772421,
+    "price": 4866.3
+  },
+  {
+    "service_type": "express_air",
+    "weight": 19035.941792885442,
+    "distance": 12684.830565784245,
+    "price": 25106.91
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 12761.063325428682,
+    "distance": 6780.104305951467,
+    "price": 1559.67
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 7055.882823997284,
+    "distance": 14912.434688475712,
+    "price": 1436.94
+  },
+  {
+    "service_type": "express_air",
+    "weight": 11646.396764979212,
+    "distance": 1643.3290960301774,
+    "price": 13002.65
+  },
+  {
+    "service_type": "express_air",
+    "weight": 607.2057425430722,
+    "distance": 13419.919355069109,
+    "price": 7930.54
+  },
+  {
+    "service_type": "express_air",
+    "weight": 19109.08667433502,
+    "distance": 11720.71097532019,
+    "price": 24566.51
+  },
+  {
+    "service_type": "trucking",
+    "weight": 18052.616294419684,
+    "distance": 4406.019201173363,
+    "price": 5699.09
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 9296.742989751518,
+    "distance": 3786.690975226541,
+    "price": 1115.18
+  },
+  {
+    "service_type": "trucking",
+    "weight": 3250.583407750921,
+    "distance": 3064.3032146050737,
+    "price": 1500.41
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 13523.024000583642,
+    "distance": 4426.038469063405,
+    "price": 1469.06
+  },
+  {
+    "service_type": "express_air",
+    "weight": 7309.000955583592,
+    "distance": 14551.80752035887,
+    "price": 15729.78
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 10276.29932708813,
+    "distance": 6959.216969926563,
+    "price": 1463.83
+  },
+  {
+    "service_type": "trucking",
+    "weight": 10086.996018414899,
+    "distance": 8621.915982342754,
+    "price": 4596.51
+  },
+  {
+    "service_type": "express_air",
+    "weight": 13136.141126635897,
+    "distance": 11632.32609502412,
+    "price": 17947.95
+  },
+  {
+    "service_type": "trucking",
+    "weight": 1510.9988805226928,
+    "distance": 3504.030191322339,
+    "price": 948.92
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 17022.61697180391,
+    "distance": 669.8401273689358,
+    "price": 1653.98
+  },
+  {
+    "service_type": "express_air",
+    "weight": 9716.81672961439,
+    "distance": 7065.541254149415,
+    "price": 12329.08
+  },
+  {
+    "service_type": "express_air",
+    "weight": 17841.189981913085,
+    "distance": 11888.43658617261,
+    "price": 22933.13
+  },
+  {
+    "service_type": "express_air",
+    "weight": 7226.578564275185,
+    "distance": 11050.755022290346,
+    "price": 13785.53
+  },
+  {
+    "service_type": "express_air",
+    "weight": 11486.814958922156,
+    "distance": 4825.944930097063,
+    "price": 12853.08
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 13377.708999069035,
+    "distance": 524.2089676223991,
+    "price": 1261.6
+  },
+  {
+    "service_type": "express_air",
+    "weight": 8833.77677051809,
+    "distance": 2130.1673774837627,
+    "price": 10752.94
+  },
+  {
+    "service_type": "express_air",
+    "weight": 15654.818458269583,
+    "distance": 13962.021103982659,
+    "price": 22185.62
+  },
+  {
+    "service_type": "express_air",
+    "weight": 2441.3702169963162,
+    "distance": 8363.686017821183,
+    "price": 6507.11
+  },
+  {
+    "service_type": "express_air",
+    "weight": 19994.9416729701,
+    "distance": 8935.168923375973,
+    "price": 22118.72
+  },
+  {
+    "service_type": "express_air",
+    "weight": 1700.9476889427176,
+    "distance": 10411.124017962049,
+    "price": 6646.98
+  },
+  {
+    "service_type": "express_air",
+    "weight": 4902.699751366509,
+    "distance": 10526.134639276128,
+    "price": 10036.56
+  },
+  {
+    "service_type": "express_air",
+    "weight": 8812.507553617343,
+    "distance": 4712.188610544103,
+    "price": 12145.4
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 5125.861408016446,
+    "distance": 548.2671427584851,
+    "price": 514.39
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 12435.07457750963,
+    "distance": 9747.213836695562,
+    "price": 1880.31
+  },
+  {
+    "service_type": "trucking",
+    "weight": 6075.308410079341,
+    "distance": 1178.9764337069096,
+    "price": 2105.29
+  },
+  {
+    "service_type": "trucking",
+    "weight": 14033.017500554406,
+    "distance": 7814.48701941045,
+    "price": 5838.83
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 6998.687856939296,
+    "distance": 14163.038460330199,
+    "price": 1449.82
+  },
+  {
+    "service_type": "express_air",
+    "weight": 13912.08885538194,
+    "distance": 11415.347969444034,
+    "price": 19032.93
+  },
+  {
+    "service_type": "express_air",
+    "weight": 13128.010839496354,
+    "distance": 14642.356519778197,
+    "price": 20076.34
+  },
+  {
+    "service_type": "express_air",
+    "weight": 2124.735818366703,
+    "distance": 10249.861997349051,
+    "price": 6906.47
+  },
+  {
+    "service_type": "trucking",
+    "weight": 18376.38407681635,
+    "distance": 2381.0686024679544,
+    "price": 5419.66
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 15581.592365300363,
+    "distance": 7818.711900944125,
+    "price": 2129.04
+  },
+  {
+    "service_type": "express_air",
+    "weight": 18214.73342430077,
+    "distance": 4041.3969236213266,
+    "price": 21782.31
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 19237.40936790968,
+    "distance": 1383.2676855914165,
+    "price": 1800.03
+  },
+  {
+    "service_type": "express_air",
+    "weight": 17826.09249336607,
+    "distance": 12968.937934275806,
+    "price": 23211.7
+  },
+  {
+    "service_type": "express_air",
+    "weight": 18228.913823818955,
+    "distance": 1103.36260501292,
+    "price": 17006.18
+  },
+  {
+    "service_type": "trucking",
+    "weight": 16364.444768293912,
+    "distance": 5365.400918782617,
+    "price": 6204.81
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 9033.65467773447,
+    "distance": 625.5736608750306,
+    "price": 921.61
+  },
+  {
+    "service_type": "express_air",
+    "weight": 14184.787545426556,
+    "distance": 14987.117723784791,
+    "price": 22178.23
+  },
+  {
+    "service_type": "trucking",
+    "weight": 3507.7836006261527,
+    "distance": 1342.032683048721,
+    "price": 1335.99
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 12835.783364774583,
+    "distance": 11681.200908334682,
+    "price": 1977.33
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 5626.617000990125,
+    "distance": 12843.444445954727,
+    "price": 1273.5
+  },
+  {
+    "service_type": "express_air",
+    "weight": 6436.715516022902,
+    "distance": 3863.6035018311827,
+    "price": 8518.24
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 15606.225441209783,
+    "distance": 3504.9300300668883,
+    "price": 1804.29
+  },
+  {
+    "service_type": "trucking",
+    "weight": 5946.036943254627,
+    "distance": 14267.640411578217,
+    "price": 4311.76
+  },
+  {
+    "service_type": "express_air",
+    "weight": 8564.8468047528,
+    "distance": 2890.9632402150974,
+    "price": 10797.42
+  },
+  {
+    "service_type": "express_air",
+    "weight": 16807.697981598434,
+    "distance": 4364.31473747627,
+    "price": 18294.0
+  },
+  {
+    "service_type": "trucking",
+    "weight": 2388.841223085143,
+    "distance": 3141.512585565019,
+    "price": 1295.01
+  },
+  {
+    "service_type": "express_air",
+    "weight": 9167.817786386122,
+    "distance": 13603.558849624833,
+    "price": 15908.38
+  },
+  {
+    "service_type": "trucking",
+    "weight": 1217.9051906067793,
+    "distance": 6554.885001616232,
+    "price": 1285.95
+  },
+  {
+    "service_type": "trucking",
+    "weight": 11909.264158295566,
+    "distance": 5822.801249026276,
+    "price": 4067.83
+  },
+  {
+    "service_type": "express_air",
+    "weight": 17755.302687460702,
+    "distance": 12489.730261298168,
+    "price": 26208.06
+  },
+  {
+    "service_type": "trucking",
+    "weight": 16345.947255208042,
+    "distance": 14792.683231568013,
+    "price": 7575.47
+  },
+  {
+    "service_type": "express_air",
+    "weight": 5816.511700607618,
+    "distance": 8516.562945056387,
+    "price": 9927.58
+  },
+  {
+    "service_type": "trucking",
+    "weight": 697.786301635444,
+    "distance": 6411.994580620272,
+    "price": 1181.99
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 9103.836698334908,
+    "distance": 11555.682365202318,
+    "price": 1466.9
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 18877.240353202178,
+    "distance": 5300.183762057131,
+    "price": 2267.09
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 19134.47885796123,
+    "distance": 12797.948292899651,
+    "price": 2770.35
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 11209.386850712657,
+    "distance": 7272.601899111445,
+    "price": 1604.55
+  },
+  {
+    "service_type": "trucking",
+    "weight": 1379.449597285782,
+    "distance": 4616.826577545737,
+    "price": 1067.46
+  },
+  {
+    "service_type": "express_air",
+    "weight": 9357.642187104391,
+    "distance": 10390.158292158398,
+    "price": 15202.71
+  },
+  {
+    "service_type": "trucking",
+    "weight": 7117.349781753112,
+    "distance": 8109.278594759286,
+    "price": 3595.98
+  },
+  {
+    "service_type": "trucking",
+    "weight": 10837.726428232872,
+    "distance": 1698.41098069683,
+    "price": 3552.28
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 15998.25256276219,
+    "distance": 6220.374265434083,
+    "price": 1793.09
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 5519.2054053192205,
+    "distance": 8184.245340820845,
+    "price": 980.44
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 2998.1714968692513,
+    "distance": 13319.2517993672,
+    "price": 980.57
+  },
+  {
+    "service_type": "trucking",
+    "weight": 14212.967083706952,
+    "distance": 536.091850179651,
+    "price": 4406.72
+  },
+  {
+    "service_type": "express_air",
+    "weight": 16943.117511505592,
+    "distance": 13053.298351279944,
+    "price": 21230.5
+  },
+  {
+    "service_type": "trucking",
+    "weight": 8036.2738117472745,
+    "distance": 14963.072882548015,
+    "price": 4817.7
+  },
+  {
+    "service_type": "trucking",
+    "weight": 11283.62487985679,
+    "distance": 13740.626771940033,
+    "price": 5719.85
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 13434.383481935738,
+    "distance": 13607.769984769971,
+    "price": 2223.61
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 14957.632436244368,
+    "distance": 14765.639623235107,
+    "price": 2089.4
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 15932.739603872693,
+    "distance": 9017.89233135743,
+    "price": 1912.1
+  },
+  {
+    "service_type": "express_air",
+    "weight": 16732.71809808771,
+    "distance": 1045.4088291458966,
+    "price": 16398.5
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 14473.541946023819,
+    "distance": 8826.484093363639,
+    "price": 1960.65
+  },
+  {
+    "service_type": "express_air",
+    "weight": 4500.931598500114,
+    "distance": 8482.647388616804,
+    "price": 8436.79
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 10287.99983543497,
+    "distance": 11266.300333383715,
+    "price": 1680.3
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 18038.084403896493,
+    "distance": 5832.504394466452,
+    "price": 2204.31
+  },
+  {
+    "service_type": "express_air",
+    "weight": 18973.7985258994,
+    "distance": 11830.190684967774,
+    "price": 25276.71
+  },
+  {
+    "service_type": "trucking",
+    "weight": 16742.826982613173,
+    "distance": 13396.699377315867,
+    "price": 7110.44
+  },
+  {
+    "service_type": "trucking",
+    "weight": 9747.938437991892,
+    "distance": 3628.1462217439716,
+    "price": 3272.19
+  },
+  {
+    "service_type": "trucking",
+    "weight": 18188.405991298427,
+    "distance": 5136.377370174729,
+    "price": 6174.08
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 9474.064889959804,
+    "distance": 6178.901473246317,
+    "price": 1261.16
+  },
+  {
+    "service_type": "express_air",
+    "weight": 19947.93294243139,
+    "distance": 10419.18684151517,
+    "price": 24408.94
+  },
+  {
+    "service_type": "express_air",
+    "weight": 17633.269986480973,
+    "distance": 8908.09762723016,
+    "price": 21748.51
+  },
+  {
+    "service_type": "express_air",
+    "weight": 9505.480668223685,
+    "distance": 1190.6683559671092,
+    "price": 10128.88
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 6159.7522848758645,
+    "distance": 4474.230332537617,
+    "price": 857.4
+  },
+  {
+    "service_type": "express_air",
+    "weight": 1960.2959451253614,
+    "distance": 9138.564980791203,
+    "price": 6848.9
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 4591.693147855316,
+    "distance": 11043.35160759107,
+    "price": 972.8
+  },
+  {
+    "service_type": "express_air",
+    "weight": 15766.375105296276,
+    "distance": 5654.778233788942,
+    "price": 19876.19
+  },
+  {
+    "service_type": "trucking",
+    "weight": 13629.950236251372,
+    "distance": 8394.255804503407,
+    "price": 5016.45
+  },
+  {
+    "service_type": "express_air",
+    "weight": 9979.708333622211,
+    "distance": 9496.804543094464,
+    "price": 15307.99
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 13269.853843137345,
+    "distance": 2413.9051331808055,
+    "price": 1344.41
+  },
+  {
+    "service_type": "express_air",
+    "weight": 19747.721529826584,
+    "distance": 8349.73277904469,
+    "price": 23582.0
+  },
+  {
+    "service_type": "trucking",
+    "weight": 19715.520476111516,
+    "distance": 8462.056485252804,
+    "price": 6934.33
+  },
+  {
+    "service_type": "trucking",
+    "weight": 9702.094975975579,
+    "distance": 1848.0057003947788,
+    "price": 3136.45
+  },
+  {
+    "service_type": "express_air",
+    "weight": 3467.563327446525,
+    "distance": 4904.837116937823,
+    "price": 5520.41
+  },
+  {
+    "service_type": "trucking",
+    "weight": 1146.0802605636557,
+    "distance": 5621.768195603553,
+    "price": 1304.7
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 7098.622008066498,
+    "distance": 14764.453901819736,
+    "price": 1372.43
+  },
+  {
+    "service_type": "express_air",
+    "weight": 6612.232762221156,
+    "distance": 13544.961520789693,
+    "price": 14583.82
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 2861.7783025230333,
+    "distance": 14083.48430385811,
+    "price": 947.47
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 18533.623981701567,
+    "distance": 14822.716895083468,
+    "price": 2456.72
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 4929.012426818692,
+    "distance": 11106.206182076268,
+    "price": 1138.79
+  },
+  {
+    "service_type": "trucking",
+    "weight": 12218.576438213538,
+    "distance": 6495.339028677419,
+    "price": 4848.59
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 12495.911814009058,
+    "distance": 2529.326201904989,
+    "price": 1317.17
+  },
+  {
+    "service_type": "trucking",
+    "weight": 18886.143624198856,
+    "distance": 8018.240208367896,
+    "price": 6234.85
+  },
+  {
+    "service_type": "express_air",
+    "weight": 8212.876057083333,
+    "distance": 10140.05017523933,
+    "price": 12691.1
+  },
+  {
+    "service_type": "express_air",
+    "weight": 15304.288226467806,
+    "distance": 11914.523389673624,
+    "price": 22128.1
+  },
+  {
+    "service_type": "express_air",
+    "weight": 13748.516729872006,
+    "distance": 5338.575169558023,
+    "price": 16001.49
+  },
+  {
+    "service_type": "trucking",
+    "weight": 18658.678277579893,
+    "distance": 9058.740440645086,
+    "price": 7312.28
+  },
+  {
+    "service_type": "trucking",
+    "weight": 4720.0968179962065,
+    "distance": 5104.939920054981,
+    "price": 2366.84
+  },
+  {
+    "service_type": "express_air",
+    "weight": 757.1912038800824,
+    "distance": 513.3780501549126,
+    "price": 966.9
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 18743.875357896846,
+    "distance": 10552.373535064891,
+    "price": 2398.56
+  },
+  {
+    "service_type": "express_air",
+    "weight": 9109.089420497037,
+    "distance": 10978.456633913496,
+    "price": 13784.07
+  },
+  {
+    "service_type": "trucking",
+    "weight": 19538.589300259846,
+    "distance": 10027.27593497001,
+    "price": 7558.77
+  },
+  {
+    "service_type": "trucking",
+    "weight": 744.5891654080983,
+    "distance": 6338.705297651561,
+    "price": 1280.21
+  },
+  {
+    "service_type": "trucking",
+    "weight": 10654.447200010463,
+    "distance": 14707.473795403617,
+    "price": 5681.21
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 5662.115922204292,
+    "distance": 2376.0995057536734,
+    "price": 734.78
+  },
+  {
+    "service_type": "express_air",
+    "weight": 16973.86518943512,
+    "distance": 4053.9926266821844,
+    "price": 18133.57
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 2212.147186651433,
+    "distance": 1371.9890637343137,
+    "price": 264.03
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 10124.058139139017,
+    "distance": 9173.608118007256,
+    "price": 1513.25
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 4131.103767770614,
+    "distance": 13222.79156667347,
+    "price": 980.3
+  },
+  {
+    "service_type": "trucking",
+    "weight": 7671.326308929798,
+    "distance": 3238.959286748015,
+    "price": 2546.47
+  },
+  {
+    "service_type": "express_air",
+    "weight": 14583.146884509746,
+    "distance": 8365.498383616803,
+    "price": 19683.9
+  },
+  {
+    "service_type": "express_air",
+    "weight": 19977.05086474484,
+    "distance": 6648.486611317572,
+    "price": 24687.91
+  },
+  {
+    "service_type": "express_air",
+    "weight": 14192.134550500135,
+    "distance": 2797.2956200384915,
+    "price": 16167.76
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 19070.337138594823,
+    "distance": 2913.094438676163,
+    "price": 1930.88
+  },
+  {
+    "service_type": "trucking",
+    "weight": 16818.673968924886,
+    "distance": 4973.593549889592,
+    "price": 5509.27
+  },
+  {
+    "service_type": "standard_ocean",
+    "weight": 6466.221519852222,
+    "distance": 9701.94860778894,
+    "price": 1224.59
+  },
+  {
+    "service_type": "trucking",
+    "weight": 18705.28396084104,
+    "distance": 7519.70535635666,
+    "price": 7240.55
+  },
+  {
+    "service_type": "express_air",
+    "weight": 4220.640044040349,
+    "distance": 14915.523344488303,
+    "price": 11508.68
+  }
+]

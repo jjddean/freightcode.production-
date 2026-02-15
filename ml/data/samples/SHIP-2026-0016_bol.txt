@@ -1,0 +1,5 @@
+BILL OF LADING
+ShipmentRef: SHIP-2026-0016
+SHIPPER: Global Cargo Hamburg
+CONSIGNEE: US Retail Corp
+WEIGHT: 773 KG

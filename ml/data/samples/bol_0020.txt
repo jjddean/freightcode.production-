@@ -1,0 +1,16 @@
+BILL OF LADING
+No: BOL-2026-0020
+Date: 2026-02-15
+
+SHIPPER:
+Global Freight Corp
+456 Port Road, Hamburg, DE
+
+CONSIGNEE:
+EuroImports Gmbh
+202 Factory Lane, Berlin, DE
+
+DESCRIPTION OF GOODS:
+Textile Goods - 1200 Units - 600kg
+
+FREIGHT PREPAID

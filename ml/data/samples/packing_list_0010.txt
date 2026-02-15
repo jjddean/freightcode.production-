@@ -1,0 +1,5 @@
+PACKING LIST
+Ref: PKG-2026-0010
+SHIPPER: Acme Shenzhen Ltd
+GOODS: Textiles - 1200 units
+WEIGHT: 4624 KG

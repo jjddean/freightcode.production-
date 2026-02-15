@@ -1,0 +1,5 @@
+COMMERCIAL INVOICE
+ShipmentRef: SHIP-2026-0019
+SELLER: Tokyo Tech Exports
+BUYER: US Retail Corp
+TOTAL: $38619.00

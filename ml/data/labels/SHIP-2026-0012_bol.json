@@ -1,0 +1,30 @@
+{
+  "documentType": "bill_of_lading",
+  "documentNumber": "SHIP-2026-0012",
+  "rawText": "BILL OF LADING\r\nShipmentRef: SHIP-2026-0012\r\nSHIPPER: Global Cargo Hamburg\r\nCONSIGNEE: US Retail Corp\r\nWEIGHT: 3618 KG",
+  "title": "BILL OF LADING\r",
+  "shippingWeight": 3618,
+  "totalValue": 0,
+  "extractedFields": [
+    {
+      "key": "DocType",
+      "value": "bill_of_lading",
+      "confidence": 1
+    },
+    {
+      "key": "Reference",
+      "value": "SHIP-2026-0012",
+      "confidence": 1
+    },
+    {
+      "key": "Weight",
+      "value": 3618,
+      "confidence": 1
+    },
+    {
+      "key": "TotalValue",
+      "value": 0,
+      "confidence": 1
+    }
+  ]
+}

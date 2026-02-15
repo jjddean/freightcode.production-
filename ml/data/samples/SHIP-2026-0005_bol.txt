@@ -1,0 +1,5 @@
+BILL OF LADING
+ShipmentRef: SHIP-2026-0005
+SHIPPER: Tokyo Tech Exports
+CONSIGNEE: Berlin Imports Gmbh
+WEIGHT: 1008 KG

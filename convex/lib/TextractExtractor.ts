@@ -4,7 +4,7 @@ import { TextractClient, AnalyzeDocumentCommand, FeatureType, Block } from "@aws
 export interface DocumentExtractionResult {
     documentType: "commercial_invoice" | "packing_list" | "bol" | "unknown";
     rawText: string;
-    fields: Record<string, string>;
+    fields: Array<{ key: string, value: string, confidence: number }>;
     tables: Record<string, string>[][];
     confidence: number;
 }
@@ -39,11 +39,11 @@ export class TextractExtractor {
             return {
                 documentType: "commercial_invoice",
                 rawText: "MOCK INVOICE\nInvoice Number: INV-2024-001\nDate: 2024-02-14\nTotal: $1,250.00\n\nItems:\n1. Widget A - $500\n2. Widget B - $750",
-                fields: {
-                    "Invoice Number": "INV-2024-001",
-                    "Date": "2024-02-14",
-                    "Total": "$1,250.00"
-                },
+                fields: [
+                    { key: "Invoice Number", value: "INV-2024-001", confidence: 100 },
+                    { key: "Date", value: "2024-02-14", confidence: 100 },
+                    { key: "Total", value: "$1,250.00", confidence: 100 }
+                ],
                 tables: [],
                 confidence: 0.99
             };
@@ -100,30 +100,36 @@ export class TextractExtractor {
         return "unknown";
     }
 
-    private extractFields(blocks: Block[]): Record<string, string> {
-        const keyMap: Record<string, string> = {};
-        const valueMap: Record<string, string> = {};
-        const fields: Record<string, string> = {};
+    private extractFields(blocks: Block[]): Array<{ key: string, value: string, confidence: number }> {
+        const keyMap: Record<string, { text: string; confidence: number }> = {};
+        const valueMap: Record<string, { text: string; confidence: number }> = {};
+        const fields: Array<{ key: string, value: string, confidence: number }> = [];
 
         blocks.forEach((block) => {
             if (block.BlockType === "KEY_VALUE_SET") {
+                const text = this.getBlockText(block, blocks);
+                const confidence = block.Confidence || 0;
                 if (block.EntityTypes?.includes("KEY")) {
-                    keyMap[block.Id!] = this.getBlockText(block, blocks);
+                    keyMap[block.Id!] = { text, confidence };
                 } else {
-                    valueMap[block.Id!] = this.getBlockText(block, blocks);
+                    valueMap[block.Id!] = { text, confidence };
                 }
             }
         });
 
         blocks.forEach((block) => {
             if (block.BlockType === "KEY_VALUE_SET" && block.EntityTypes?.includes("KEY")) {
-                const keyText = keyMap[block.Id!];
+                const keyData = keyMap[block.Id!];
                 const valueRel = block.Relationships?.find((r) => r.Type === "VALUE");
                 if (valueRel && valueRel.Ids && valueRel.Ids.length > 0) {
                     const valueId = valueRel.Ids[0];
-                    const valueText = valueMap[valueId];
-                    if (keyText && valueText) {
-                        fields[keyText] = valueText;
+                    const valueData = valueMap[valueId];
+                    if (keyData && valueData) {
+                        fields.push({
+                            key: keyData.text,
+                            value: valueData.text,
+                            confidence: (keyData.confidence + valueData.confidence) / 2
+                        });
                     }
                 }
             }

@@ -1,0 +1,5 @@
+COMMERCIAL INVOICE
+ShipmentRef: SHIP-2026-0010
+SELLER: Global Cargo Hamburg
+BUYER: US Retail Corp
+TOTAL: $17223.00

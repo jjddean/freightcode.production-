@@ -1,0 +1,30 @@
+{
+  "documentType": "packing_list",
+  "documentNumber": "PKG-2026-0004",
+  "rawText": "PACKING LIST\r\nRef: PKG-2026-0004\r\nSHIPPER: Acme Shenzhen Ltd\r\nGOODS: Textiles - 1200 units\r\nWEIGHT: 290 KG",
+  "title": "PACKING LIST\r",
+  "shippingWeight": 290,
+  "totalValue": 0,
+  "extractedFields": [
+    {
+      "key": "DocType",
+      "value": "packing_list",
+      "confidence": 1
+    },
+    {
+      "key": "Reference",
+      "value": "PKG-2026-0004",
+      "confidence": 1
+    },
+    {
+      "key": "Weight",
+      "value": 290,
+      "confidence": 1
+    },
+    {
+      "key": "TotalValue",
+      "value": 0,
+      "confidence": 1
+    }
+  ]
+}

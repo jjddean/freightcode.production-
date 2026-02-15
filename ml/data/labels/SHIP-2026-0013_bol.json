@@ -1,0 +1,30 @@
+{
+  "documentType": "bill_of_lading",
+  "documentNumber": "SHIP-2026-0013",
+  "rawText": "BILL OF LADING\r\nShipmentRef: SHIP-2026-0013\r\nSHIPPER: Global Cargo Hamburg\r\nCONSIGNEE: Berlin Imports Gmbh\r\nWEIGHT: 4677 KG",
+  "title": "BILL OF LADING\r",
+  "shippingWeight": 4677,
+  "totalValue": 0,
+  "extractedFields": [
+    {
+      "key": "DocType",
+      "value": "bill_of_lading",
+      "confidence": 1
+    },
+    {
+      "key": "Reference",
+      "value": "SHIP-2026-0013",
+      "confidence": 1
+    },
+    {
+      "key": "Weight",
+      "value": 4677,
+      "confidence": 1
+    },
+    {
+      "key": "TotalValue",
+      "value": 0,
+      "confidence": 1
+    }
+  ]
+}

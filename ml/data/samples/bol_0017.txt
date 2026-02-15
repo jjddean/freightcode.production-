@@ -1,0 +1,16 @@
+BILL OF LADING
+No: BOL-2026-0017
+Date: 2026-02-15
+
+SHIPPER:
+Oceanic Trade Co
+789 Mariner Street, Singapore, SG
+
+CONSIGNEE:
+Retail Connect
+101 Market St, London, UK
+
+DESCRIPTION OF GOODS:
+Textile Goods - 1200 Units - 600kg
+
+FREIGHT PREPAID

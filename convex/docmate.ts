@@ -38,7 +38,16 @@ export const processDocument = action({
         docType: extraction.documentType,
       });
 
-      // Step 3: Save to database using the new mutation file
+      // Step 3: Optional AI Correction (if flagged)
+      let correctedText = undefined;
+      if (auditResult.status === "flagged") {
+        correctedText = await ctx.runAction(api.smartaudit.generateRawCorrection, {
+          rawText: extraction.rawText,
+          correctedData: auditResult.correctedData,
+        });
+      }
+
+      // Step 4: Save to database using the new mutation file
       const docId = await ctx.runMutation((api as any).docmate_db.saveProcessedDocument, {
         fileName: args.fileName,
         documentType: extraction.documentType,
@@ -47,6 +56,7 @@ export const processDocument = action({
         tables: extraction.tables,
         confidence: extraction.confidence,
         auditResult,
+        correctedText,
       });
 
       return {

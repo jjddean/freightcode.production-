@@ -1,0 +1,30 @@
+{
+  "documentType": "packing_list",
+  "documentNumber": "SHIP-2026-0025",
+  "rawText": "PACKING LIST\r\nShipmentRef: SHIP-2026-0025\r\nSHIPPER: Tokyo Tech Exports\r\nWEIGHT: 4498 KG",
+  "title": "PACKING LIST\r",
+  "shippingWeight": 4498,
+  "totalValue": 0,
+  "extractedFields": [
+    {
+      "key": "DocType",
+      "value": "packing_list",
+      "confidence": 1
+    },
+    {
+      "key": "Reference",
+      "value": "SHIP-2026-0025",
+      "confidence": 1
+    },
+    {
+      "key": "Weight",
+      "value": 4498,
+      "confidence": 1
+    },
+    {
+      "key": "TotalValue",
+      "value": 0,
+      "confidence": 1
+    }
+  ]
+}

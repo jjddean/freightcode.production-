@@ -1,0 +1,30 @@
+{
+  "documentType": "packing_list",
+  "documentNumber": "PKG-2026-0001",
+  "rawText": "PACKING LIST\r\nRef: PKG-2026-0001\r\nSHIPPER: Acme Shenzhen Ltd\r\nGOODS: Auto Parts - 5 crates\r\nWEIGHT: 965 KG",
+  "title": "PACKING LIST\r",
+  "shippingWeight": 965,
+  "totalValue": 0,
+  "extractedFields": [
+    {
+      "key": "DocType",
+      "value": "packing_list",
+      "confidence": 1
+    },
+    {
+      "key": "Reference",
+      "value": "PKG-2026-0001",
+      "confidence": 1
+    },
+    {
+      "key": "Weight",
+      "value": 965,
+      "confidence": 1
+    },
+    {
+      "key": "TotalValue",
+      "value": 0,
+      "confidence": 1
+    }
+  ]
+}

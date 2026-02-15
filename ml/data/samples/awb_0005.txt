@@ -1,0 +1,6 @@
+AIR WAYBILL
+No: AWB-2026-0005
+FLIGHT: QR815
+FROM: SZX
+TO: LAX
+DATA: Auto Parts - 5 crates

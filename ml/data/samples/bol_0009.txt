@@ -1,0 +1,5 @@
+BILL OF LADING
+No: BOL-2026-0009
+SHIPPER: Acme Shenzhen Ltd
+CONSIGNEE: Berlin Imports Gmbh
+GOODS: Auto Parts - 5 crates

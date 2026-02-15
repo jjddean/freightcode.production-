@@ -18,6 +18,7 @@ import {
     ArrowRight
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { formatCurrency } from '@/lib/currency';
 
 // Mock Data matching the aesthetic
 const shipments = [
@@ -117,7 +118,7 @@ const TestDashboardPage = () => {
                             </div>
                             <div className="text-xs text-red-400/50 mt-1">Action required immediately</div>
                         </div>
-                        <StatCard label="Total Spend (Mo)" value="$42,500" change="+12% vs last month" highlight />
+                        <StatCard label="Total Spend (Mo)" value={formatCurrency(42500, 'USD')} change="+12% vs last month" highlight />
                     </div>
 
                     {/* 2. MAIN GRID (Map + Tasks) */}

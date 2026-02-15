@@ -1,0 +1,30 @@
+{
+  "documentType": "commercial_invoice",
+  "documentNumber": "SHIP-2026-0019",
+  "rawText": "COMMERCIAL INVOICE\r\nShipmentRef: SHIP-2026-0019\r\nSELLER: Tokyo Tech Exports\r\nBUYER: US Retail Corp\r\nTOTAL: $38619.00",
+  "title": "COMMERCIAL INVOICE\r",
+  "shippingWeight": 0,
+  "totalValue": 38619,
+  "extractedFields": [
+    {
+      "key": "DocType",
+      "value": "commercial_invoice",
+      "confidence": 1
+    },
+    {
+      "key": "Reference",
+      "value": "SHIP-2026-0019",
+      "confidence": 1
+    },
+    {
+      "key": "Weight",
+      "value": 0,
+      "confidence": 1
+    },
+    {
+      "key": "TotalValue",
+      "value": 38619,
+      "confidence": 1
+    }
+  ]
+}

@@ -18,6 +18,7 @@ import {
 import { toast } from 'sonner';
 import { useStripeCheckout } from '@/hooks/useStripeCheckout';
 import SubscriptionCards from '@/components/subscription/SubscriptionCards';
+import { formatCurrency, convertCurrency } from '@/lib/currency';
 
 const PaymentsPage = () => {
   const { user } = useUser();
@@ -246,7 +247,7 @@ const PaymentsPage = () => {
       sortable: true,
       align: 'right' as const,
       className: "w-24",
-      render: (value: number) => <span className="font-semibold text-gray-900">£{value.toLocaleString()}</span>
+      render: (value: number, row: any) => <span className="font-semibold text-gray-900">{formatCurrency(value, (row.currency || 'GBP') as any)}</span>
     },
     {
       key: 'status' as keyof typeof invoices[0],
@@ -387,7 +388,13 @@ const PaymentsPage = () => {
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
                     <p className="text-gray-500">Amount</p>
-                    <p className="text-xl font-bold text-primary">£{selectedInvoice.amount?.toLocaleString()}</p>
+                    <div className="space-y-1">
+                      <p className="text-xl font-bold text-primary">{formatCurrency(selectedInvoice.amount, (selectedInvoice.currency || 'GBP') as any)}</p>
+                      <div className="flex gap-2 text-[10px] text-gray-400 font-medium uppercase tracking-wider">
+                        <span>≈ {formatCurrency(convertCurrency(selectedInvoice.amount, (selectedInvoice.currency || 'GBP') as any, 'USD'), 'USD')}</span>
+                        <span>≈ {formatCurrency(convertCurrency(selectedInvoice.amount, (selectedInvoice.currency || 'GBP') as any, 'EUR'), 'EUR')}</span>
+                      </div>
+                    </div>
                   </div>
                   <div>
                     <p className="text-gray-500">Status</p>

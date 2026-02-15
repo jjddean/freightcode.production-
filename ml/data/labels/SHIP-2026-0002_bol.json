@@ -1,0 +1,30 @@
+{
+  "documentType": "bill_of_lading",
+  "documentNumber": "SHIP-2026-0002",
+  "rawText": "BILL OF LADING\r\nShipmentRef: SHIP-2026-0002\r\nSHIPPER: Acme Shenzhen Ltd\r\nCONSIGNEE: UK Logistics Hub\r\nWEIGHT: 3088 KG",
+  "title": "BILL OF LADING\r",
+  "shippingWeight": 3088,
+  "totalValue": 0,
+  "extractedFields": [
+    {
+      "key": "DocType",
+      "value": "bill_of_lading",
+      "confidence": 1
+    },
+    {
+      "key": "Reference",
+      "value": "SHIP-2026-0002",
+      "confidence": 1
+    },
+    {
+      "key": "Weight",
+      "value": 3088,
+      "confidence": 1
+    },
+    {
+      "key": "TotalValue",
+      "value": 0,
+      "confidence": 1
+    }
+  ]
+}

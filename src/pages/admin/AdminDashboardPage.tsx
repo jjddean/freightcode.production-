@@ -18,6 +18,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
+import { formatCurrency } from '@/lib/currency';
 
 const StatCardSkeleton = () => (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
@@ -159,7 +160,7 @@ const AdminDashboardPage = () => {
                 </Card>
 
                 {/* Right Column Item 1: Revenue */}
-                <Card className="border-gray-200 shadow-sm overflow-hidden bg-white">
+                <Card className="border-blue-100 shadow-sm overflow-hidden bg-blue-50/50">
                     <div className="p-6">
                         <div className="flex items-center justify-between mb-4">
                             <div className="p-3 rounded-lg bg-primary-50 text-primary-600">
@@ -170,7 +171,7 @@ const AdminDashboardPage = () => {
                             </span>
                         </div>
                         <h3 className="text-sm font-medium text-gray-500">Total Revenue (MTD)</h3>
-                        <div className="text-2xl font-bold text-gray-900 mt-1">$124,500</div>
+                        <div className="text-2xl font-bold text-gray-900 mt-1">{formatCurrency(124500, (stats?.currency || 'USD') as any)}</div>
                     </div>
                     <div className="bg-gray-50 p-4 border-t border-gray-100">
                         <Button

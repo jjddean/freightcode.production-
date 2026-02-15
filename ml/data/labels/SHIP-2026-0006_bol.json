@@ -1,0 +1,30 @@
+{
+  "documentType": "bill_of_lading",
+  "documentNumber": "SHIP-2026-0006",
+  "rawText": "BILL OF LADING\r\nShipmentRef: SHIP-2026-0006\r\nSHIPPER: Tokyo Tech Exports\r\nCONSIGNEE: US Retail Corp\r\nWEIGHT: 831 KG",
+  "title": "BILL OF LADING\r",
+  "shippingWeight": 831,
+  "totalValue": 0,
+  "extractedFields": [
+    {
+      "key": "DocType",
+      "value": "bill_of_lading",
+      "confidence": 1
+    },
+    {
+      "key": "Reference",
+      "value": "SHIP-2026-0006",
+      "confidence": 1
+    },
+    {
+      "key": "Weight",
+      "value": 831,
+      "confidence": 1
+    },
+    {
+      "key": "TotalValue",
+      "value": 0,
+      "confidence": 1
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+BILL OF LADING
+No: BOL-2026-0006
+SHIPPER: Acme Shenzhen Ltd
+CONSIGNEE: US Retail Corp
+GOODS: Textiles - 1200 units

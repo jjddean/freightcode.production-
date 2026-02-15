@@ -1,0 +1,16 @@
+BILL OF LADING
+No: BOL-2026-0018
+Date: 2026-02-15
+
+SHIPPER:
+Global Freight Corp
+456 Port Road, Hamburg, DE
+
+CONSIGNEE:
+Retail Connect
+101 Market St, London, UK
+
+DESCRIPTION OF GOODS:
+Machinery Parts - 5 Case - 1500kg
+
+FREIGHT PREPAID

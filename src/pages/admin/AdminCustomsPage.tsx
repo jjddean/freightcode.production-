@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useQuery, useMutation } from "convex/react";
+import React, { useState, useMemo } from 'react';
+import { useQuery, useMutation, useAction } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import DataTable from '@/components/ui/data-table';
 import { Button } from '@/components/ui/button';
@@ -33,6 +33,103 @@ import {
 } from "@/components/ui/card";
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import { formatCurrency } from '@/lib/currency';
+
+const CDSStatusCell = ({ row }: { row: any }) => {
+    const [status, setStatus] = useState<any>(null);
+    const [loading, setLoading] = useState(false);
+    const getENSAction = useAction(api.hmrc_actions.getENSStatus);
+
+    const handleCheck = async () => {
+        if (!row.customs?.entryNumber) {
+            toast.error("No HMRC Reference Found");
+            return;
+        }
+        setLoading(true);
+        try {
+            const res = await getENSAction({ mrn: row.customs.entryNumber });
+            if (res.success) {
+                setStatus(res);
+                toast.success("HMRC Status Updated");
+            } else {
+                toast.error(res.message || "HMRC Check Failed");
+            }
+        } catch (e) {
+            console.error(e);
+            toast.error("HMRC API Error");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div className="flex flex-col gap-1 min-w-[100px]">
+            {status ? (
+                <Badge className={status.status === 'ACCEPTED' ? "bg-emerald-50 text-emerald-700 border-emerald-200" : "bg-red-50 text-red-700 border-red-200"}>
+                    {status.status}
+                </Badge>
+            ) : (
+                <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-7 px-2 text-[10px] w-full"
+                    onClick={handleCheck}
+                    disabled={loading}
+                >
+                    {loading ? "Checking..." : "Verify in CDS"}
+                </Button>
+            )}
+        </div>
+    );
+};
+
+const DutyDefermentCell = ({ row }: { row: any }) => {
+    const [balance, setBalance] = useState<any>(null);
+    const [loading, setLoading] = useState(false);
+    const getDDAction = useAction(api.hmrc_actions.getDutyDeferment);
+
+    const checkBalance = async () => {
+        if (!row.customs?.eoriNumber) {
+            toast.error("No EORI Found for Financials");
+            return;
+        }
+        setLoading(true);
+        try {
+            const res = await getDDAction({ eori: row.customs.eoriNumber });
+            if (res.success) {
+                setBalance(res);
+            } else {
+                toast.error(res.message || "Could not fetch balance");
+            }
+        } catch (e) {
+            console.error(e);
+            toast.error("DDA Lookup Failed");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div className="min-w-[100px]">
+            {balance ? (
+                <div className="text-[10px] font-mono leading-tight">
+                    <div className="text-emerald-600 font-bold whitespace-nowrap">{formatCurrency(balance.availableCredit)}</div>
+                    <div className="text-slate-400 text-[8px] opacity-70">Limit: {formatCurrency(balance.creditLimit)}</div>
+                </div>
+            ) : (
+                <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-7 px-2 text-[10px] w-full"
+                    onClick={checkBalance}
+                    disabled={loading}
+                >
+                    {loading ? "···" : "Check DDA"}
+                </Button>
+            )}
+        </div>
+    );
+};
 
 const AdminCustomsPage = () => {
     const pendingShipments = useQuery(api.customs.getPendingCustoms) || [];
@@ -75,7 +172,7 @@ const AdminCustomsPage = () => {
         }
     };
 
-    const columns: any[] = [
+    const columns: any[] = React.useMemo(() => [
         {
             key: 'trackingNumber',
             header: 'Tracking & Ref',
@@ -97,14 +194,14 @@ const AdminCustomsPage = () => {
                     </div>
                     <div className="flex items-center text-slate-900 mt-1 font-medium">
                         <span className="w-12 text-slate-400 uppercase font-bold text-[9px]">Value</span>
-                        {details.value}
+                        {details.value ? formatCurrency(details.value) : 'N/A'}
                     </div>
                 </div>
             )
         },
         {
             key: 'customs',
-            header: 'Status',
+            header: 'System Status',
             render: (customs: any) => (
                 <Badge variant="outline" className={
                     customs?.filingStatus === 'review'
@@ -118,12 +215,29 @@ const AdminCustomsPage = () => {
         },
         {
             key: 'riskLevel',
-            header: 'Risk',
-            render: (risk: string) => (
-                <Badge variant={risk === 'high' ? 'destructive' : 'outline'} className="text-[10px]">
-                    {risk === 'high' ? 'HIGH RISK' : 'SAFE'}
-                </Badge>
+            header: 'Compliance Data',
+            render: (risk: string, row: any) => (
+                <div className="flex flex-col gap-1">
+                    <Badge variant={risk === 'high' ? 'destructive' : 'outline'} className="text-[10px] w-fit">
+                        {risk === 'high' ? 'High Risk' : 'Standard'}
+                    </Badge>
+                    {row.customs?.eoriNumber && (
+                        <div className="text-[9px] text-slate-500 font-mono bg-slate-50 px-1 py-0.5 rounded border border-slate-100 italic">
+                            EORI: {row.customs.eoriNumber}
+                        </div>
+                    )}
+                </div>
             )
+        },
+        {
+            key: 'cds_check',
+            header: 'HMRC CDS Status',
+            render: (_: any, row: any) => <CDSStatusCell row={row} />
+        },
+        {
+            key: 'financials',
+            header: 'Duty Deferment',
+            render: (_: any, row: any) => <DutyDefermentCell row={row} />
         },
         {
             key: 'actions',
@@ -131,26 +245,26 @@ const AdminCustomsPage = () => {
             render: (_: any, row: any) => (
                 <div className="flex items-center gap-2">
                     <Button
-                        variant="outline"
+                        variant="ghost"
                         size="sm"
-                        className="h-8 text-xs font-semibold border-slate-200 hover:bg-slate-50 transition-colors"
-                        onClick={() => window.open("https://import-notifications.service.gov.uk", "_blank")}
+                        className="h-8 text-[11px] font-semibold text-blue-600 hover:bg-blue-50"
+                        onClick={() => window.open(`https://www.tax.service.gov.uk/customs-declaration-service/declaration/${row.customs?.entryNumber || ''}/status`, "_blank")}
                     >
-                        <ExternalLink className="w-3.5 h-3.5 mr-1.5" />
-                        File in HMRC
+                        <ExternalLink className="w-3.5 h-3.5 mr-1" />
+                        Portal
                     </Button>
                     <Button
                         size="sm"
                         className="h-8 text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm"
                         onClick={() => handleOpenFilingModal(row)}
                     >
-                        <ClipboardCheck className="w-3.5 h-3.5 mr-1.5" />
+                        <ClipboardCheck className="w-3.5 h-3.5 mr-1" />
                         Mark Filed
                     </Button>
                 </div>
             )
         }
-    ];
+    ], [handleOpenFilingModal]);
 
     return (
         <div className="space-y-6">

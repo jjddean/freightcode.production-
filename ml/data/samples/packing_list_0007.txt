@@ -1,0 +1,5 @@
+PACKING LIST
+Ref: PKG-2026-0007
+SHIPPER: Global Cargo Hamburg
+GOODS: Electronics - 500kg
+WEIGHT: 4537 KG

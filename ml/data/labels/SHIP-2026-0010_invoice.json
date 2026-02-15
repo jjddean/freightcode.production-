@@ -1,0 +1,30 @@
+{
+  "documentType": "commercial_invoice",
+  "documentNumber": "SHIP-2026-0010",
+  "rawText": "COMMERCIAL INVOICE\r\nShipmentRef: SHIP-2026-0010\r\nSELLER: Global Cargo Hamburg\r\nBUYER: US Retail Corp\r\nTOTAL: $17223.00",
+  "title": "COMMERCIAL INVOICE\r",
+  "shippingWeight": 0,
+  "totalValue": 17223,
+  "extractedFields": [
+    {
+      "key": "DocType",
+      "value": "commercial_invoice",
+      "confidence": 1
+    },
+    {
+      "key": "Reference",
+      "value": "SHIP-2026-0010",
+      "confidence": 1
+    },
+    {
+      "key": "Weight",
+      "value": 0,
+      "confidence": 1
+    },
+    {
+      "key": "TotalValue",
+      "value": 17223,
+      "confidence": 1
+    }
+  ]
+}

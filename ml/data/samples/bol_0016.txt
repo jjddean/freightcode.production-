@@ -1,0 +1,16 @@
+BILL OF LADING
+No: BOL-2026-0016
+Date: 2026-02-15
+
+SHIPPER:
+Acme Logistics Ltd.
+123 Industry Way, Shenzhen, CN
+
+CONSIGNEE:
+Retail Connect
+101 Market St, London, UK
+
+DESCRIPTION OF GOODS:
+Electronic Components - 500 Pcs - 250kg
+
+FREIGHT PREPAID

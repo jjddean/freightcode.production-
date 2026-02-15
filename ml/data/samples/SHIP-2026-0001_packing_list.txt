@@ -1,0 +1,4 @@
+PACKING LIST
+ShipmentRef: SHIP-2026-0001
+SHIPPER: Acme Shenzhen Ltd
+WEIGHT: 666 KG

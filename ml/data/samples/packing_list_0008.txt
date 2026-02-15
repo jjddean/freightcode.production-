@@ -1,0 +1,5 @@
+PACKING LIST
+Ref: PKG-2026-0008
+SHIPPER: Acme Shenzhen Ltd
+GOODS: Auto Parts - 5 crates
+WEIGHT: 3864 KG

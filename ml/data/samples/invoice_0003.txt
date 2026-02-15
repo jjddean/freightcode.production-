@@ -1,0 +1,6 @@
+COMMERCIAL INVOICE
+No: INV-2026-0003
+DATE: 2026-02-15
+SELLER: Global Cargo Hamburg
+BUYER: Berlin Imports Gmbh
+TOTAL: $32066.00

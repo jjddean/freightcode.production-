@@ -1,0 +1,5 @@
+COMMERCIAL INVOICE
+ShipmentRef: SHIP-2026-0022
+SELLER: Acme Shenzhen Ltd
+BUYER: UK Logistics Hub
+TOTAL: $42863.00

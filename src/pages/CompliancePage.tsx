@@ -354,6 +354,7 @@ function SmartAuditSection() {
   const [activeTab, setActiveTab] = useState("manual");
 
   const auditAction = useAction(api.smartaudit.auditDocument);
+  const generateCorrectionAction = useAction(api.smartaudit.generateRawCorrection);
   const saveAuditMutation = useMutation(api.smartaudit.saveAudit);
 
   const handleAudit = async () => {
@@ -480,7 +481,35 @@ function SmartAuditSection() {
                   </Button>
                   <Button
                     className="flex-1 bg-purple-600 text-white hover:bg-purple-700"
-                    onClick={() => toast.info("Feature coming soon", { description: "You will be able to export the corrected document shortly." })}
+                    disabled={isAuditing}
+                    onClick={async () => {
+                      setIsAuditing(true);
+                      try {
+                        const correctedText = await generateCorrectionAction({
+                          rawText,
+                          correctedData: auditResult.correctedData
+                        });
+
+                        // Treat it like a "Smart Upload" result so we can use the nice viewer
+                        setExtractedData({
+                          extraction: {
+                            rawText,
+                            fields: auditResult.extractedData ? Object.entries(auditResult.extractedData).map(([k, v]) => ({ key: k, value: String(v), confidence: 100 })) : [],
+                            tables: [],
+                            confidence: 100,
+                            documentType: docType
+                          },
+                          auditResult,
+                          correctedText
+                        });
+                        setActiveTab("upload");
+                        toast.success("Correction Drafted", { description: "Switching to AI Analysis view." });
+                      } catch (error: any) {
+                        toast.error("Correction Failed", { description: error.message });
+                      } finally {
+                        setIsAuditing(false);
+                      }
+                    }}
                   >
                     Draft Correction
                   </Button>
@@ -512,10 +541,15 @@ function SmartAuditSection() {
                         <TabsTrigger value="fields" className="text-xs h-6">Extracted Fields</TabsTrigger>
                         <TabsTrigger value="tables" className="text-xs h-6">Tables ({extractedData.extraction.tables.length})</TabsTrigger>
                         <TabsTrigger value="raw" className="text-xs h-6">Raw Text</TabsTrigger>
+                        {extractedData.correctedText && (
+                          <TabsTrigger value="corrected" className="text-xs h-6 bg-green-50 text-green-700 data-[state=active]:bg-green-600 data-[state=active]:text-white ml-2">
+                            ✨ Corrected Doc
+                          </TabsTrigger>
+                        )}
                       </TabsList>
 
                       <TabsContent value="fields" className="max-h-60 overflow-y-auto pr-1">
-                        {extractedData.extraction.fields.length > 0 ? (
+                        {extractedData.extraction?.fields?.length > 0 ? (
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                             {extractedData.extraction.fields.map((field: any, idx: number) => (
                               <div key={idx} className="flex flex-col p-2 bg-white rounded border border-purple-100 hover:border-purple-300 transition-colors">
@@ -533,11 +567,11 @@ function SmartAuditSection() {
                       </TabsContent>
 
                       <TabsContent value="tables" className="max-h-60 overflow-y-auto">
-                        {extractedData.extraction.tables.length > 0 ? extractedData.extraction.tables.map((table: any, idx: number) => (
+                        {extractedData.extraction?.tables?.length > 0 ? extractedData.extraction.tables.map((table: any, idx: number) => (
                           <div key={idx} className="mb-4 last:mb-0 border rounded-md overflow-hidden">
                             <table className="min-w-full text-xs text-left">
                               <tbody>
-                                {table.rows.map((row: string[], rowIdx: number) => (
+                                {table.rows?.map((row: string[], rowIdx: number) => (
                                   <tr key={rowIdx} className="border-b last:border-0 hover:bg-gray-50">
                                     {row.map((cell: string, cellIdx: number) => (
                                       <td key={cellIdx} className="px-3 py-2 border-r last:border-0 truncate max-w-[150px]" title={cell}>
@@ -556,20 +590,36 @@ function SmartAuditSection() {
 
                       <TabsContent value="raw">
                         <div className="bg-slate-900 text-slate-300 p-3 rounded-md overflow-x-auto text-xs font-mono max-h-60">
-                          <pre>{extractedData.extraction.rawText}</pre>
+                          <pre>{extractedData.extraction?.rawText}</pre>
                         </div>
                       </TabsContent>
+
+                      {extractedData.correctedText && (
+                        <TabsContent value="corrected">
+                          <div className="bg-white border-2 border-green-200 p-4 rounded-md overflow-y-auto text-sm font-sans max-h-80 shadow-inner">
+                            <div className="flex items-center gap-2 mb-3 text-green-700 font-semibold border-b border-green-100 pb-2">
+                              <CheckCircle className="w-4 h-4" />
+                              AI Corrected Document (Customs Ready)
+                            </div>
+                            <pre className="whitespace-pre-wrap text-gray-800 leading-relaxed font-mono text-xs">
+                              {extractedData.correctedText}
+                            </pre>
+                          </div>
+                        </TabsContent>
+                      )}
                     </Tabs>
                   </CardContent>
                 </Card>
 
                 {/* Audit Result */}
-                <AuditResultsView {...extractedData.auditResult} />
+                {extractedData.auditResult && (
+                  <AuditResultsView {...extractedData.auditResult} />
+                )}
 
                 <div className="flex gap-2">
                   <Button
                     variant="outline"
-                    className="w-full"
+                    className="flex-1"
                     onClick={() => {
                       setExtractedData(null);
                       setAuditResult(null);
@@ -577,6 +627,33 @@ function SmartAuditSection() {
                   >
                     Process Another Document
                   </Button>
+                  {!extractedData.correctedText && (
+                    <Button
+                      className="flex-1 bg-purple-600 text-white hover:bg-purple-700"
+                      disabled={isAuditing}
+                      onClick={async () => {
+                        setIsAuditing(true);
+                        try {
+                          const correctedText = await generateCorrectionAction({
+                            rawText: extractedData.extraction.rawText,
+                            correctedData: extractedData.auditResult.correctedData
+                          });
+                          setExtractedData({
+                            ...extractedData,
+                            correctedText
+                          });
+                          toast.success("Correction Generated", { description: "You can now view the 'Corrected Doc' tab." });
+                        } catch (error: any) {
+                          toast.error("Correction Failed", { description: error.message });
+                        } finally {
+                          setIsAuditing(false);
+                        }
+                      }}
+                    >
+                      <Wand2 className="w-4 h-4 mr-2" />
+                      Draft Correction
+                    </Button>
+                  )}
                 </div>
               </div>
             )}

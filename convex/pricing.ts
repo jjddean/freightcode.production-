@@ -20,7 +20,7 @@ const CITY_COORDS: Record<string, { lat: number; lng: number }> = {
 };
 
 // Haversine formula to calculate distance between two points
-function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+export function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
     const R = 6371; // Earth's radius in km
     const dLat = (lat2 - lat1) * Math.PI / 180;
     const dLon = (lon2 - lon1) * Math.PI / 180;
@@ -39,7 +39,7 @@ function extractCity(address: string): string {
 }
 
 // Get coordinates for a city
-function getCityCoords(address: string): { lat: number; lng: number } | null {
+export function getCityCoords(address: string): { lat: number; lng: number } | null {
     const city = extractCity(address);
     for (const [key, coords] of Object.entries(CITY_COORDS)) {
         if (city.includes(key) || key.includes(city)) {

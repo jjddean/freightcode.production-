@@ -1,0 +1,5 @@
+COMMERCIAL INVOICE
+ShipmentRef: SHIP-2026-0003
+SELLER: Tokyo Tech Exports
+BUYER: UK Logistics Hub
+TOTAL: $5108.00

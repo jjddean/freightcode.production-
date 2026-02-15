@@ -1,0 +1,5 @@
+COMMERCIAL INVOICE
+ShipmentRef: SHIP-2026-0014
+SELLER: Tokyo Tech Exports
+BUYER: Berlin Imports Gmbh
+TOTAL: $32031.00

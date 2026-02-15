@@ -1,0 +1,5 @@
+BILL OF LADING
+ShipmentRef: SHIP-2026-0009
+SHIPPER: Acme Shenzhen Ltd
+CONSIGNEE: UK Logistics Hub
+WEIGHT: 1405 KG

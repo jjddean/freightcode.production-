@@ -19,10 +19,10 @@ interface AuditResultsViewProps {
 }
 
 export const AuditResultsView: React.FC<AuditResultsViewProps> = ({
-    status,
-    riskChecklist,
-    extractedData,
-    correctedData
+    status = "passed",
+    riskChecklist = [],
+    extractedData = {},
+    correctedData = {}
 }) => {
     const getSeverityColor = (severity: string) => {
         switch (severity.toLowerCase()) {

@@ -1,0 +1,30 @@
+{
+  "documentType": "packing_list",
+  "documentNumber": "SHIP-2026-0009",
+  "rawText": "PACKING LIST\r\nShipmentRef: SHIP-2026-0009\r\nSHIPPER: Acme Shenzhen Ltd\r\nWEIGHT: 1405 KG",
+  "title": "PACKING LIST\r",
+  "shippingWeight": 1405,
+  "totalValue": 0,
+  "extractedFields": [
+    {
+      "key": "DocType",
+      "value": "packing_list",
+      "confidence": 1
+    },
+    {
+      "key": "Reference",
+      "value": "SHIP-2026-0009",
+      "confidence": 1
+    },
+    {
+      "key": "Weight",
+      "value": 1405,
+      "confidence": 1
+    },
+    {
+      "key": "TotalValue",
+      "value": 0,
+      "confidence": 1
+    }
+  ]
+}

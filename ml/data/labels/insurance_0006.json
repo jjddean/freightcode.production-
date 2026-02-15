@@ -1,0 +1,30 @@
+{
+  "documentType": "insurance_certificate",
+  "documentNumber": "INS-2026-0006",
+  "rawText": "INSURANCE CERTIFICATE\r\nNo: INS-2026-0006\r\nPOLICY: FC-992\r\nCOVERAGE: ALL RISK",
+  "title": "INSURANCE CERTIFICATE\r",
+  "shippingWeight": 0,
+  "totalValue": 0,
+  "extractedFields": [
+    {
+      "key": "DocType",
+      "value": "insurance_certificate",
+      "confidence": 1
+    },
+    {
+      "key": "Reference",
+      "value": "INS-2026-0006",
+      "confidence": 1
+    },
+    {
+      "key": "Weight",
+      "value": 0,
+      "confidence": 1
+    },
+    {
+      "key": "TotalValue",
+      "value": 0,
+      "confidence": 1
+    }
+  ]
+}

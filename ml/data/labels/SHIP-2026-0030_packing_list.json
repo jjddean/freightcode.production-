@@ -1,0 +1,30 @@
+{
+  "documentType": "packing_list",
+  "documentNumber": "SHIP-2026-0030",
+  "rawText": "PACKING LIST\r\nShipmentRef: SHIP-2026-0030\r\nSHIPPER: Global Cargo Hamburg\r\nWEIGHT: 2147 KG",
+  "title": "PACKING LIST\r",
+  "shippingWeight": 2147,
+  "totalValue": 0,
+  "extractedFields": [
+    {
+      "key": "DocType",
+      "value": "packing_list",
+      "confidence": 1
+    },
+    {
+      "key": "Reference",
+      "value": "SHIP-2026-0030",
+      "confidence": 1
+    },
+    {
+      "key": "Weight",
+      "value": 2147,
+      "confidence": 1
+    },
+    {
+      "key": "TotalValue",
+      "value": 0,
+      "confidence": 1
+    }
+  ]
+}

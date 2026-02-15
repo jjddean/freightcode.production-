@@ -1,0 +1,5 @@
+BILL OF LADING
+ShipmentRef: SHIP-2026-0026
+SHIPPER: Global Cargo Hamburg
+CONSIGNEE: UK Logistics Hub
+WEIGHT: 1579 KG

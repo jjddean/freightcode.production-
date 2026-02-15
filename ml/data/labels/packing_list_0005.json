@@ -1,0 +1,30 @@
+{
+  "documentType": "packing_list",
+  "documentNumber": "PKG-2026-0005",
+  "rawText": "PACKING LIST\r\nRef: PKG-2026-0005\r\nSHIPPER: Global Cargo Hamburg\r\nGOODS: Textiles - 1200 units\r\nWEIGHT: 3486 KG",
+  "title": "PACKING LIST\r",
+  "shippingWeight": 3486,
+  "totalValue": 0,
+  "extractedFields": [
+    {
+      "key": "DocType",
+      "value": "packing_list",
+      "confidence": 1
+    },
+    {
+      "key": "Reference",
+      "value": "PKG-2026-0005",
+      "confidence": 1
+    },
+    {
+      "key": "Weight",
+      "value": 3486,
+      "confidence": 1
+    },
+    {
+      "key": "TotalValue",
+      "value": 0,
+      "confidence": 1
+    }
+  ]
+}

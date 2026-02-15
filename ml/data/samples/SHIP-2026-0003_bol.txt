@@ -1,0 +1,5 @@
+BILL OF LADING
+ShipmentRef: SHIP-2026-0003
+SHIPPER: Tokyo Tech Exports
+CONSIGNEE: UK Logistics Hub
+WEIGHT: 2404 KG

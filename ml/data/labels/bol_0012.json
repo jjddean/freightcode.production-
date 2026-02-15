@@ -1,0 +1,30 @@
+{
+  "documentType": "bill_of_lading",
+  "documentNumber": "BOL-2026-0012",
+  "rawText": "BILL OF LADING\r\nNo: BOL-2026-0012\r\nDate: 2026-02-15\r\n\r\nSHIPPER:\r\nGlobal Freight Corp\r\n456 Port Road, Hamburg, DE\r\n\r\nCONSIGNEE:\r\nRetail Connect\r\n101 Market St, London, UK\r\n\r\nDESCRIPTION OF GOODS:\r\nElectronic Components - 500 Pcs - 250kg\r\n\r\nFREIGHT PREPAID\r\n",
+  "title": "BILL OF LADING\r",
+  "shippingWeight": 0,
+  "totalValue": 0,
+  "extractedFields": [
+    {
+      "key": "DocType",
+      "value": "bill_of_lading",
+      "confidence": 1
+    },
+    {
+      "key": "Reference",
+      "value": "BOL-2026-0012",
+      "confidence": 1
+    },
+    {
+      "key": "Weight",
+      "value": 0,
+      "confidence": 1
+    },
+    {
+      "key": "TotalValue",
+      "value": 0,
+      "confidence": 1
+    }
+  ]
+}

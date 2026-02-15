@@ -1,0 +1,5 @@
+BILL OF LADING
+ShipmentRef: SHIP-2026-0029
+SHIPPER: Acme Shenzhen Ltd
+CONSIGNEE: US Retail Corp
+WEIGHT: 3828 KG

@@ -1,0 +1,5 @@
+BILL OF LADING
+ShipmentRef: SHIP-2026-0018
+SHIPPER: Tokyo Tech Exports
+CONSIGNEE: US Retail Corp
+WEIGHT: 1052 KG

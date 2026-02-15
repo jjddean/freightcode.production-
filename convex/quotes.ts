@@ -4,9 +4,75 @@ import { v } from "convex/values"
 import { calculateShippingPrice, estimateTransitTime, generateMockLineItems } from "./pricing";
 import { getFreightEstimates } from "./freightos";
 import { findLocode } from "./locations";
+import { getCityCoords, calculateDistance } from "./pricing";
 
+const ML_GATEWAY_URL = "http://127.0.0.1:8000";
 
-// ... (imports remain)
+/**
+ * Shared helper to normalize quotes from multiple sources and add ML Market Scores.
+ */
+async function normalizeAndScoreQuotes(newQuotes: any[], request: any): Promise<any[]> {
+  return await Promise.all(newQuotes.map(async (r: any) => {
+    const actualPrice = Number(r.price?.amount ?? r.cost ?? r.amount?.total ?? r.amount ?? 0);
+    let marketScore = undefined;
+
+    // ML Brain: Market Scoring
+    try {
+      const originCoords = getCityCoords(request.origin);
+      const destCoords = getCityCoords(request.destination);
+      let distance = 5000;
+      if (originCoords && destCoords) {
+        distance = calculateDistance(originCoords.lat, originCoords.lng, destCoords.lat, destCoords.lng);
+      }
+
+      // Map service types to ML expectations
+      let mlService = "standard_ocean";
+      const lowerService = (r.serviceType || r.service_level || "").toLowerCase();
+      if (lowerService.includes("air")) mlService = "express_air";
+      if (lowerService.includes("truck")) mlService = "trucking";
+
+      const prResponse = await fetch(`${ML_GATEWAY_URL}/predict-pricing`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          service_type: mlService,
+          weight: parseFloat(request.weight) || 1000,
+          distance: distance
+        }),
+      });
+
+      if (prResponse.ok) {
+        const prResult = await prResponse.json();
+        const predicted = prResult.predicted_price;
+        marketScore = Math.min(100, Math.max(0, Math.round((predicted / actualPrice) * 50 + 40)));
+      }
+    } catch (err) {
+      console.error("ML Pricing Error:", err);
+    }
+
+    return {
+      carrierId: r.carrierId ?? r.id ?? `carrier-${r.carrier}`,
+      carrierName: r.carrierName ?? r.carrier ?? "Unknown carrier",
+      price: {
+        amount: actualPrice,
+        breakdown: {
+          baseRate: Number(r.price?.breakdown?.baseRate ?? r.amount?.baseRate ?? 0),
+          documentation: Number(r.price?.breakdown?.documentation ?? r.amount?.documentation ?? 0),
+          fuelSurcharge: Number(r.price?.breakdown?.fuelSurcharge ?? r.amount?.fuelSurcharge ?? 0),
+          securityFee: Number(r.price?.breakdown?.securityFee ?? r.amount?.securityFee ?? 0),
+        },
+        currency: r.price?.currency ?? r.currency ?? "USD",
+        lineItems: (r.price?.lineItems && r.price.lineItems.length > 0)
+          ? r.price.lineItems
+          : generateMockLineItems(request.origin, request.destination),
+      },
+      serviceType: r.serviceType ?? r.service ?? r.service_level ?? "unknown",
+      transitTime: r.transitTime ?? r.transit_time ?? "unknown",
+      validUntil: r.validUntil ?? new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+      marketScore: marketScore,
+    };
+  }));
+}
 export const createQuote = mutation({
   args: {
     request: v.object({
@@ -204,28 +270,7 @@ export const createQuote = mutation({
         throw new Error("No valid quotes found for this route.");
       }
 
-      const normalizedQuotes = newQuotes.map((r: any) => ({
-        carrierId: r.carrierId ?? r.id ?? `carrier-${r.carrier}`,
-        carrierName: r.carrierName ?? r.carrier ?? "Unknown carrier",
-        price: {
-          // Handle Shippo format (cost) and legacy format (price.amount)
-          amount: Number(r.price?.amount ?? r.cost ?? r.amount?.total ?? r.amount ?? 0),
-          breakdown: {
-            baseRate: Number(r.price?.breakdown?.baseRate ?? r.amount?.baseRate ?? 0),
-            documentation: Number(r.price?.breakdown?.documentation ?? r.amount?.documentation ?? 0),
-            fuelSurcharge: Number(r.price?.breakdown?.fuelSurcharge ?? r.amount?.fuelSurcharge ?? 0),
-            securityFee: Number(r.price?.breakdown?.securityFee ?? r.amount?.securityFee ?? 0),
-          },
-          currency: r.price?.currency ?? r.currency ?? "USD",
-          // Always ensure lineItems exist - generate if not present or empty
-          lineItems: (r.price?.lineItems && r.price.lineItems.length > 0)
-            ? r.price.lineItems
-            : generateMockLineItems(request.origin, request.destination),
-        },
-        serviceType: r.serviceType ?? r.service ?? r.service_level ?? "unknown",
-        transitTime: r.transitTime ?? r.transit_time ?? "unknown",
-        validUntil: r.validUntil ?? new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-      }));
+      const normalizedQuotes = await normalizeAndScoreQuotes(newQuotes, request);
 
 
       const quoteDoc: any = {
@@ -319,28 +364,7 @@ export const createInstantQuoteAndBooking = mutation({
     const orgId = argsOrgId || (identity as any)?.org_id;
 
     // STRICT NORMALIZATION - Handle Shippo format (cost) and legacy format (price.amount)
-    const normalizedQuotes = quotes.map((r: any) => ({
-      carrierId: r.carrierId ?? r.id ?? `carrier-${Date.now()}`,
-      carrierName: r.carrierName ?? r.carrier ?? "freightcode Logistics",
-      price: {
-        // Handle Shippo format (cost) and legacy format (price.amount)
-        amount: Number(r.price?.amount ?? r.cost ?? r.amount?.total ?? r.amount ?? 0),
-        breakdown: {
-          baseRate: Number(r.price?.breakdown?.baseRate ?? r.amount?.baseRate ?? r.amount ?? 0),
-          documentation: Number(r.price?.breakdown?.documentation ?? r.amount?.documentation ?? 0),
-          fuelSurcharge: Number(r.price?.breakdown?.fuelSurcharge ?? r.amount?.fuelSurcharge ?? 0),
-          securityFee: Number(r.price?.breakdown?.securityFee ?? r.amount?.securityFee ?? 0),
-        },
-        currency: r.price?.currency ?? r.currency ?? "USD",
-        // IMPORTANT: Preserve lineItems or generate mock breakdown (check for empty array too)
-        lineItems: (r.price?.lineItems && r.price.lineItems.length > 0)
-          ? r.price.lineItems
-          : generateMockLineItems(request.origin, request.destination),
-      },
-      serviceType: (r.serviceType ?? r.service ?? r.service_level ?? r.serviceType) || "Standard Freight",
-      transitTime: r.transitTime ?? r.transit_time ?? "3-5 days",
-      validUntil: r.validUntil ?? new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-    }));
+    const normalizedQuotes = await normalizeAndScoreQuotes(quotes, request);
 
 
     const quoteId = `QT-${Date.now()}`;
@@ -504,19 +528,21 @@ export const createPublicQuote = mutation({
       validUntil: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString()
     }];
 
+    const normalizedQuotes = await normalizeAndScoreQuotes(quotes, request);
+
     // 3. Save Quote
     const quoteId = `QT-G-${Date.now()}`;
     await ctx.db.insert("quotes", {
       ...request,
       quoteId,
       status: "success",
-      quotes,
+      quotes: normalizedQuotes,
       guestId,
       userId: undefined,
       orgId: undefined,
       createdAt: Date.now(),
     });
 
-    return { quoteId, guestId, quotes };
+    return { quoteId, guestId, quotes: normalizedQuotes };
   },
 });

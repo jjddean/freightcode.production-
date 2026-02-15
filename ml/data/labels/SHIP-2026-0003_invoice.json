@@ -1,0 +1,30 @@
+{
+  "documentType": "commercial_invoice",
+  "documentNumber": "SHIP-2026-0003",
+  "rawText": "COMMERCIAL INVOICE\r\nShipmentRef: SHIP-2026-0003\r\nSELLER: Tokyo Tech Exports\r\nBUYER: UK Logistics Hub\r\nTOTAL: $5108.00",
+  "title": "COMMERCIAL INVOICE\r",
+  "shippingWeight": 0,
+  "totalValue": 5108,
+  "extractedFields": [
+    {
+      "key": "DocType",
+      "value": "commercial_invoice",
+      "confidence": 1
+    },
+    {
+      "key": "Reference",
+      "value": "SHIP-2026-0003",
+      "confidence": 1
+    },
+    {
+      "key": "Weight",
+      "value": 0,
+      "confidence": 1
+    },
+    {
+      "key": "TotalValue",
+      "value": 5108,
+      "confidence": 1
+    }
+  ]
+}

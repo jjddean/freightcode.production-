@@ -1,0 +1,30 @@
+{
+  "documentType": "commercial_invoice",
+  "documentNumber": "INV-2026-0002",
+  "rawText": "COMMERCIAL INVOICE\r\nNo: INV-2026-0002\r\nDATE: 2026-02-15\r\nSELLER: Tokyo Tech Exports\r\nBUYER: Berlin Imports Gmbh\r\nTOTAL: $37839.00",
+  "title": "COMMERCIAL INVOICE\r",
+  "shippingWeight": 0,
+  "totalValue": 37839,
+  "extractedFields": [
+    {
+      "key": "DocType",
+      "value": "commercial_invoice",
+      "confidence": 1
+    },
+    {
+      "key": "Reference",
+      "value": "INV-2026-0002",
+      "confidence": 1
+    },
+    {
+      "key": "Weight",
+      "value": 0,
+      "confidence": 1
+    },
+    {
+      "key": "TotalValue",
+      "value": 37839,
+      "confidence": 1
+    }
+  ]
+}

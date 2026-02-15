@@ -1,0 +1,30 @@
+{
+  "documentType": "air_waybill",
+  "documentNumber": "AWB-2026-0001",
+  "rawText": "AIR WAYBILL\r\nNo: AWB-2026-0001\r\nFLIGHT: QR815\r\nFROM: SZX\r\nTO: LAX\r\nDATA: Textiles - 1200 units",
+  "title": "AIR WAYBILL\r",
+  "shippingWeight": 0,
+  "totalValue": 0,
+  "extractedFields": [
+    {
+      "key": "DocType",
+      "value": "air_waybill",
+      "confidence": 1
+    },
+    {
+      "key": "Reference",
+      "value": "AWB-2026-0001",
+      "confidence": 1
+    },
+    {
+      "key": "Weight",
+      "value": 0,
+      "confidence": 1
+    },
+    {
+      "key": "TotalValue",
+      "value": 0,
+      "confidence": 1
+    }
+  ]
+}

@@ -13,6 +13,7 @@ import { useQuery, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { toast } from 'sonner';
 import { Play, Wrench } from 'lucide-react';
+import { formatCurrency, convertCurrency } from '@/lib/currency';
 import { useOrganization, useUser } from "@clerk/clerk-react";
 
 const DashboardPage = () => {
@@ -97,7 +98,12 @@ const DashboardPage = () => {
       render: (value: string) => <StatusBadge status={value} />
     },
     { key: 'eta' as any, header: 'ETA', sortable: true },
-    { key: 'value' as any, header: 'Value', sortable: true },
+    {
+      key: 'value' as any,
+      header: 'Value',
+      sortable: true,
+      render: (val: string) => <span className="font-semibold text-gray-900">{formatCurrency(val)}</span>
+    },
   ];
 
   return (
@@ -173,9 +179,12 @@ const DashboardPage = () => {
                   </div>
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-500">This Month</p>
                   <p className="text-sm font-medium text-gray-500">Revenue</p>
-                  <p className="text-2xl font-semibold text-gray-900">£{(liveMetrics.monthlyRevenue / 1000).toFixed(0)}K</p>
+                  <p className="text-2xl font-semibold text-gray-900">{formatCurrency(liveMetrics.monthlyRevenue)}</p>
+                  <div className="flex gap-2 text-[10px] text-gray-400 font-medium uppercase tracking-wider mt-1">
+                    <span>≈ {formatCurrency(convertCurrency(liveMetrics.monthlyRevenue, 'GBP', 'USD'), 'USD')}</span>
+                    <span>≈ {formatCurrency(convertCurrency(liveMetrics.monthlyRevenue, 'GBP', 'EUR'), 'EUR')}</span>
+                  </div>
                 </div>
               </div>
               <div className="absolute top-2 right-2 w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>

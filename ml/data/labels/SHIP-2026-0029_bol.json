@@ -1,0 +1,30 @@
+{
+  "documentType": "bill_of_lading",
+  "documentNumber": "SHIP-2026-0029",
+  "rawText": "BILL OF LADING\r\nShipmentRef: SHIP-2026-0029\r\nSHIPPER: Acme Shenzhen Ltd\r\nCONSIGNEE: US Retail Corp\r\nWEIGHT: 3828 KG",
+  "title": "BILL OF LADING\r",
+  "shippingWeight": 3828,
+  "totalValue": 0,
+  "extractedFields": [
+    {
+      "key": "DocType",
+      "value": "bill_of_lading",
+      "confidence": 1
+    },
+    {
+      "key": "Reference",
+      "value": "SHIP-2026-0029",
+      "confidence": 1
+    },
+    {
+      "key": "Weight",
+      "value": 3828,
+      "confidence": 1
+    },
+    {
+      "key": "TotalValue",
+      "value": 0,
+      "confidence": 1
+    }
+  ]
+}

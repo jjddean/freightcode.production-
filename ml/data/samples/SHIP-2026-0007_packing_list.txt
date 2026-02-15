@@ -1,0 +1,4 @@
+PACKING LIST
+ShipmentRef: SHIP-2026-0007
+SHIPPER: Tokyo Tech Exports
+WEIGHT: 1314 KG

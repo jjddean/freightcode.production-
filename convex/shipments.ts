@@ -2,6 +2,11 @@ import { mutation, query } from "./_generated/server";
 import { internal } from "./_generated/api";
 import { v } from "convex/values";
 import { createNotificationHelper } from "./notifications";
+import { api } from "./_generated/api";
+import { action } from "./_generated/server";
+import { getCityCoords, calculateDistance } from "./pricing";
+
+const ML_GATEWAY_URL = "http://127.0.0.1:8000";
 
 export const upsertShipment = mutation({
   args: {
@@ -185,6 +190,15 @@ export const upsertShipment = mutation({
       }
     }
 
+    // ML Brain: Trigger Predictive ETA calculation
+    await ctx.scheduler.runAfter(0, api.shipments.updatePredictiveETA, {
+      shipmentIdString: shipmentId,
+      carrier: tracking.carrier,
+      service: tracking.service,
+      origin: tracking.shipmentDetails.origin,
+      destination: tracking.shipmentDetails.destination,
+    });
+
     return shipmentDocId!;
   },
 });
@@ -339,6 +353,84 @@ export const flagShipment = mutation({
       timestamp: Date.now()
     });
   }
+});
+
+/**
+ * ML ACTION: Calculates a high-precision ETA using the ML Gateway.
+ */
+export const updatePredictiveETA = action({
+  args: {
+    shipmentIdString: v.string(),
+    carrier: v.string(),
+    service: v.string(),
+    origin: v.string(),
+    destination: v.string(),
+  },
+  handler: async (ctx, args) => {
+    try {
+      // 1. Calculate Distance
+      const originCoords = getCityCoords(args.origin);
+      const destCoords = getCityCoords(args.destination);
+      let distance = 5000;
+      if (originCoords && destCoords) {
+        distance = calculateDistance(originCoords.lat, originCoords.lng, destCoords.lat, destCoords.lng);
+      }
+
+      // 2. Map Service Type to ML Expectation
+      let mlService = "standard_ocean";
+      const s = args.service.toLowerCase();
+      if (s.includes("air")) mlService = "express_air";
+      if (s.includes("truck")) mlService = "trucking";
+
+      // 3. Call ML Gateway
+      const response = await fetch(`${ML_GATEWAY_URL}/predict-eta`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          carrier: args.carrier,
+          service_type: mlService,
+          distance: distance,
+          congestion_index: 0.5, // Future: fetch from GeoRisk
+          weather_risk: 0.2,     // Future: fetch from GeoRisk
+        }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        const days = result.predicted_days;
+
+        // Calculate timestamp
+        const arrivalDate = new Date();
+        arrivalDate.setDate(arrivalDate.getDate() + Math.ceil(days));
+
+        await ctx.runMutation(api.shipments.savePredictedETA, {
+          shipmentIdString: args.shipmentIdString,
+          predictedDate: arrivalDate.toISOString(),
+        });
+      }
+    } catch (error) {
+      console.error("ML ETA Error:", error);
+    }
+  },
+});
+
+export const savePredictedETA = mutation({
+  args: {
+    shipmentIdString: v.string(),
+    predictedDate: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const shipment = await ctx.db
+      .query("shipments")
+      .withIndex("byShipmentId", (q) => q.eq("shipmentId", args.shipmentIdString))
+      .unique();
+
+    if (shipment) {
+      await ctx.db.patch(shipment._id, {
+        predictedDelivery: args.predictedDate,
+      });
+    }
+  },
 });
 
 // Admin: Clear Risk Flag

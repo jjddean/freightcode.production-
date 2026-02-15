@@ -315,7 +315,7 @@ export const clearAllShipments = mutation({
 // Admin: Flag a shipment as High Risk
 export const flagShipment = mutation({
   args: {
-    shipmentId: v.id("shipments"), // This expects the internal ID usually, let's accept string ID or internal ID. 
+    shipmentId: v.optional(v.id("shipments")), // Optional as we lookup by string ID
     // Wait, UI usually has the internal ID `_id`. Let's assume we pass the internal ID for efficiency.
     // If the UI passes the string `shipmentId` field, we'd need to lookup.
     // Standardizing on passing the internal `_id` is better for mutations.

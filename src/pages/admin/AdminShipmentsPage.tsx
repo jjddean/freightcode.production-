@@ -222,130 +222,133 @@ const AdminShipmentsPage = () => {
                                     <span className="text-gray-500 block text-xs uppercase font-bold tracking-tight mb-1">Status</span>
                                     <span className="font-semibold text-gray-900">{selectedShipment.status}</span>
                                 </div>
-                                <span className="font-semibold text-gray-900">{selectedShipment.carrier}</span>
+                                <div className="p-3 bg-gray-50 rounded-lg border border-gray-100">
+                                    <span className="text-gray-500 block text-xs uppercase font-bold tracking-tight mb-1">Carrier</span>
+                                    <span className="font-semibold text-gray-900">{selectedShipment.carrier}</span>
+                                </div>
                             </div>
-                            <div className="p-3 bg-gray-50 rounded-lg border border-gray-100">
+
+                            <div className="p-3 bg-gray-50 rounded-lg border border-gray-100 text-sm">
                                 <span className="text-gray-500 block text-xs uppercase font-bold tracking-tight mb-1">Value</span>
                                 <span className="font-semibold text-gray-900">{selectedShipment.shipmentDetails?.value ? formatCurrency(selectedShipment.shipmentDetails.value) : 'N/A'}</span>
                             </div>
-                        </div>
 
                             {/* Customs Filing Section */}
-                    <div className="space-y-4 border rounded-xl p-4 bg-slate-50/50">
-                        <div className="flex items-center justify-between">
-                            <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                                <FileCheck className="h-4 w-4 text-primary-600" />
-                                Customs & Compliance
-                            </h3>
-                            <Badge variant="outline" className={
-                                selectedShipment.customs?.filingStatus === 'filed' ? "bg-emerald-50 text-emerald-700 border-emerald-200" :
-                                    selectedShipment.customs?.filingStatus === 'pending' ? "bg-amber-50 text-amber-700 border-amber-200" :
-                                        "bg-slate-100 text-slate-500"
-                            }>
-                                {selectedShipment.customs?.filingStatus || 'UNSET'}
-                            </Badge>
-                        </div>
+                            <div className="space-y-4 border rounded-xl p-4 bg-slate-50/50">
+                                <div className="flex items-center justify-between">
+                                    <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                                        <FileCheck className="h-4 w-4 text-primary-600" />
+                                        Customs & Compliance
+                                    </h3>
+                                    <Badge variant="outline" className={cn(
+                                        selectedShipment.customs?.filingStatus === 'filed' ? "bg-emerald-50 text-emerald-700 border-emerald-200" :
+                                            selectedShipment.customs?.filingStatus === 'pending' ? "bg-amber-50 text-amber-700 border-amber-200" :
+                                                "bg-slate-100 text-slate-500"
+                                    )}>
+                                        {selectedShipment.customs?.filingStatus || 'UNSET'}
+                                    </Badge>
+                                </div>
 
-                        {selectedShipment.customs?.filingStatus === 'filed' ? (
-                            <div className="space-y-2 text-xs">
-                                <div className="flex justify-between">
-                                    <span className="text-slate-500">HMRC Reference:</span>
-                                    <span className="font-mono font-bold text-slate-900">{selectedShipment.customs.entryNumber}</span>
-                                </div>
-                                <div className="flex justify-between">
-                                    <span className="text-slate-500">Filed On:</span>
-                                    <span className="font-medium">{new Date(selectedShipment.customs.filedAt).toLocaleString()}</span>
-                                </div>
-                                {selectedShipment.customs.notes && (
-                                    <div className="mt-2 p-2 bg-white rounded border text-slate-600 italic">
-                                        "{selectedShipment.customs.notes}"
+                                {selectedShipment.customs?.filingStatus === 'filed' ? (
+                                    <div className="space-y-2 text-xs">
+                                        <div className="flex justify-between">
+                                            <span className="text-slate-500">HMRC Reference:</span>
+                                            <span className="font-mono font-bold text-slate-900">{selectedShipment.customs.entryNumber}</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                            <span className="text-slate-500">Filed On:</span>
+                                            <span className="font-medium">{new Date(selectedShipment.customs.filedAt).toLocaleString()}</span>
+                                        </div>
+                                        {selectedShipment.customs.notes && (
+                                            <div className="mt-2 p-2 bg-white rounded border text-slate-600 italic">
+                                                "{selectedShipment.customs.notes}"
+                                            </div>
+                                        )}
+                                    </div>
+                                ) : (
+                                    <div className="space-y-3">
+                                        <p className="text-xs text-slate-600">
+                                            This shipment requires customs filing. You can open the HMRC portal to file manually, then mark it as filed here.
+                                        </p>
+                                        <div className="flex items-center gap-2">
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                className="w-full h-8 text-xs font-semibold"
+                                                onClick={() => window.open("https://import-notifications.service.gov.uk", "_blank")}
+                                            >
+                                                <ExternalLink className="w-3.5 h-3.5 mr-1.5" />
+                                                HMRC Portal
+                                            </Button>
+                                            <Button
+                                                size="sm"
+                                                className="w-full h-8 text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white"
+                                                onClick={handleOpenFilingModal}
+                                            >
+                                                <ClipboardCheck className="w-3.5 h-3.5 mr-1.5" />
+                                                Mark Filed
+                                            </Button>
+                                        </div>
                                     </div>
                                 )}
                             </div>
-                        ) : (
-                            <div className="space-y-3">
-                                <p className="text-xs text-slate-600">
-                                    This shipment requires customs filing. You can open the HMRC portal to file manually, then mark it as filed here.
-                                </p>
-                                <div className="flex items-center gap-2">
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        className="w-full h-8 text-xs font-semibold"
-                                        onClick={() => window.open("https://import-notifications.service.gov.uk", "_blank")}
-                                    >
-                                        <ExternalLink className="w-3.5 h-3.5 mr-1.5" />
-                                        HMRC Portal
+
+                            {/* Action Buttons */}
+                            <div className="flex flex-col gap-2">
+                                {selectedShipment.riskLevel === 'high' ? (
+                                    <Button variant="outline" className="w-full text-green-600 border-green-200 hover:bg-green-50" onClick={() => handleClear(selectedShipment.shipmentId)}>
+                                        <CheckCircle className="mr-2 h-4 w-4" /> Clear Risk Flag
                                     </Button>
-                                    <Button
-                                        size="sm"
-                                        className="w-full h-8 text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white"
-                                        onClick={handleOpenFilingModal}
-                                    >
-                                        <ClipboardCheck className="w-3.5 h-3.5 mr-1.5" />
-                                        Mark Filed
+                                ) : (
+                                    <Button variant="outline" className="w-full text-red-600 border-red-200 hover:bg-red-50" onClick={() => handleFlag(selectedShipment.shipmentId)}>
+                                        <AlertTriangle className="mr-2 h-4 w-4" /> Flag as High Risk
                                     </Button>
-                                </div>
+                                )}
                             </div>
-                        )}
-                    </div>
-
-                    {/* Action Buttons */}
-                    <div className="flex flex-col gap-2">
-                        {selectedShipment.riskLevel === 'high' ? (
-                            <Button variant="outline" className="w-full text-green-600 border-green-200 hover:bg-green-50" onClick={() => handleClear(selectedShipment.shipmentId)}>
-                                <CheckCircle className="mr-2 h-4 w-4" /> Clear Risk Flag
-                            </Button>
-                        ) : (
-                            <Button variant="outline" className="w-full text-red-600 border-red-200 hover:bg-red-50" onClick={() => handleFlag(selectedShipment.shipmentId)}>
-                                <AlertTriangle className="mr-2 h-4 w-4" /> Flag as High Risk
-                            </Button>
-                        )}
-                    </div>
-                </div>
+                        </div>
                     )}
-            </SheetContent>
-        </Sheet>
+                </SheetContent>
+            </Sheet>
 
-            {/* Filing Modal */ }
-    <Dialog open={isFilingModalOpen} onOpenChange={setIsFilingModalOpen}>
-        <DialogContent>
-            <DialogHeader>
-                <DialogTitle>Confirm Customs Filing</DialogTitle>
-                <DialogDescription>
-                    Enter the HMRC reference number for {selectedShipment?.shipmentId}.
-                </DialogDescription>
-            </DialogHeader>
-            <div className="space-y-4 py-4">
-                <div className="space-y-2">
-                    <Label htmlFor="ref">HMRC Reference (CDS/IPAFFS)</Label>
-                    <Input
-                        id="ref"
-                        value={hmrcRef}
-                        onChange={(e) => setHmrcRef(e.target.value)}
-                        placeholder="e.g. GB-2026-..."
-                    />
-                </div>
-                <div className="space-y-2">
-                    <Label htmlFor="notes">Notes</Label>
-                    <textarea
-                        id="notes"
-                        value={filingNotes}
-                        onChange={(e) => setFilingNotes(e.target.value)}
-                        placeholder="Optional filing notes..."
-                        className="flex min-h-[80px] w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-                    />
-                </div>
-            </div>
-            <DialogFooter>
-                <Button variant="outline" onClick={() => setIsFilingModalOpen(false)}>Cancel</Button>
-                <Button className="bg-emerald-600 hover:bg-emerald-700 text-white" onClick={handleSubmitFiling} disabled={isSubmitting}>
-                    {isSubmitting ? 'Submitting...' : 'Confirm'}
-                </Button>
-            </DialogFooter>
-        </DialogContent>
-    </Dialog>
-        </div >
+            {/* Filing Modal */}
+            <Dialog open={isFilingModalOpen} onOpenChange={setIsFilingModalOpen}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Confirm Customs Filing</DialogTitle>
+                        <DialogDescription>
+                            Enter the HMRC reference number for {selectedShipment?.shipmentId}.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="space-y-4 py-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="ref">HMRC Reference (CDS/IPAFFS)</Label>
+                            <Input
+                                id="ref"
+                                value={hmrcRef}
+                                onChange={(e) => setHmrcRef(e.target.value)}
+                                placeholder="e.g. GB-2026-..."
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="notes">Notes</Label>
+                            <textarea
+                                id="notes"
+                                value={filingNotes}
+                                onChange={(e) => setFilingNotes(e.target.value)}
+                                placeholder="Optional filing notes..."
+                                className="flex min-h-[80px] w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                            />
+                        </div>
+                    </div>
+                    <DialogFooter>
+                        <Button variant="outline" onClick={() => setIsFilingModalOpen(false)}>Cancel</Button>
+                        <Button className="bg-emerald-600 hover:bg-emerald-700 text-white" onClick={handleSubmitFiling} disabled={isSubmitting}>
+                            {isSubmitting ? 'Submitting...' : 'Confirm'}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+        </div>
     );
 };
 

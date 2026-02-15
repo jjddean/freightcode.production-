@@ -171,7 +171,7 @@ const AdminDashboardPage = () => {
                             </span>
                         </div>
                         <h3 className="text-sm font-medium text-gray-500">Total Revenue (MTD)</h3>
-                        <div className="text-2xl font-bold text-gray-900 mt-1">{formatCurrency(124500, (stats?.currency || 'USD') as any)}</div>
+                        <div className="text-2xl font-bold text-gray-900 mt-1">{formatCurrency(124500, ((stats as any)?.currency || 'USD') as any)}</div>
                     </div>
                     <div className="bg-gray-50 p-4 border-t border-gray-100">
                         <Button

@@ -5,13 +5,7 @@ import { v } from "convex/values";
 // import { TextractClient } from "@aws-sdk/client-textract"; // Keep import to test bundling? No, comment out first.
 import { TextractExtractor, DocumentExtractionResult } from "./lib/TextractExtractor";
 
-export interface DocumentExtractionResult {
-  documentType: "commercial_invoice" | "packing_list" | "bol" | "unknown";
-  rawText: string;
-  fields: Record<string, string>;
-  tables: Record<string, string>[][];
-  confidence: number;
-}
+
 
 
 export const processDocument = action({

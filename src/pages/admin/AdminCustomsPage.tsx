@@ -99,7 +99,7 @@ const DutyDefermentCell = ({ row }: { row: any }) => {
             if (res.success) {
                 setBalance(res);
             } else {
-                toast.error(res.message || "Could not fetch balance");
+                toast.error(('message' in res ? res.message : null) || "Could not fetch balance");
             }
         } catch (e) {
             console.error(e);

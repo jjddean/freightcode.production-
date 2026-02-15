@@ -474,4 +474,17 @@ export default defineSchema({
     updatedAt: v.number(),
   }).index("byUserId", ["userId"])
     .index("byShipmentId", ["shipmentId"]),
+
+  processed_documents: defineTable({
+    fileName: v.string(),
+    documentType: v.string(),
+    rawText: v.string(),
+    extractedFields: v.any(),
+    tables: v.any(),
+    confidence: v.number(),
+    auditResult: v.any(),
+    userId: v.optional(v.id("users")),
+    createdAt: v.number(),
+    status: v.string(),
+  }),
 });

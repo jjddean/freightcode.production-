@@ -8,6 +8,8 @@ export interface Column<T> {
   sortable?: boolean;
   render?: (value: any, row: T) => React.ReactNode;
   className?: string;
+  mono?: boolean;
+  align?: 'left' | 'center' | 'right';
 }
 
 interface DataTableProps<T> {
@@ -132,13 +134,19 @@ function DataTable<T extends Record<string, any>>({
                 <th
                   key={String(column.key)}
                   className={cn(
-                    "px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+                    "px-4 py-3 text-left text-[11px] font-semibold text-slate-500 uppercase tracking-wider",
                     column.sortable && "cursor-pointer hover:bg-gray-100",
+                    column.align === 'right' && "text-right",
+                    column.align === 'center' && "text-center",
                     column.className
                   )}
                   onClick={() => column.sortable && handleSort(column.key)}
                 >
-                  <div className="flex items-center space-x-1">
+                  <div className={cn(
+                    "flex items-center space-x-1",
+                    column.align === 'right' && "justify-end",
+                    column.align === 'center' && "justify-center"
+                  )}>
                     <span>{column.header}</span>
                     {column.sortable && (
                       <div className="flex flex-col">
@@ -187,7 +195,10 @@ function DataTable<T extends Record<string, any>>({
                   <td
                     key={String(column.key)}
                     className={cn(
-                      "px-4 py-3 text-sm text-gray-900",
+                      "px-4 py-3 text-sm text-slate-700",
+                      column.mono && "font-mono text-[13px] font-semibold tracking-tight text-slate-500",
+                      column.align === 'right' && "text-right",
+                      column.align === 'center' && "text-center",
                       column.className
                     )}
                   >

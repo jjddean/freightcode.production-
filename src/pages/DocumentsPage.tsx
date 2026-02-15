@@ -6,7 +6,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-
+import { StatusBadge } from '@/components/ui/status-badge';
+import { cn } from '@/lib/utils';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import MediaCardHeader from '@/components/ui/media-card-header';
 import DataTable from '@/components/ui/data-table';
@@ -293,6 +294,7 @@ const DocumentsPage = () => {
             key: 'documentNumber',
             header: 'Document #',
             sortable: true,
+            mono: true,
             render: (val: string, row: any) => (
                 <span className="font-medium text-primary cursor-pointer hover:underline" onClick={() => handleOpenDetail(row)}>
                     {val || row._id.substring(0, 8)}
@@ -318,12 +320,7 @@ const DocumentsPage = () => {
             render: (value: string, row: any) => {
                 const dsStatus = row.docusign?.status;
                 const display = dsStatus ? `${value} (${dsStatus})` : value;
-
-                let color = 'bg-gray-100 text-gray-800';
-                if (value === 'approved' || dsStatus === 'signed' || dsStatus === 'completed') color = 'bg-green-100 text-green-800';
-                else if (value === 'pending' || dsStatus === 'sent') color = 'bg-blue-100 text-blue-800';
-
-                return <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${color}`}>{display}</span>;
+                return <StatusBadge status={dsStatus || value} label={display} />;
             }
         },
         {

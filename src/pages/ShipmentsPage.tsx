@@ -1,4 +1,23 @@
 import React, { useState, useEffect } from 'react';
+import { StatusBadge } from '@/components/ui/status-badge';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+type ShipmentRow = {
+  id: string;
+  origin: string;
+  destination: string;
+  status: string;
+  eta: string;
+  carrier: string;
+  value: string;
+  container: string;
+};
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -20,13 +39,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useFeature } from '@/hooks/useFeature';
 import { Link } from 'react-router-dom'; // Ensure Link is imported for upgrade redo
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 
 import {
   Sheet,
@@ -363,41 +375,31 @@ const ShipmentsPage = () => {
   };
 
   const shipmentColumns = [
-    { key: 'id' as keyof typeof filteredShipments.active[0], header: 'Shipment ID', sortable: true },
+    { key: 'id' as keyof ShipmentRow, header: 'Shipment ID', sortable: true, mono: true },
     {
-      key: 'origin' as keyof typeof filteredShipments.active[0],
+      key: 'origin' as keyof ShipmentRow,
       header: 'Route',
       sortable: true,
-      render: (value: string, row: typeof filteredShipments.active[0]) => (
+      render: (value: string, row: ShipmentRow) => (
         <span className="text-sm">
           <div className="font-medium">{row.origin}</div>
           <div className="text-gray-500">→ {row.destination}</div>
         </span>
       )
     },
-    { key: 'carrier' as keyof typeof filteredShipments.active[0], header: 'Carrier', sortable: true },
+    { key: 'carrier' as keyof ShipmentRow, header: 'Carrier', sortable: true },
     {
-      key: 'status' as keyof typeof filteredShipments.active[0],
+      key: 'status' as keyof ShipmentRow,
       header: 'Status',
       sortable: true,
-      render: (value: string) => (
-        <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${value === 'Delivered' ? 'bg-green-100 text-green-800' :
-          value === 'In Transit' ? 'bg-blue-100 text-blue-800' :
-            value === 'Customs Clearance' ? 'bg-yellow-100 text-yellow-800' :
-              value === 'Loading' ? 'bg-purple-100 text-purple-800' :
-                value === 'Booking Confirmed' ? 'bg-gray-100 text-gray-800' :
-                  'bg-gray-100 text-gray-800'
-          }`}>
-          {value}
-        </span>
-      )
+      render: (value: string) => <StatusBadge status={value} />
     },
-    { key: 'eta' as keyof typeof filteredShipments.active[0], header: 'ETA', sortable: true },
-    { key: 'value' as keyof typeof filteredShipments.active[0], header: 'Value', sortable: true },
+    { key: 'eta' as keyof ShipmentRow, header: 'ETA', sortable: true },
+    { key: 'value' as keyof ShipmentRow, header: 'Value', sortable: true },
     {
-      key: 'container' as keyof typeof filteredShipments.active[0],
+      key: 'container' as keyof ShipmentRow,
       header: 'Actions',
-      render: (value: string, row: typeof filteredShipments.active[0]) => (
+      render: (value: string, row: ShipmentRow) => (
         <div className="flex space-x-2">
           <Button variant="outline" size="sm" onClick={() => {
             setSheetMode('details');

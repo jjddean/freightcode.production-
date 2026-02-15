@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { StatusBadge } from '@/components/ui/status-badge';
 import { Link } from 'react-router-dom';
 import MediaCardHeader from '@/components/ui/media-card-header';
 import DataTable from '@/components/ui/data-table';
@@ -86,22 +87,14 @@ const DashboardPage = () => {
 
 
   const shipmentColumns: Column<Shipment>[] = [
-    { key: 'id' as any, header: 'Shipment ID', sortable: true },
+    { key: 'id' as any, header: 'Shipment ID', sortable: true, mono: true },
     { key: 'origin' as any, header: 'Origin', sortable: true },
     { key: 'destination' as any, header: 'Destination', sortable: true },
     {
       key: 'status' as any,
       header: 'Status',
       sortable: true,
-      render: (value: string) => (
-        <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${value === 'Delivered' ? 'bg-green-100 text-green-800' :
-          value === 'In Transit' ? 'bg-blue-100 text-blue-800' :
-            value === 'Customs Clearance' ? 'bg-yellow-100 text-yellow-800' :
-              'bg-gray-100 text-gray-800'
-          }`}>
-          {value}
-        </span>
-      )
+      render: (value: string) => <StatusBadge status={value} />
     },
     { key: 'eta' as any, header: 'ETA', sortable: true },
     { key: 'value' as any, header: 'Value', sortable: true },

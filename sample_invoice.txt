@@ -1,0 +1,29 @@
+COMMERCIAL INVOICE
+
+Invoice No: INV-2023-001
+Date: 2023-10-27
+
+Shipper:
+Acme Electronics Ltd.
+123 Tech Park
+Shenzhen, China
+
+Consignee:
+Global Gadgets Inc.
+456 Innovation Drive
+San Francisco, CA 94105
+USA
+
+Description of Goods:
+1. Wireless Headphones - Model X1 - 500 Units - $25.00/Unit - Total: $12,500.00
+2. Smart Watch - Series 5 - 200 Units - $150.00/Unit - Total: $30,000.00
+3. USB-C Cables - 1000 Units - $2.00/Unit - Total: $2,000.00
+
+Total Value: $44,500.00
+Currency: USD
+Incoterms: FOB Shenzhen
+Country of Origin: China
+
+I declare that all information contained in this invoice to be true and correct.
+Signed: John Doe
+Title: Export Manager

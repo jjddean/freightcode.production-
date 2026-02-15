@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { StatusBadge } from '@/components/ui/status-badge';
 import MediaCardHeader from '@/components/ui/media-card-header';
 import DataTable from '@/components/ui/data-table';
 import { Button } from '@/components/ui/button';
@@ -51,28 +52,13 @@ const ClientBookingsPage = () => {
         startCheckout(invoiceId);
     };
 
-    const StatusBadge = ({ status }: { status: string }) => {
-        const styles: Record<string, string> = {
-            confirmed: 'bg-green-100 text-green-800',
-            pending: 'bg-yellow-100 text-yellow-800',
-            cancelled: 'bg-red-100 text-red-800',
-            in_transit: 'bg-blue-100 text-blue-800',
-            delivered: 'bg-gray-100 text-gray-800',
-        };
-        const style = styles[status] || 'bg-gray-100 text-gray-800';
-
-        return (
-            <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${style}`}>
-                {status}
-            </span>
-        );
-    };
 
     const columns = [
         {
             key: 'bookingId',
             header: 'Booking ID',
             sortable: true,
+            mono: true,
             render: (value: string, row: any) => (
                 <Drawer direction="right" shouldScaleBackground={false}>
                     <DrawerTrigger asChild>
@@ -209,7 +195,7 @@ const ClientBookingsPage = () => {
                 </Drawer>
             )
         },
-        { key: 'quoteId', header: 'Quote ID', sortable: true },
+        { key: 'quoteId', header: 'Quote ID', sortable: true, mono: true },
         {
             key: 'status',
             header: 'Status',

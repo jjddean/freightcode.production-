@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { StatusBadge } from '@/components/ui/status-badge';
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import DataTable from '@/components/ui/data-table';
@@ -63,7 +64,8 @@ const AdminBookingsPage = () => {
         {
             key: 'bookingId',
             header: 'Booking Ref',
-            render: (value: string) => <span className="font-mono text-xs">{value}</span>
+            mono: true,
+            render: (value: string) => value
         },
         {
             key: 'customerDetails',
@@ -96,19 +98,12 @@ const AdminBookingsPage = () => {
             header: 'Status',
             render: (value: string, row: any) => {
                 const isPending = value === 'pending' || row.approvalStatus === 'pending';
-                const isApproved = value === 'approved' || row.approvalStatus === 'approved';
-                const isRejected = value === 'rejected' || row.approvalStatus === 'rejected';
+                const statusValue = isPending ? 'pending' : value;
 
                 return (
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize
-                      ${isApproved ? 'bg-green-100 text-green-800' :
-                            isPending ? 'bg-yellow-100 text-yellow-800' :
-                                isRejected ? 'bg-red-100 text-red-800' :
-                                    value === 'confirmed' ? 'bg-primary-100 text-primary-800' :
-                                        'bg-gray-100 text-gray-800'}`}>
-                        {isPending && <AlertCircle className="h-3 w-3 mr-1" />}
-                        {value}
-                    </span>
+                    <div className="flex items-center">
+                        <StatusBadge status={statusValue} />
+                    </div>
                 );
             }
         },

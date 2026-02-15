@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { StatusBadge } from '@/components/ui/status-badge';
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -23,19 +24,16 @@ const AdminFinancePage = () => {
     };
 
     const invoiceColumns: any[] = [
-        { key: 'invoiceNumber', header: 'Invoice #', render: (val: string) => <span className="font-mono text-xs">{val}</span> },
+        { key: 'invoiceNumber', header: 'Invoice #', mono: true },
         {
             key: 'status',
             header: 'Status',
-            render: (val: string) => (
-                <Badge variant={val === 'paid' ? 'outline' : 'secondary'} className={val === 'paid' ? 'border-green-500 text-green-600' : ''}>
-                    {val}
-                </Badge>
-            )
+            render: (val: string) => <StatusBadge status={val} />
         },
         {
             key: 'amount',
             header: 'Amount',
+            align: 'right',
             render: (val: number, row: any) => <span className="font-medium">{formatCurrency(val, row.currency)}</span>
         },
         { key: 'dueDate', header: 'Due Date', render: (val: string) => val ? new Date(val).toLocaleDateString() : '-' },
@@ -47,8 +45,8 @@ const AdminFinancePage = () => {
     ];
 
     const paymentColumns: any[] = [
-        { key: 'payment_id', header: 'Transaction ID', render: (val: string) => <span className="font-mono text-xs">{val}</span> },
-        { key: 'status', header: 'Status', render: (val: string) => <Badge variant={val === 'succeeded' ? 'default' : 'secondary'}>{val}</Badge> },
+        { key: 'payment_id', header: 'Transaction ID', mono: true },
+        { key: 'status', header: 'Status', render: (val: string) => <StatusBadge status={val} /> },
         {
             key: 'totals',
             header: 'Amount',

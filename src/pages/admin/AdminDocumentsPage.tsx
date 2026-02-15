@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { StatusBadge } from '@/components/ui/status-badge';
 import DataTable from '@/components/ui/data-table';
 import { Button } from '@/components/ui/button';
 import { useQuery } from "convex/react";
@@ -43,8 +44,9 @@ const AdminDocumentsPage = () => {
             key: 'documentNumber',
             header: 'Document #',
             sortable: true,
+            mono: true,
             render: (val: string, row: any) => (
-                <span className="font-medium text-blue-600 cursor-pointer hover:underline font-mono text-xs" onClick={() => handleOpenDetail(row)}>
+                <span className="text-blue-600 cursor-pointer hover:underline" onClick={() => handleOpenDetail(row)}>
                     {val}
                 </span>
             )
@@ -71,14 +73,7 @@ const AdminDocumentsPage = () => {
             key: 'status',
             header: 'Status',
             sortable: true,
-            render: (value: string) => (
-                <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border ${value === 'approved' ? 'bg-green-50 text-green-700 border-green-200' :
-                    value === 'pending' ? 'bg-yellow-50 text-yellow-700 border-yellow-200' :
-                        'bg-gray-50 text-gray-600 border-gray-200'
-                    }`}>
-                    {value ? value.toUpperCase() : 'UNKNOWN'}
-                </span>
-            )
+            render: (value: string) => <StatusBadge status={value} />
         },
         {
             key: 'actions',

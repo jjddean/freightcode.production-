@@ -1,0 +1,4 @@
+convex/docmate.ts(14,14): error TS7022: 'processDocument' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+convex/docmate.ts(19,3): error TS7023: 'handler' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+convex/docmate.ts(28,13): error TS7022: 'auditResult' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+convex/docmate.ts(34,13): error TS7022: 'docId' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.

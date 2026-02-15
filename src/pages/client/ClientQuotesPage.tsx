@@ -1,4 +1,5 @@
 import React, { useMemo, useState, useEffect } from 'react';
+import { StatusBadge } from '@/components/ui/status-badge';
 import { useLocation, useSearchParams, useNavigate } from 'react-router-dom';
 import MediaCardHeader from '@/components/ui/media-card-header';
 import DataTable from '@/components/ui/data-table';
@@ -59,21 +60,6 @@ function getCityCoordinates(cityOrOrigin?: string): { lat: number; lng: number }
     return { lat: 51.5074, lng: -0.1278 };
 }
 
-const StatusBadge = ({ status }: { status: string }) => {
-    const styles = {
-        success: 'bg-green-100 text-green-800',
-        pending: 'bg-yellow-100 text-yellow-800',
-        default: 'bg-gray-100 text-gray-800'
-    };
-    const label = status === 'success' ? 'Ready' : status;
-    const style = styles[status as keyof typeof styles] || styles.default;
-
-    return (
-        <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${style}`}>
-            {label}
-        </span>
-    );
-};
 
 import {
     Dialog,
@@ -411,13 +397,14 @@ const ClientQuotesPage = () => {
     const columns: any[] = [
         {
             key: 'quoteId',
-            header: 'Rates',
-            sortable: false,
+            header: 'Quote ID',
+            sortable: true,
+            mono: true,
             render: (value: string, row: any) => (
                 <Drawer direction="right" shouldScaleBackground={false}>
                     <DrawerTrigger asChild>
-                        <Button variant="outline" size="sm" className="h-8 text-blue-600 border-blue-200 hover:bg-blue-50">
-                            View Rates
+                        <Button variant="link" className="p-0 h-auto font-medium text-blue-600 hover:underline">
+                            {value}
                         </Button>
                     </DrawerTrigger>
                     <DrawerContent className="max-w-md ml-auto h-full rounded-none border-l">
@@ -507,7 +494,8 @@ const ClientQuotesPage = () => {
         {
             key: 'status',
             header: 'Status',
-            render: (value: string) => <StatusBadge status={value} />
+            sortable: true,
+            render: (value: string) => <StatusBadge status={value === 'success' ? 'ready' : value} />
         },
         {
             key: 'createdAt',

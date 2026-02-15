@@ -15,6 +15,8 @@ import { AuditResultsView } from '@/components/ai/AuditResultsView';
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Loader2, Sparkles, Wand2 } from 'lucide-react';
+import { DocMateUploader } from '@/components/ai/DocMateUploader';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const CompliancePage = () => {
   // Live documents for compliance monitoring
@@ -347,6 +349,10 @@ function SmartAuditSection() {
   const [isAuditing, setIsAuditing] = useState(false);
   const [auditResult, setAuditResult] = useState<any>(null);
 
+  // Smart Upload State
+  const [extractedData, setExtractedData] = useState<any>(null);
+  const [activeTab, setActiveTab] = useState("manual");
+
   const auditAction = useAction(api.smartaudit.auditDocument);
   const saveAuditMutation = useMutation(api.smartaudit.saveAudit);
 
@@ -380,6 +386,12 @@ function SmartAuditSection() {
     }
   };
 
+  const handleSmartUploadComplete = (data: any) => {
+    setExtractedData(data);
+    setAuditResult(data.auditResult);
+    toast.success("Analysis Complete", { description: `Extracted ${data.extraction.fields.length} fields.` });
+  };
+
   return (
     <Card className="border-purple-200 overflow-hidden shadow-lg transition-all hover:shadow-purple-100/50">
       <CardHeader className="bg-gradient-to-r from-purple-50 to-white pb-6">
@@ -397,73 +409,180 @@ function SmartAuditSection() {
         </div>
       </CardHeader>
       <CardContent className="pt-6 space-y-6">
-        {!auditResult ? (
-          <div className="space-y-4">
-            <div className="flex gap-4">
-              <Select value={docType} onValueChange={setDocType}>
-                <SelectTrigger className="w-[200px] border-purple-100 focus:ring-purple-500">
-                  <SelectValue placeholder="Document Type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="commercial_invoice">Commercial Invoice</SelectItem>
-                  <SelectItem value="packing_list">Packing List</SelectItem>
-                  <SelectItem value="bol">Bill of Lading</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
 
-            <div className="relative">
-              <textarea
-                placeholder="Paste the text content of your document here for a compliance risk analysis..."
-                className="flex min-h-[200px] w-full rounded-md border border-purple-100 bg-gray-50/30 px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 font-mono"
-                value={rawText}
-                onChange={(e) => setRawText(e.target.value)}
-              />
-              {rawText.length > 0 && (
-                <div className="absolute bottom-2 right-2 text-[10px] text-gray-400">
-                  {rawText.length} characters
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-2 mb-6">
+            <TabsTrigger value="manual">Manual Paste</TabsTrigger>
+            <TabsTrigger value="upload" className="data-[state=active]:bg-purple-100 data-[state=active]:text-purple-900">
+              <Wand2 className="w-3 h-3 mr-2" />
+              Smart Upload (AI)
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="manual" className="mt-0">
+            {!auditResult ? (
+              <div className="space-y-4 animate-in fade-in duration-300">
+                <div className="flex gap-4">
+                  <Select value={docType} onValueChange={setDocType}>
+                    <SelectTrigger className="w-[200px] border-purple-100 focus:ring-purple-500">
+                      <SelectValue placeholder="Document Type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="commercial_invoice">Commercial Invoice</SelectItem>
+                      <SelectItem value="packing_list">Packing List</SelectItem>
+                      <SelectItem value="bol">Bill of Lading</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
-              )}
-            </div>
 
-            <Button
-              className="w-full bg-purple-600 hover:bg-purple-700 text-white shadow-md transition-all active:scale-[0.98]"
-              disabled={isAuditing}
-              onClick={handleAudit}
-            >
-              {isAuditing ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Analyzing Risk Profiles...
-                </>
-              ) : (
-                <>
-                  <Wand2 className="mr-2 h-4 w-4" />
-                  Run SmartAudit™ Audit
-                </>
-              )}
-            </Button>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            <AuditResultsView {...auditResult} />
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                className="flex-1 border-purple-200 text-purple-700 hover:bg-purple-50"
-                onClick={() => setAuditResult(null)}
-              >
-                New Audit
-              </Button>
-              <Button
-                className="flex-1 bg-purple-600 text-white hover:bg-purple-700"
-                onClick={() => toast.info("Feature coming soon", { description: "You will be able to export the corrected document shortly." })}
-              >
-                Draft Correction
-              </Button>
-            </div>
-          </div>
-        )}
+                <div className="relative">
+                  <textarea
+                    placeholder="Paste the text content of your document here for a compliance risk analysis..."
+                    className="flex min-h-[200px] w-full rounded-md border border-purple-100 bg-gray-50/30 px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 font-mono"
+                    value={rawText}
+                    onChange={(e) => setRawText(e.target.value)}
+                  />
+                  {rawText.length > 0 && (
+                    <div className="absolute bottom-2 right-2 text-[10px] text-gray-400">
+                      {rawText.length} characters
+                    </div>
+                  )}
+                </div>
+
+                <Button
+                  className="w-full bg-purple-600 hover:bg-purple-700 text-white shadow-md transition-all active:scale-[0.98]"
+                  disabled={isAuditing}
+                  onClick={handleAudit}
+                >
+                  {isAuditing ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Analyzing Risk Profiles...
+                    </>
+                  ) : (
+                    <>
+                      <Wand2 className="mr-2 h-4 w-4" />
+                      Run SmartAudit™ Audit
+                    </>
+                  )}
+                </Button>
+              </div>
+            ) : (
+              <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                <AuditResultsView {...auditResult} />
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    className="flex-1 border-purple-200 text-purple-700 hover:bg-purple-50"
+                    onClick={() => setAuditResult(null)}
+                  >
+                    New Audit
+                  </Button>
+                  <Button
+                    className="flex-1 bg-purple-600 text-white hover:bg-purple-700"
+                    onClick={() => toast.info("Feature coming soon", { description: "You will be able to export the corrected document shortly." })}
+                  >
+                    Draft Correction
+                  </Button>
+                </div>
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="upload" className="mt-0">
+            {!extractedData ? (
+              <div className="animate-in fade-in duration-300">
+                <DocMateUploader onExtractionComplete={handleSmartUploadComplete} />
+              </div>
+            ) : (
+              <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                {/* Extraction Summary */}
+                <Card className="border-purple-200 bg-purple-50/30">
+                  <CardHeader className="py-3 px-4">
+                    <CardTitle className="text-sm font-semibold flex items-center justify-between">
+                      <span className="flex items-center gap-2">📄 Document Extraction Analysis</span>
+                      <Badge variant="outline" className="bg-white">
+                        {Math.round(extractedData.extraction.confidence)}% Confidence
+                      </Badge>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="px-4 pb-4">
+                    <Tabs defaultValue="fields">
+                      <TabsList className="h-8 mb-2">
+                        <TabsTrigger value="fields" className="text-xs h-6">Extracted Fields</TabsTrigger>
+                        <TabsTrigger value="tables" className="text-xs h-6">Tables ({extractedData.extraction.tables.length})</TabsTrigger>
+                        <TabsTrigger value="raw" className="text-xs h-6">Raw Text</TabsTrigger>
+                      </TabsList>
+
+                      <TabsContent value="fields" className="max-h-60 overflow-y-auto pr-1">
+                        {extractedData.extraction.fields.length > 0 ? (
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            {extractedData.extraction.fields.map((field: any, idx: number) => (
+                              <div key={idx} className="flex flex-col p-2 bg-white rounded border border-purple-100 hover:border-purple-300 transition-colors">
+                                <div className="flex justify-between items-start">
+                                  <span className="font-medium text-xs text-gray-500 uppercase">{field.key}</span>
+                                  <Badge variant="secondary" className="text-[10px] h-4 leading-none">{Math.round(field.confidence)}%</Badge>
+                                </div>
+                                <span className="text-sm text-gray-900 font-medium truncate mt-1" title={field.value}>{field.value}</span>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <p className="text-sm text-gray-500 italic py-4 text-center">No key-value pairs detected.</p>
+                        )}
+                      </TabsContent>
+
+                      <TabsContent value="tables" className="max-h-60 overflow-y-auto">
+                        {extractedData.extraction.tables.length > 0 ? extractedData.extraction.tables.map((table: any, idx: number) => (
+                          <div key={idx} className="mb-4 last:mb-0 border rounded-md overflow-hidden">
+                            <table className="min-w-full text-xs text-left">
+                              <tbody>
+                                {table.rows.map((row: string[], rowIdx: number) => (
+                                  <tr key={rowIdx} className="border-b last:border-0 hover:bg-gray-50">
+                                    {row.map((cell: string, cellIdx: number) => (
+                                      <td key={cellIdx} className="px-3 py-2 border-r last:border-0 truncate max-w-[150px]" title={cell}>
+                                        {cell}
+                                      </td>
+                                    ))}
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        )) : (
+                          <p className="text-sm text-gray-500 italic py-4 text-center">No tables detected.</p>
+                        )}
+                      </TabsContent>
+
+                      <TabsContent value="raw">
+                        <div className="bg-slate-900 text-slate-300 p-3 rounded-md overflow-x-auto text-xs font-mono max-h-60">
+                          <pre>{extractedData.extraction.rawText}</pre>
+                        </div>
+                      </TabsContent>
+                    </Tabs>
+                  </CardContent>
+                </Card>
+
+                {/* Audit Result */}
+                <AuditResultsView {...extractedData.auditResult} />
+
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => {
+                      setExtractedData(null);
+                      setAuditResult(null);
+                    }}
+                  >
+                    Process Another Document
+                  </Button>
+                </div>
+              </div>
+            )}
+          </TabsContent>
+        </Tabs>
+
       </CardContent>
     </Card>
   );

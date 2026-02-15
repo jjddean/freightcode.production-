@@ -1,5 +1,6 @@
 // @ts-nocheck
 import React, { useState } from 'react';
+import { StatusBadge } from '@/components/ui/status-badge';
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -75,12 +76,7 @@ const AdminCustomersPage = () => {
         {
             key: 'role',
             header: 'Role',
-            render: (val: string) => (
-                <Badge variant="outline" className={`capitalize ${val === 'admin' ? 'border-blue-200 text-blue-700 bg-blue-50' : 'text-gray-600'}`}>
-                    {val === 'admin' && <Shield className="w-3 h-3 mr-1" />}
-                    {val}
-                </Badge>
-            )
+            render: (val: string) => <StatusBadge status={val} />
         },
         {
             key: 'subscriptionTier',
@@ -115,14 +111,7 @@ const AdminCustomersPage = () => {
         {
             key: 'status',
             header: 'Status',
-            render: (val: string) => (
-                <Badge
-                    variant={val === 'suspended' ? 'destructive' : val === 'active' ? 'outline' : 'secondary'}
-                    className={val === 'active' ? 'text-green-600 border-green-200 bg-green-50' : ''}
-                >
-                    {val || 'Active'}
-                </Badge>
-            )
+            render: (val: string) => <StatusBadge status={val || 'active'} />
         },
         {
             key: '_creationTime',

@@ -1,5 +1,5 @@
-// @ts-nocheck
 import React, { useState, useMemo, useEffect } from 'react';
+import { StatusBadge } from '@/components/ui/status-badge';
 import { Check } from 'lucide-react';
 import MediaCardHeader from '@/components/ui/media-card-header';
 import DataTable from '@/components/ui/data-table';
@@ -41,7 +41,7 @@ const PaymentsPage = () => {
   const handleUpgrade = async (priceId: string, plan: string) => {
     const toastId = toast.loading("Redirecting to checkout...");
     try {
-      const { url } = await createSubscriptionSession({ priceId, plan });
+      const { url } = await createSubscriptionSession({ priceId, plan: plan as any });
       if (url) {
         window.location.href = url;
         return; // Don't dismiss toast if redirecting
@@ -127,7 +127,7 @@ const PaymentsPage = () => {
           // Convert Quote -> Booking
           const result = await createBooking({
             quoteId: fetchedQuote.quoteId,
-            carrierQuoteId: rate.carrierId || rate.id || `rate-auto-${Date.now()}`,
+            carrierQuoteId: (rate as any).carrierId || (rate as any).id || `rate-auto-${Date.now()}`,
             customerDetails: {
               name: contact.name,
               email: contact.email,
@@ -217,7 +217,8 @@ const PaymentsPage = () => {
       key: 'id' as keyof typeof invoices[0],
       header: 'Invoice ID',
       sortable: true,
-      render: (value: string) => <span className="font-mono text-xs text-gray-500 truncate max-w-[120px] block">{value}</span>
+      mono: true,
+      render: (value: string) => <span className="truncate max-w-[120px] block">{value}</span>
     },
     { key: 'date' as keyof typeof invoices[0], header: 'Date', sortable: true },
     {
@@ -243,22 +244,15 @@ const PaymentsPage = () => {
       key: 'amount' as keyof typeof invoices[0],
       header: 'Amount',
       sortable: true,
-      className: "text-right w-24",
+      align: 'right' as const,
+      className: "w-24",
       render: (value: number) => <span className="font-semibold text-gray-900">£{value.toLocaleString()}</span>
     },
     {
       key: 'status' as keyof typeof invoices[0],
       header: 'Status',
       sortable: true,
-      render: (value: string) => (
-        <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${value === 'Paid' ? 'bg-green-100 text-green-800' :
-          value === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
-            value === 'Overdue' ? 'bg-red-100 text-red-800' :
-              'bg-gray-100 text-gray-800'
-          }`}>
-          {value}
-        </span>
-      )
+      render: (value: string) => <StatusBadge status={value} />
     },
     { key: 'dueDate' as keyof typeof invoices[0], header: 'Due Date', sortable: true },
     {

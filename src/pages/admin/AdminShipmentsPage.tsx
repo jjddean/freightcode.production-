@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation } from "convex/react";
+import { StatusBadge } from '@/components/ui/status-badge';
 import { cn } from "@/lib/utils";
 import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
@@ -102,16 +103,12 @@ const AdminShipmentsPage = () => {
         {
             key: 'trackingNumber',
             header: 'Tracking #',
-            render: (value: string) => <span className="font-mono font-medium text-primary-600">{value}</span>
+            mono: true
         },
         {
             key: 'riskLevel',
             header: 'Risk',
-            render: (val: string) => (
-                val === 'high' ? <Badge variant="destructive" className="flex w-fit items-center gap-1"><AlertTriangle className="h-3 w-3" /> High</Badge> :
-                    val === 'medium' ? <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 hover:bg-yellow-200">Medium</Badge> :
-                        <Badge variant="outline" className="text-gray-500 border-gray-200">Safe</Badge>
-            )
+            render: (val: string) => <StatusBadge status={val || 'safe'} />
         },
         {
             key: 'carrier',
@@ -139,28 +136,12 @@ const AdminShipmentsPage = () => {
         {
             key: 'customs',
             header: 'Customs',
-            render: (customs: any) => (
-                <Badge variant="outline" className={cn(
-                    "text-[10px] uppercase font-bold",
-                    customs?.filingStatus === 'filed' ? "bg-emerald-50 text-emerald-700 border-emerald-100" :
-                        customs?.filingStatus === 'pending' ? "bg-amber-50 text-amber-700 border-amber-100" :
-                            "bg-slate-50 text-slate-500"
-                )}>
-                    {customs?.filingStatus || 'None'}
-                </Badge>
-            )
+            render: (customs: any) => <StatusBadge status={customs?.filingStatus || 'None'} />
         },
         {
             key: 'status',
             header: 'Status',
-            render: (value: string) => (
-                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize
-          ${value === 'delivered' ? 'bg-green-100 text-green-800' :
-                        value === 'transit' ? 'bg-primary-100 text-primary-800' :
-                            'bg-gray-100 text-gray-800'}`}>
-                    {value}
-                </span>
-            )
+            render: (value: string) => <StatusBadge status={value} />
         },
         {
             key: 'shipmentId',

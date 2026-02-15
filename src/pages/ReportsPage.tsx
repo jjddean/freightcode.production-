@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { StatusBadge } from '@/components/ui/status-badge';
 import {
   Select,
   SelectContent,
@@ -89,19 +90,14 @@ const ReportsPage = () => {
   }, [shipments]);
 
   const reportColumns = [
-    { key: 'id' as keyof typeof recentReports[0], header: 'Report ID', sortable: true },
+    { key: 'id' as keyof typeof recentReports[0], header: 'Report ID', sortable: true, mono: true },
     { key: 'name' as keyof typeof recentReports[0], header: 'Report Name', sortable: true },
     { key: 'date' as keyof typeof recentReports[0], header: 'Generated', sortable: true },
     {
       key: 'type' as keyof typeof recentReports[0],
       header: 'Type',
       sortable: true,
-      render: (value: string) => (
-        <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${value === 'Automated' ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800'
-          }`}>
-          {value}
-        </span>
-      )
+      render: (value: string) => <StatusBadge status={value} />
     },
     { key: 'size' as keyof typeof recentReports[0], header: 'Size', sortable: true },
     {

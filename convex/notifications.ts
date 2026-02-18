@@ -6,7 +6,7 @@ export const list = query({
     args: { limit: v.optional(v.number()) },
     handler: async (ctx, args) => {
         const identity = await ctx.auth.getUserIdentity();
-        if (!identity) return [];
+        if (!identity) return null;
 
         const userId = identity.subject;
 
@@ -58,7 +58,7 @@ export const getUnreadCount = query({
     args: {},
     handler: async (ctx) => {
         const identity = await ctx.auth.getUserIdentity();
-        if (!identity) return 0;
+        if (!identity) return null;
         const userId = identity.subject;
 
         const unread = await ctx.db

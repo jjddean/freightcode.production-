@@ -126,6 +126,9 @@ export default defineSchema({
     provider: v.string(), // "project44", "freightos", "vizion"
     apiKey: v.optional(v.string()), // Encrypted or reference
     apiSecret: v.optional(v.string()),
+    accessToken: v.optional(v.string()),
+    refreshToken: v.optional(v.string()),
+    expiresAt: v.optional(v.number()),
     webhookSecret: v.optional(v.string()),
     status: v.string(), // "active", "inactive"
     orgId: v.optional(v.union(v.string(), v.null())), // If org brings their own keys

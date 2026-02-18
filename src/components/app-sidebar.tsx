@@ -13,7 +13,7 @@ import {
 } from "lucide-react"
 import { IconCirclePlusFilled, IconMail } from "@tabler/icons-react"
 
-import { useLocation } from "react-router-dom"
+import { useLocation, Link } from "react-router-dom"
 import { useUser } from "@clerk/clerk-react"
 import { useQuery } from "convex/react"
 import { api } from "../../convex/_generated/api"
@@ -126,9 +126,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader className="border-b-0 px-2 pt-1">
-        <a href="/dashboard" className="flex h-11 items-center px-4 mb-1">
+        <Link to="/dashboard" className="flex h-11 items-center px-4 mb-1">
           <BrandLogo />
-        </a>
+        </Link>
         <SidebarMenu className="pt-0 pb-0">
           <SidebarMenuItem className="flex items-center gap-2">
             <Dialog>

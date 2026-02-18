@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import MediaCardHeader from '@/components/ui/media-card-header';
 import Footer from '@/components/layout/Footer';
 import { Button } from '@/components/ui/button';
@@ -104,10 +105,10 @@ const CarrierIntegrationPage: React.FC = () => {
           <h3 className="text-lg font-medium text-gray-900 mb-4">Quick Actions</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Button asChild variant="outline" className="justify-start">
-              <a href="/">
+              <Link to="/">
                 <span className="mr-2">🔄</span>
                 Test Live Rates
-              </a>
+              </Link>
             </Button>
             <Button variant="outline" className="justify-start">
               <span className="mr-2">📊</span>

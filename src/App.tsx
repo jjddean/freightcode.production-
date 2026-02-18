@@ -38,7 +38,6 @@ const DocumentsPage = lazy(() => import('./pages/DocumentsPage'));
 const ReportsPage = lazy(() => import('./pages/ReportsPage'));
 const AccountPage = lazy(() => import('./pages/AccountPage'));
 const ClientQuotesPage = lazy(() => import('./pages/client/ClientQuotesPage'));
-const WaitlistPage = lazy(() => import('./pages/WaitlistPage'));
 const ClientBookingsPage = lazy(() => import('./pages/client/ClientBookingsPage'));
 const ApiDocsPage = lazy(() => import('./pages/ApiDocsPage'));
 const CurrencyPage = lazy(() => import('./pages/tools/CurrencyPage'));
@@ -47,7 +46,7 @@ const SharedDocumentPage = lazy(() => import('./pages/SharedDocumentPage'));
 const DocusignCallbackPage = lazy(() => import('./pages/DocusignCallbackPage'));
 const DocumentPrintPage = lazy(() => import('./pages/DocumentPrintPage'));
 const TestDashboardPage = lazy(() => import('./pages/TestDashboardPage'));
-const GeoRiskDemoPage = lazy(() => import('./pages/GeoRiskDemoPage'));
+const HmrcCallbackPage = lazy(() => import('./pages/HmrcCallbackPage'));
 
 // Admin Pages - Lazy Loaded
 const AdminDashboardPage = lazy(() => import('./pages/admin/AdminDashboardPage'));
@@ -98,54 +97,13 @@ function Layout({ children }: LayoutProps) {
 }
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  return (
-    <>
-      <SignedIn>{children}</SignedIn>
-      <SignedOut>
-        <div className="min-h-screen flex items-center justify-center bg-gray-50">
-          <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Sign In Required</h2>
-            <div className="space-x-4">
-              <SignInButton mode="modal">
-                <button className="px-4 py-2 bg-blue-600 text-white rounded">Sign In</button>
-              </SignInButton>
-              <SignUpButton mode="modal">
-                <button className="px-4 py-2 border border-gray-300 rounded">Sign Up</button>
-              </SignUpButton>
-            </div>
-          </div>
-        </div>
-      </SignedOut>
-    </>
-  );
+  // Authentication disabled per user request to remove Clerk layer
+  return <>{children}</>;
 }
 
 // Admin Route Wrapper - Role-based permissions
 function AdminRoute({ children }: { children: React.ReactNode }) {
-  const { user, isLoaded } = useUser();
-  const { isAdmin, isLoading: isRoleLoading } = useRole();
-
-  if (!isLoaded || isRoleLoading) return <LoadingSpinner />;
-
-  // Allow access if user is admin or platform superadmin
-  // Also fallback to email whitelist for backward compatibility during migration
-  const adminEmails = (import.meta.env.VITE_ADMIN_EMAILS || '').split(',').filter(Boolean);
-  const userEmail = user?.primaryEmailAddress?.emailAddress;
-  const isEmailWhitelisted = userEmail && adminEmails.includes(userEmail);
-
-  if (!user || (!isAdmin && !isEmailWhitelisted)) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 flex-col">
-        <h1 className="text-3xl font-bold text-red-600 mb-2">Access Denied</h1>
-        <p className="text-gray-600 mb-6">You do not have permission to view the Admin Portal.</p>
-        <p className="text-sm text-gray-400 mb-4">
-          Role required: <code className="bg-gray-100 px-2 py-1 rounded">admin</code> or <code className="bg-gray-100 px-2 py-1 rounded">platform:superadmin</code>
-        </p>
-        <Button onClick={() => window.location.href = '/dashboard'}>Return to Dashboard</Button>
-      </div>
-    );
-  }
-
+  // Admin logic disabled per user request to remove Clerk layer
   return <>{children}</>;
 }
 
@@ -177,13 +135,11 @@ export default function App() {
                 <Route path="/resources" element={<ResourcesPage />} />
                 <Route path="/shared/:token" element={<SharedDocumentPage />} />
                 <Route path="/api/docusign/callback" element={<DocusignCallbackPage />} />
+                <Route path="/auth/hmrc/callback" element={<HmrcCallbackPage />} />
               </Route>
 
               {/* Standalone Pages */}
-              <Route path="/access" element={<WaitlistPage />} />
               <Route path="/test-dashboard" element={<TestDashboardPage />} />
-              <Route path="/georisk-demo" element={<GeoRiskDemoPage />} />
-              <Route path="/geo" element={<GeoRiskDemoPage />} />
               <Route path="/documents/print/:documentId" element={<DocumentPrintPage />} />
 
               {/* Admin Routes (Wrapped in ProtectedRoute & AdminRoute & AdminLayout) */}

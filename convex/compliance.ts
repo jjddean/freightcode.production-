@@ -1,16 +1,17 @@
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
+import { getEffectiveUserId } from "./users";
 
 // Get current KYC status for the user
 export const getKycStatus = query({
     args: {},
     handler: async (ctx) => {
-        const identity = await ctx.auth.getUserIdentity();
-        if (!identity) return null;
+        const userId = await getEffectiveUserId(ctx);
+        if (!userId) return null;
 
         return await ctx.db
             .query("kycVerifications")
-            .withIndex("byUserId", (q) => q.eq("userId", identity.subject))
+            .withIndex("byUserId", (q) => q.eq("userId", userId))
             .first();
     },
 });
@@ -21,8 +22,8 @@ export const startKyc = mutation({
         orgId: v.optional(v.union(v.string(), v.null())) // Implicitly passed from frontend
     },
     handler: async (ctx, args) => {
-        const identity = await ctx.auth.getUserIdentity();
-        if (!identity) throw new Error("Unauthorized");
+        const userId = await getEffectiveUserId(ctx);
+        if (!userId) throw new Error("Unauthorized");
 
         // Note: We might want one KYC per Org or per User.
         // If Org is selected, we should prioritize querying by orgId if we had an index,
@@ -31,7 +32,7 @@ export const startKyc = mutation({
 
         const existing = await ctx.db
             .query("kycVerifications")
-            .withIndex("byUserId", (q) => q.eq("userId", identity.subject))
+            .withIndex("byUserId", (q) => q.eq("userId", userId))
             .first();
 
         if (existing) return existing._id;
@@ -42,13 +43,13 @@ export const startKyc = mutation({
         if (!orgId) {
             const user = await ctx.db
                 .query("users")
-                .withIndex("byExternalId", (q) => q.eq("externalId", identity.subject))
+                .withIndex("byExternalId", (q) => q.eq("externalId", userId))
                 .unique();
             orgId = user?.orgId;
         }
 
         return await ctx.db.insert("kycVerifications", {
-            userId: identity.subject,
+            userId: userId,
             orgId: orgId,
             status: "draft",
             step: 1,

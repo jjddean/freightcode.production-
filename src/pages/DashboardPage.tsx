@@ -6,14 +6,13 @@ import DataTable from '@/components/ui/data-table';
 import type { Column } from '@/components/ui/data-table';
 import { Button } from '@/components/ui/button';
 import Footer from '@/components/layout/Footer';
-import { ShipmentMap } from '@/components/ui/ShipMapFinal';
 import MobileDashboard from '@/components/mobile/MobileDashboard';
 
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { toast } from 'sonner';
 import { Play, Wrench } from 'lucide-react';
-import { formatCurrency, convertCurrency } from '@/lib/currency';
+import { formatCurrency } from '@/lib/currency';
 import { useOrganization, useUser } from "@clerk/clerk-react";
 
 const DashboardPage = () => {
@@ -131,7 +130,7 @@ const DashboardPage = () => {
             <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 relative">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
                     <span className="text-blue-600 text-sm">🚢</span>
                   </div>
                 </div>
@@ -146,7 +145,7 @@ const DashboardPage = () => {
             <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
                     <span className="text-blue-600 text-sm">📋</span>
                   </div>
                 </div>
@@ -160,7 +159,7 @@ const DashboardPage = () => {
             <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
                     <span className="text-blue-600 text-sm">💰</span>
                   </div>
                 </div>
@@ -174,17 +173,13 @@ const DashboardPage = () => {
             <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 relative">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
                     <span className="text-blue-600 text-sm">📊</span>
                   </div>
                 </div>
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-500">Revenue</p>
                   <p className="text-2xl font-semibold text-gray-900">{formatCurrency(liveMetrics.monthlyRevenue)}</p>
-                  <div className="flex gap-2 text-[10px] text-gray-400 font-medium uppercase tracking-wider mt-1">
-                    <span>≈ {formatCurrency(convertCurrency(liveMetrics.monthlyRevenue, 'GBP', 'USD'), 'USD')}</span>
-                    <span>≈ {formatCurrency(convertCurrency(liveMetrics.monthlyRevenue, 'GBP', 'EUR'), 'EUR')}</span>
-                  </div>
                 </div>
               </div>
               <div className="absolute top-2 right-2 w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
@@ -297,13 +292,7 @@ const DashboardPage = () => {
             </div>
           </div>
 
-          {/* Global Shipment Map */}
-          <div className="mt-8">
-            <h2 className="text-xl font-semibold text-gray-900 mb-6">Global Shipment Tracking</h2>
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden relative z-0" style={{ height: '500px' }}>
-              <ShipmentMap shipments={liveShipments || []} className="w-full h-full" />
-            </div>
-          </div>
+          {/* Global Shipment Map removed */}
         </div>
       </div>
 

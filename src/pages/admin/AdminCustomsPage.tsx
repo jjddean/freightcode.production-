@@ -140,6 +140,7 @@ const AdminCustomsPage = () => {
     const [hmrcRef, setHmrcRef] = useState('');
     const [filingNotes, setFilingNotes] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const getAuthUrl = useAction(api.hmrc_actions.getHMRCAuthUrl);
 
     const handleOpenFilingModal = (shipment: any) => {
         setSelectedShipment(shipment);
@@ -272,7 +273,25 @@ const AdminCustomsPage = () => {
                 title="Customs Filing Queue"
                 subtitle="Manage and file import/export declarations in the official HMRC portal."
                 icon={FileSearch}
-            />
+            >
+                <div className="flex gap-2">
+                    <Button
+                        variant="outline"
+                        className="bg-white border-blue-200 text-blue-700 hover:bg-blue-50"
+                        onClick={async () => {
+                            try {
+                                const url = await getAuthUrl({});
+                                window.open(url, "_blank");
+                            } catch (e) {
+                                toast.error("Failed to generate auth URL");
+                            }
+                        }}
+                    >
+                        <ExternalLink className="w-4 h-4 mr-2" />
+                        Connect HMRC
+                    </Button>
+                </div>
+            </AdminPageHeader>
 
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <Card className="p-4 bg-white border border-slate-100 shadow-sm">
@@ -356,7 +375,7 @@ const AdminCustomsPage = () => {
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
-        </div>
+        </div >
     );
 };
 

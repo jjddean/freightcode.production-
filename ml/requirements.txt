@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+joblib
+pandas
+scikit-learn
+prometheus-client
+pydantic
+python-multipart

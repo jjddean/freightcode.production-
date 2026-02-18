@@ -8,6 +8,7 @@ export { default as PlatformPage } from './PlatformPage';
 export { default as ResourcesPage } from './ResourcesPage';
 export { default as AboutPage } from './AboutPage';
 export { default as ContactPage } from './ContactPage';
+export { default as HmrcCallbackPage } from './HmrcCallbackPage';
 
 // Protected Dashboard Pages
 export { default as DashboardPage } from './DashboardPage';
@@ -30,4 +31,3 @@ export { default as BlogPage } from './BlogPage';
 export { default as FAQPage } from './FAQPage';
 export { default as CaseStudiesPage } from './CaseStudiesPage';
 export { default as NewsPage } from './NewsPage';
-export { default as WaitlistPage } from './WaitlistPage';

@@ -88,11 +88,21 @@ export async function getCurrentUserOrThrow(ctx: QueryCtx) {
 }
 
 export async function getCurrentUser(ctx: QueryCtx) {
-  const identity = await ctx.auth.getUserIdentity();
-  if (identity === null) {
-    return null;
+  const userId = await getEffectiveUserId(ctx);
+  const user = await userByExternalId(ctx, userId);
+
+  // Auto-create guest user if missing
+  if (!user && userId === "guest_user_123") {
+    return {
+      _id: "guest_user_id" as any,
+      name: "Guest User",
+      email: "guest@freightcode.dev",
+      externalId: "guest_user_123",
+      role: "admin"
+    };
   }
-  return await userByExternalId(ctx, identity.subject);
+
+  return user;
 }
 
 async function userByExternalId(ctx: QueryCtx, externalId: string) {
@@ -101,6 +111,17 @@ async function userByExternalId(ctx: QueryCtx, externalId: string) {
     .withIndex("byExternalId", (q) => q.eq("externalId", externalId))
     .unique();
 }
+
+/**
+ * Guest Identity Fallback
+ * Returns the Clerk ID if logged in, or a static guest ID if auth is removed.
+ */
+export async function getEffectiveUserId(ctx: QueryCtx | MutationCtx) {
+  const identity = await ctx.auth.getUserIdentity();
+  return identity?.subject || "guest_user_123";
+}
+
+
 
 export const getUserByExternalId = internalQuery({
   args: { externalId: v.string() },

@@ -267,7 +267,7 @@ const ClientQuotesPage = () => {
         }
     }, [fetchedActiveQuote, activeQuote]);
 
-    const createQuote = useMutation(api.quotes.createInstantQuoteAndBooking);
+    const createQuote = useMutation(api.quotes.createQuote);
 
     const setMode = (mode: string, id?: string, step?: number) => {
         const params: any = { v: mode };
@@ -370,20 +370,14 @@ const ClientQuotesPage = () => {
                 urgency: formData.urgency,
                 additionalServices: formData.additionalServices,
                 contactInfo: formData.contactInfo,
-                quotes: formData.rates || [] // Pass captured rates
+                quotes: formData.rates || [],
+                selectedRate: formData.selectedRate
             };
 
             const result = await createQuote({ request: requestData });
 
-            setActiveQuote({
-                ...requestData,
-                selectedRate: formData.selectedRate,
-                quoteId: result.quoteId,
-                status: "success",
-                quotes: result.quotes || []
-            });
-
             setMode('list');
+            setSearchParams({ id: result.quoteId });
             toast.success("Quote generated successfully!");
         } catch (error) {
             console.error('Error creating quote:', error);
@@ -534,6 +528,57 @@ const ClientQuotesPage = () => {
                     </div>
                 ) : (
                     <>
+                        {activeQuoteId && fetchedActiveQuote && (
+                            <div className="mb-12 bg-white rounded-xl shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-4 duration-500">
+                                <div className="bg-primary/5 px-6 py-4 border-b border-primary/10 flex justify-between items-center">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center text-primary">
+                                            📋
+                                        </div>
+                                        <div>
+                                            <h3 className="font-bold text-gray-900">Active Quote: {fetchedActiveQuote.quoteId}</h3>
+                                            <p className="text-xs text-gray-500">
+                                                {fetchedActiveQuote.origin} → {fetchedActiveQuote.destination} · {fetchedActiveQuote.serviceType}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <Button variant="ghost" size="sm" onClick={() => setSearchParams({ v: 'list' })}>
+                                        Dismiss
+                                    </Button>
+                                </div>
+                                <div className="p-6">
+                                    <h4 className="text-sm font-semibold text-gray-900 mb-4">Available Rates</h4>
+                                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                        {(fetchedActiveQuote.quotes || []).map((q: any, idx: number) => (
+                                            <div key={idx} className="bg-gray-50 p-4 rounded-md border border-gray-100 hover:border-primary/30 hover:shadow-md transition-all relative group">
+                                                <div className="flex justify-between items-start mb-3">
+                                                    <div>
+                                                        <div className="font-bold text-gray-900">{q.carrierName}</div>
+                                                        <div className="text-xs text-gray-500">{q.serviceType}</div>
+                                                    </div>
+                                                    <div className="text-right">
+                                                        <div className="font-bold text-primary text-lg">
+                                                            {formatCurrency(q.price?.amount || q.cost || 0, q.price?.currency || 'USD')}
+                                                        </div>
+                                                        <div className="text-[10px] text-gray-400 font-medium uppercase tracking-wider">
+                                                            ≈ {formatCurrency(convertCurrency(q.price?.amount || q.cost || 0, q.price?.currency || 'USD', 'GBP'), 'GBP')}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="text-sm text-gray-600 mb-4 bg-white/50 p-2 rounded">
+                                                    Transit: <span className="font-medium">{q.transitTime}</span>
+                                                </div>
+                                                <BookingDialog
+                                                    quote={fetchedActiveQuote}
+                                                    selectedCarrier={q}
+                                                />
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
                         <div className="flex justify-between items-center mb-8">
                             <div className="space-y-1">
                                 <h2 className="text-xl font-semibold text-gray-900">Recent Quotes</h2>

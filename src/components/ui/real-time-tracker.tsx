@@ -2,7 +2,6 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
-import { ShipmentMap } from "./ShipMapFinal";
 
 interface TrackingEvent {
   id: string;
@@ -190,15 +189,7 @@ const RealTimeTracker: React.FC<RealTimeTrackerProps> = ({ shipmentId, className
         </div>
       </div>
 
-      {/* Map Section */}
-      <div className="p-6 border-t border-gray-200">
-        <ShipmentMap
-          shipments={shipmentData?.shipment ? [shipmentData.shipment] : []}
-          selectedShipmentId={shipmentId}
-          isExpanded={true}
-          className="h-[200px] w-full rounded-lg overflow-hidden"
-        />
-      </div>
+      {/* Map Section removed */}
     </div>
   );
 };

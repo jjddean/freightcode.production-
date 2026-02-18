@@ -12,27 +12,116 @@ interface DocMateUploaderProps {
 export const DocMateUploader: React.FC<DocMateUploaderProps> = ({
     onExtractionComplete,
 }) => {
+    const SUPPORTED_EXTENSIONS = [".pdf", ".jpg", ".jpeg", ".png", ".tif", ".tiff"];
+    const SUPPORTED_MIME_TYPES = new Set([
+        "application/pdf",
+        "image/jpeg",
+        "image/png",
+        "image/tiff",
+    ]);
+    const EXTRACTION_TIMEOUT_MS = 90000;
+    const SMARTAUDIT_TIMEOUT_MS = 180000;
+    const SAVE_TIMEOUT_MS = 30000;
+
+    const withTimeout = async <T,>(promise: Promise<T>, label: string, timeoutMs: number): Promise<T> => {
+        let timeout: ReturnType<typeof setTimeout> | undefined;
+        try {
+            return await Promise.race([
+                promise,
+                new Promise<T>((_, reject) => {
+                    timeout = setTimeout(() => reject(new Error(`${label} timed out after ${Math.floor(timeoutMs / 1000)}s.`)), timeoutMs);
+                }),
+            ]);
+        } finally {
+            if (timeout) clearTimeout(timeout);
+        }
+    };
+
+    const getFileExtension = (fileName: string): string => {
+        const lastDot = fileName.lastIndexOf(".");
+        return lastDot >= 0 ? fileName.slice(lastDot).toLowerCase() : "";
+    };
+
+    const isSupportedFile = (file: File): boolean => {
+        const extension = getFileExtension(file.name);
+        const mimeType = (file.type || "").toLowerCase();
+        return SUPPORTED_EXTENSIONS.includes(extension) || SUPPORTED_MIME_TYPES.has(mimeType);
+    };
+
+    const formatUploadError = (error: any): string => {
+        const rawMessage = String(error?.message || "Failed to process document. Please try again.");
+        const cleanMessage = rawMessage.replace(/^.*Uncaught Error:\s*/i, "");
+        const lowered = cleanMessage.toLowerCase();
+
+        if (lowered.includes("unsupported document format")) {
+            return "Unsupported document format. Please upload PDF, JPG, JPEG, PNG, or TIFF. If using PDF, make sure it is not password-protected.";
+        }
+
+        return cleanMessage;
+    };
+
     const [uploading, setUploading] = useState(false);
+    const [uploadStage, setUploadStage] = useState("");
     const [dragActive, setDragActive] = useState(false);
-    const processDocument = useAction(api.docmate.processDocument);
+    const extractMetadata = useAction(api.docmate.extractDocumentMetadata);
+    const auditDocument = useAction(api.smartaudit.auditDocument);
+    const saveDocument = useMutation(api.docmate_db.saveProcessedDocument);
 
     const handleFile = async (file: File) => {
         setUploading(true);
+        setUploadStage("Preparing upload...");
         try {
+            if (!isSupportedFile(file)) {
+                throw new Error("Unsupported document format. Please upload PDF, JPG, JPEG, PNG, or TIFF.");
+            }
+
             const arrayBuffer = await file.arrayBuffer();
-            // processDocument expects argument 'documentBytes' as Bytes (ArrayBuffer)
 
-            const result = await processDocument({
-                documentBytes: arrayBuffer,
-                fileName: file.name,
-            });
+            // Step 1: Extract Text (Cloud Backend - "The Eyes")
+            setUploadStage("Extracting text via Textract...");
+            const extraction = await withTimeout(
+                extractMetadata({
+                    documentBytes: arrayBuffer,
+                    fileName: file.name,
+                }),
+                "Document extraction",
+                EXTRACTION_TIMEOUT_MS
+            );
 
-            onExtractionComplete(result);
-        } catch (error) {
+            // Step 2: Audit in Convex action (uses OLLAMA_HOST on backend)
+            setUploadStage("Running SmartAudit via Convex/Ollama...");
+            const auditResult = await withTimeout(
+                auditDocument({
+                    rawText: extraction.rawText,
+                    docType: extraction.documentType,
+                }),
+                "SmartAudit analysis",
+                SMARTAUDIT_TIMEOUT_MS
+            );
+
+            // Step 3: Save results to database (Cloud Backend)
+            setUploadStage("Saving extracted results...");
+            const docId = await withTimeout(
+                saveDocument({
+                    fileName: file.name,
+                    documentType: extraction.documentType,
+                    rawText: extraction.rawText,
+                    extractedFields: extraction.fields,
+                    tables: extraction.tables,
+                    confidence: extraction.confidence,
+                    auditResult,
+                }),
+                "Saving extracted document",
+                SAVE_TIMEOUT_MS
+            );
+
+            onExtractionComplete({ documentId: docId, extraction, auditResult });
+        } catch (error: any) {
             console.error("Upload error:", error);
-            alert("Failed to process document. Please try again or check console for details.");
+            alert(formatUploadError(error));
         } finally {
             setUploading(false);
+            setUploadStage("");
         }
     };
 
@@ -64,9 +153,9 @@ export const DocMateUploader: React.FC<DocMateUploaderProps> = ({
                     <div className="space-y-4 py-8">
                         <Loader2 className="h-12 w-12 mx-auto animate-spin text-purple-600" />
                         <p className="text-sm text-gray-600 font-medium">
-                            Processing document with AI (Textract + SmartAudit)...
+                            {uploadStage || "Processing document with AI (Textract + SmartAudit)..."}
                         </p>
-                        <p className="text-xs text-gray-400">This may take 10-20 seconds</p>
+                        <p className="text-xs text-gray-400">This can take up to 2-3 minutes if the model is cold.</p>
                     </div>
                 ) : (
                     <div className="py-4">
@@ -83,7 +172,7 @@ export const DocMateUploader: React.FC<DocMateUploaderProps> = ({
                             type="file"
                             id="file-upload"
                             className="hidden"
-                            accept=".pdf,.jpg,.jpeg,.png"
+                            accept=".pdf,.jpg,.jpeg,.png,.tif,.tiff"
                             onChange={handleFileInput}
                         />
                         <Button variant="outline" className="border-purple-200 text-purple-700 hover:bg-purple-50">
@@ -91,7 +180,7 @@ export const DocMateUploader: React.FC<DocMateUploaderProps> = ({
                             Select File
                         </Button>
                         <p className="text-xs text-gray-400 mt-4">
-                            Supported formats: PDF, JPG, PNG
+                            Supported formats: PDF, JPG, PNG, TIFF
                         </p>
                     </div>
                 )}

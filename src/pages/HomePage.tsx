@@ -3,51 +3,21 @@ import { Button } from '@/components/ui/button';
 import MediaCardHeader from '@/components/ui/media-card-header';
 import Modal from '@/components/ui/modal';
 import QuoteRequestForm from '@/components/forms/QuoteRequestForm';
+import QuickQuoteForm from '@/components/forms/QuickQuoteForm';
 import MarketingFooter from '@/components/layout/MarketingFooter';
 
 import { toast } from 'sonner';
 
-import { VisualQuoteInput } from '@/components/home/VisualQuoteInput';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 
 const HomePage = () => {
-  const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
-  const [showResults, setShowResults] = useState(false);
-  const [searchParams, setSearchParams] = useState({ origin: '', destination: '' });
-  const [quoteInitialData, setQuoteInitialData] = useState<any>(null);
-
-  const handleVisualSearch = (data: { origin: string; destination: string; weight: string; dimensions: string }) => {
-    setSearchParams({ origin: data.origin, destination: data.destination });
-
-    // Parse dimensions string into object
-    let dims = { length: '', width: '', height: '' };
-    if (data.dimensions) {
-      const parts = data.dimensions.toLowerCase().split(/[x\s*]+/).filter(p => !isNaN(parseFloat(p)));
-      if (parts.length >= 1) dims.length = parts[0];
-      if (parts.length >= 2) dims.width = parts[1];
-      if (parts.length >= 3) dims.height = parts[2];
-    }
-
-    setQuoteInitialData({
-      origin: data.origin,
-      destination: data.destination,
-      weight: data.weight,
-      dimensions: dims
-    });
-
-    setShowResults(true);
-    toast.success(`Found 3 routes from ${data.origin} to ${data.destination}`);
-
-    // Auto-scroll to results
-    setTimeout(() => {
-      document.getElementById('quote-results')?.scrollIntoView({ behavior: 'smooth' });
-    }, 100);
-  };
-
+  const createQuote = useMutation(api.quotes.createQuote);
   const navigate = useNavigate();
-  const createBooking = useMutation(api.quotes.createInstantQuoteAndBooking);
+  const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
+  const [initialStep, setInitialStep] = useState(1);
+  const [initialData, setInitialData] = useState<any>(null);
 
   const handleQuoteSubmit = async (data: any) => {
     try {
@@ -55,107 +25,84 @@ const HomePage = () => {
       const payload = {
         origin: data.origin,
         destination: data.destination,
-        serviceType: data.serviceType,
-        cargoType: data.cargoType,
-        weight: data.weight,
-        dimensions: data.dimensions,
-        value: data.value,
-        incoterms: data.incoterms,
-        urgency: data.urgency,
-        additionalServices: data.additionalServices,
+        serviceType: data.serviceType || 'ocean',
+        cargoType: data.cargoType || 'general',
+        weight: data.weight || '0',
+        dimensions: data.dimensions || { length: '0', width: '0', height: '0' },
+        value: data.value || '0',
+        incoterms: data.incoterms || 'FOB',
+        urgency: data.urgency || 'standard',
+        additionalServices: data.additionalServices || [],
         contactInfo: data.contactInfo,
-        quotes: data.selectedRate ? [data.selectedRate] : [] // Pass selected rate if any
+        quotes: data.rates || [],
+        selectedRate: data.selectedRate,
       };
 
       // 2. Call Backend
-      const result = await createBooking({ request: payload });
+      const result = await createQuote({ request: payload });
 
       // 3. Close Modal & Redirect
       setIsQuoteModalOpen(false);
-      toast.success("Booking initiated! Redirecting to payment...");
+      toast.success("Quote request submitted! Redirecting to select rates...");
 
-      // Redirect to payments with the new quote ID
-      navigate(`/payments?quoteId=${result.quoteId}`);
+      // Redirect to quotes page with the new quote ID
+      navigate(`/quotes?id=${result.quoteId}`);
 
     } catch (error) {
-      console.error("Booking failed:", error);
-      toast.error("Failed to create booking. Please try again.");
+      console.error("Quote creation failed:", error);
+      toast.error("Failed to create quote. Please try again.");
     }
   };
 
   const handleCloseModal = () => {
     setIsQuoteModalOpen(false);
+    setInitialStep(1);
+    setInitialData(null);
+  };
+
+  const handleQuickQuoteSelect = (data: any) => {
+    // Collect all data from Quick Quote form
+    const fullInitialData = {
+      origin: data.origin,
+      destination: data.destination,
+      weight: data.weight,
+      dimensions: data.dimensions,
+      selectedRate: data.selectedRate,
+      // Default other fields that QuoteRequestForm expects
+      serviceType: 'ocean',
+      cargoType: 'general',
+      incoterms: 'FOB',
+    };
+
+    setInitialData(fullInitialData);
+    setInitialStep(3); // Start at Contact Information step
+    setIsQuoteModalOpen(true);
   };
 
   return (
     <div className="min-h-screen bg-white">
-      {/* 1. Interactive Visual Quote Hero */}
-      <div className="px-4 sm:px-6 lg:px-8 py-8">
-        <VisualQuoteInput onSearch={handleVisualSearch} />
-      </div>
+      {/* Hero Section */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 text-center">
+        <div className="animate-in fade-in slide-in-from-top-4 duration-700">
+          <span className="inline-block px-3 py-1 bg-indigo-50 text-indigo-600 text-xs font-semibold rounded-full mb-4 tracking-wider uppercase">
+            Private Access
+          </span>
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-primary-800 tracking-tight mb-6">
+            Freight Operations for the <br />
+            <span className="text-primary-800">Next Frontier of Trade</span>
+          </h1>
+          <p className="max-w-2xl mx-auto text-base md:text-lg text-slate-500 leading-relaxed mb-10">
+            Scale your forwarding business with unified carrier APIs, GeoRisk Navigator™, and embedded trade finance.
+          </p>
 
-      {/* 2. Results Section (Conditionally Rendered) */}
-      {showResults && (
-        <div id="quote-results" className="px-4 sm:px-6 lg:px-8 py-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">Best Routes Found</h2>
-            <Button variant="outline" onClick={() => setShowResults(false)}>Clear Search</Button>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {/* Option 1: Sea (Value - Primary/Navy) */}
-            <div className="rounded-xl p-6 shadow-sm hover:shadow-lg transition-all cursor-pointer bg-white group">
-              <div className="flex justify-between items-start mb-4">
-                <div className="p-3 bg-primary-50 rounded-lg group-hover:bg-primary-100 transition-colors">
-                  <span className="text-2xl">🚢</span>
-                </div>
-                <span className="bg-primary-100 text-primary-800 text-xs font-bold px-2 py-1 rounded-full">Best Value</span>
-              </div>
-              <h3 className="font-bold text-lg mb-1">Ocean Freight</h3>
-              <p className="text-sm text-gray-500 mb-4">Maersk Line • 35 Days</p>
-              <div className="text-2xl font-bold text-gray-900 mb-4">$1,240 <span className="text-sm font-normal text-gray-500">/ container</span></div>
-              <div className="flex justify-center">
-                <Button className="px-6 bg-primary hover:bg-primary-700 text-white shadow-sm" onClick={() => setIsQuoteModalOpen(true)}>Book Layout</Button>
-              </div>
-            </div>
-
-            {/* Option 2: Air (Fastest - Secondary/Teal) */}
-            <div className="rounded-xl p-6 shadow-sm hover:shadow-lg transition-all cursor-pointer bg-white group">
-              <div className="flex justify-between items-start mb-4">
-                <div className="p-3 bg-secondary-50 rounded-lg group-hover:bg-secondary-100 transition-colors">
-                  <span className="text-2xl">✈️</span>
-                </div>
-                <span className="bg-secondary-100 text-secondary-800 text-xs font-bold px-2 py-1 rounded-full">Fastest</span>
-              </div>
-              <h3 className="font-bold text-lg mb-1">Air Freight</h3>
-              <p className="text-sm text-gray-500 mb-4">DHL Aviation • 3 Days</p>
-              <div className="text-2xl font-bold text-gray-900 mb-4">$4,850 <span className="text-sm font-normal text-gray-500">/ 500kg</span></div>
-              <div className="flex justify-center">
-                <Button className="px-6 variant-outline border-secondary text-secondary-700 hover:bg-secondary-50 shadow-sm" onClick={() => setIsQuoteModalOpen(true)}>Book Express</Button>
-              </div>
-            </div>
-
-            {/* Option 3: Rail/Mixed (Eco - Primary-Light or Slate for neutrality) */}
-            <div className="rounded-xl p-6 shadow-sm hover:shadow-lg transition-all cursor-pointer bg-white group">
-              <div className="flex justify-between items-start mb-4">
-                <div className="p-3 bg-primary-50 rounded-lg group-hover:bg-primary-100 transition-colors">
-                  <span className="text-2xl">🚆</span>
-                </div>
-                <span className="bg-primary-100 text-primary-700 text-xs font-bold px-2 py-1 rounded-full">Eco Choice</span>
-              </div>
-              <h3 className="font-bold text-lg mb-1">Rail Freight</h3>
-              <p className="text-sm text-gray-500 mb-4">China Rec • 18 Days</p>
-              <div className="text-2xl font-bold text-gray-900 mb-4">$2,100 <span className="text-sm font-normal text-gray-500">/ container</span></div>
-              <div className="flex justify-center">
-                <Button className="px-6 variant-ghost hover:bg-primary-50 text-primary-700 shadow-sm" onClick={() => setIsQuoteModalOpen(true)}>Book Green</Button>
-              </div>
-            </div>
+          <div className="mt-8">
+            <QuickQuoteForm onSelectRate={handleQuickQuoteSelect} />
           </div>
         </div>
-      )}
+      </div>
 
       {/* Core Services Section */}
-      <div className="py-16 bg-gray-50">
+      <div className="py-20 bg-gray-50 border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-primary-800 mb-4">Core Services</h2>
@@ -209,7 +156,8 @@ const HomePage = () => {
           <QuoteRequestForm
             onSubmit={handleQuoteSubmit}
             onCancel={handleCloseModal}
-            initialData={quoteInitialData}
+            initialStep={initialStep}
+            initialData={initialData}
           />
         </Modal>
       </div>

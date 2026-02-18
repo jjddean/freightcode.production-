@@ -14,12 +14,14 @@ export const saveProcessedDocument = mutation({
     },
     handler: async (ctx, args) => {
         const identity = await ctx.auth.getUserIdentity();
-        if (!identity) throw new Error("Unauthenticated");
 
-        const user = await ctx.db
-            .query("users")
-            .withIndex("byExternalId", (q) => q.eq("externalId", identity.subject))
-            .unique();
+        let user = null;
+        if (identity) {
+            user = await ctx.db
+                .query("users")
+                .withIndex("byExternalId", (q) => q.eq("externalId", identity.subject))
+                .unique();
+        }
 
         const docId = await ctx.db.insert("processed_documents", {
             ...args,

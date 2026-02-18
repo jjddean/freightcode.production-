@@ -38,6 +38,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({ className }) =>
   // Tracks notifications already toasted to avoid duplicates
   const toastedIds = useRef<Set<string>>(new Set());
   const isInitialLoad = useRef(true);
+  const mountTime = useRef(Date.now());
 
   // Normalize data format
   const notifications = (rawNotifications || []).map((n: any) => ({
@@ -48,7 +49,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({ className }) =>
 
   // Real-time toast alerts for new unread notifications
   useEffect(() => {
-    if (rawNotifications) {
+    if (Array.isArray(rawNotifications)) {
       if (isInitialLoad.current) {
         // Just Mark existing ones as "seen" on first load
         rawNotifications.forEach(n => toastedIds.current.add(n._id));
@@ -56,25 +57,23 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({ className }) =>
       } else {
         // Check for new unread notifications
         rawNotifications.forEach(n => {
-          if (!n.read && !toastedIds.current.has(n._id)) {
+          // Robust suppression: Only toast if:
+          // 1. It's unread
+          // 2. We haven't toasted it in this session
+          // 3. It was created AFTER the component mounted (with a 2s safety buffer for clock skew)
+          const isFresh = n.createdAt > (mountTime.current - 2000);
+
+          if (!n.read && !toastedIds.current.has(n._id) && isFresh) {
             toastedIds.current.add(n._id);
             toast.info(n.title, {
               description: n.message,
               duration: 5000,
-              // @ts-ignore
-              action: n.actionUrl ? {
-                label: n.actionText || 'View',
-                onClick: () => {
-                  markRead({ notificationId: n._id });
-                  navigate(n.actionUrl!);
-                }
-              } : undefined
             });
           }
         });
       }
     }
-  }, [rawNotifications, navigate, markRead]);
+  }, [rawNotifications, navigate]);
 
   const unreadCount = dbUnreadCount;
   const urgentCount = notifications.filter((n: any) => n.priority === 'urgent' && !n.read).length;
@@ -270,6 +269,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({ className }) =>
                           <Button
                             variant="outline"
                             size="sm"
+                            className="h-7 text-[10px]"
                             onClick={(e) => {
                               e.stopPropagation();
                               handleNotificationClick(notification);

@@ -3,8 +3,9 @@ import { StatusBadge } from '@/components/ui/status-badge';
 import MediaCardHeader from '@/components/ui/media-card-header';
 import DataTable from '@/components/ui/data-table';
 import { Button } from '@/components/ui/button';
-import { useQuery, useAction } from "convex/react";
+import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
+import { useNavigate } from 'react-router-dom';
 import {
     Drawer,
     DrawerClose,
@@ -22,7 +23,7 @@ import {
     SheetHeader,
     SheetTitle,
     SheetTrigger,
-} from '@/components/ui/sheet';
+} from '@/sheet';
 import QuoteRequestForm from '@/components/forms/QuoteRequestForm';
 import { toast } from 'sonner';
 import { useStripeCheckout } from '@/hooks/useStripeCheckout';
@@ -39,10 +40,34 @@ const ClientBookingsPage = () => {
     const [isCreateOpen, setIsCreateOpen] = useState(false);
     // const createCheckout = useAction(api.billing.createCheckoutSession);
 
-    const handleCreateBooking = (data: any) => {
+    const createQuote = useMutation(api.quotes.createQuote);
+    const navigate = useNavigate();
 
-        toast.success("Booking request submitted successfully!");
-        setIsCreateOpen(false);
+    const handleCreateBooking = async (data: any) => {
+        try {
+            const result = await createQuote({
+                request: {
+                    ...data,
+                    serviceType: data.serviceType || 'ocean',
+                    cargoType: data.cargoType || 'general',
+                    weight: data.weight || '0',
+                    dimensions: data.dimensions || { length: '0', width: '0', height: '0' },
+                    value: data.value || '0',
+                    incoterms: data.incoterms || 'FOB',
+                    urgency: data.urgency || 'standard',
+                    additionalServices: data.additionalServices || [],
+                    contactInfo: data.contactInfo,
+                    quotes: data.rates || [],
+                    selectedRate: data.selectedRate,
+                }
+            });
+            toast.success("Quote request submitted! Redirecting to select rates...");
+            setIsCreateOpen(false);
+            navigate(`/quotes?id=${result.quoteId}`);
+        } catch (error) {
+            console.error("Quote creation failed:", error);
+            toast.error("Failed to submit quote request.");
+        }
     };
 
     const { startCheckout } = useStripeCheckout();

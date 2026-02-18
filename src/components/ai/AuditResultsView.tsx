@@ -25,7 +25,8 @@ export const AuditResultsView: React.FC<AuditResultsViewProps> = ({
     correctedData = {}
 }) => {
     const getSeverityColor = (severity: string) => {
-        switch (severity.toLowerCase()) {
+        const s = severity?.toLowerCase() || 'low';
+        switch (s) {
             case 'high': return 'bg-red-100 text-red-800 border-red-200';
             case 'medium': return 'bg-amber-100 text-amber-800 border-amber-200';
             case 'low': return 'bg-blue-100 text-blue-800 border-blue-200';
@@ -34,7 +35,8 @@ export const AuditResultsView: React.FC<AuditResultsViewProps> = ({
     };
 
     const getSeverityIcon = (severity: string) => {
-        switch (severity.toLowerCase()) {
+        const s = severity?.toLowerCase() || 'low';
+        switch (s) {
             case 'high': return <AlertCircle className="h-4 w-4 text-red-600" />;
             case 'medium': return <AlertTriangle className="h-4 w-4 text-amber-600" />;
             case 'low': return <Info className="h-4 w-4 text-blue-600" />;
@@ -55,7 +57,7 @@ export const AuditResultsView: React.FC<AuditResultsViewProps> = ({
                     <AlertCircle className="h-6 w-6 text-red-600" />
                 )}
                 <div>
-                    <h3 className="font-bold">SmartAudit™ Compliance Audit: {status.toUpperCase()}</h3>
+                    <h3 className="font-bold">SmartAudit™ Compliance Audit: {status?.toString().toUpperCase() || 'UNKNOWN'}</h3>
                     <p className="text-sm opacity-90">
                         {status === 'passed'
                             ? "Document aligns with customs standards. No major risks detected."

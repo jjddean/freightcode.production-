@@ -389,7 +389,7 @@ const DocumentsPage = () => {
                     <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
                         <div className="flex items-center">
                             <div className="flex-shrink-0">
-                                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                                <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
                                     <span className="text-blue-600 text-sm">📄</span>
                                 </div>
                             </div>
@@ -404,7 +404,7 @@ const DocumentsPage = () => {
                     <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
                         <div className="flex items-center">
                             <div className="flex-shrink-0">
-                                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                                <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
                                     <span className="text-blue-600 text-sm">✍️</span>
                                 </div>
                             </div>
@@ -421,7 +421,7 @@ const DocumentsPage = () => {
                     <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
                         <div className="flex items-center">
                             <div className="flex-shrink-0">
-                                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                                <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
                                     <span className="text-blue-600 text-sm">✅</span>
                                 </div>
                             </div>
@@ -439,7 +439,7 @@ const DocumentsPage = () => {
                     <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
                         <div className="flex items-center">
                             <div className="flex-shrink-0">
-                                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                                <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
                                     <span className="text-blue-600 text-sm">📝</span>
                                 </div>
                             </div>
@@ -884,45 +884,38 @@ function SmartUploadButton({ onParse }: { onParse: (data: any) => void }) {
             try {
                 const { askOllama, FREIGHT_PROMPT } = await import('@/lib/ollama');
 
-                const jsonStr = await askOllama(FREIGHT_PROMPT + file.name, "llama3");
+                const jsonStr = await askOllama(FREIGHT_PROMPT + file.name);
                 const result = JSON.parse(jsonStr);
 
                 toast.dismiss(toastId);
-                toast.success("Processed by Local Llama 3!");
+                toast.success("Processed by Local Ollama!");
                 onParse(result);
                 return;
             } catch (ollamaErr: any) {
-                console.warn("Ollama failed, falling back to basic mock:", ollamaErr);
-                // Silent fallback
+                console.warn("Ollama failed:", ollamaErr);
+                const errorMsg = ollamaErr.message || "Unknown Ollama error";
+
+                if (errorMsg.includes("timed out")) {
+                    toast.error("Ollama Timed Out", {
+                        description: "The AI agent is taking too long to respond. Check if Ollama is overloaded."
+                    });
+                } else if (errorMsg.includes("not found")) {
+                    toast.error("Model Missing", {
+                        description: "phi3:mini not found. Run 'ollama pull phi3:mini'"
+                    });
+                } else {
+                    toast.error("Local Processing Error", {
+                        description: errorMsg
+                    });
+                }
+
+                // Throw error so it hits the main catch block and shows toast
+                throw new Error(`Local Processing Failed: ${errorMsg}`);
             }
-
-            // 2. Fallback to Cloud Mock/Real AI
-
-            // Read file as base64
-            const fileData = await new Promise<string>((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(reader.result as string);
-                reader.onerror = reject;
-                reader.readAsDataURL(file);
-            });
-
-            const result = await parseDocument({
-                fileData: fileData,
-                fileName: file.name
-            });
-            onParse(result);
-
-            toast.dismiss(toastId);
-            if (result.confidence > 0.8) {
-                toast.success(`Data extracted for ${result.data.shipper.name}`);
-            } else {
-                toast.warning("AI confidence low - please verify fields");
-            }
-
         } catch (err: any) {
             toast.dismiss(toastId);
-            toast.error(`Cloud AI Failed: ${err.message}`);
-            console.error(err);
+            // Main catch block for high-level failures
+            console.error("Critical Processing Error:", err);
         } finally {
             setAnalyzing(false);
             if (fileInputRef.current) fileInputRef.current.value = '';

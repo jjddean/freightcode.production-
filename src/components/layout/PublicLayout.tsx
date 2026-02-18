@@ -9,7 +9,7 @@ export default function PublicLayout() {
         <>
             <Navbar />
             <MobileNavigation />
-            <main className="min-h-screen">
+            <main className="min-h-screen pt-16 pb-16 md:pb-0">
                 <Suspense fallback={<LoadingSpinner />}>
                     <Outlet />
                 </Suspense>

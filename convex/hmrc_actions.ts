@@ -1,11 +1,121 @@
 import { action } from "./_generated/server";
 import { v } from "convex/values";
 import { HMRCService } from "../src/services/hmrc/HMRCService";
+import { internal } from "./_generated/api";
 
 const HMRC_CLIENT_ID = process.env.HMRC_CLIENT_ID;
 const HMRC_CLIENT_SECRET = process.env.HMRC_CLIENT_SECRET;
-const HMRC_REDIRECT_URI = process.env.HMRC_REDIRECT_URI || "https://freightcode-dev.vercel.app/";
+const HMRC_REDIRECT_URI = process.env.HMRC_REDIRECT_URI || "http://localhost:5173/auth/hmrc/callback";
 const HMRC_ENVIRONMENT = process.env.HMRC_ENVIRONMENT || "sandbox";
+const HMRC_ACTION_TIMEOUT_MS = 8000;
+
+async function withTimeout<T>(promise: Promise<T>, label: string, timeoutMs: number = HMRC_ACTION_TIMEOUT_MS): Promise<T> {
+    let timeout: ReturnType<typeof setTimeout> | undefined;
+    try {
+        return await Promise.race([
+            promise,
+            new Promise<T>((_, reject) => {
+                timeout = setTimeout(() => reject(new Error(`${label} timed out after ${timeoutMs}ms`)), timeoutMs);
+            }),
+        ]);
+    } finally {
+        if (timeout) clearTimeout(timeout);
+    }
+}
+
+/**
+ * Generate the authorization link for the admin to connect HMRC.
+ */
+export const getHMRCAuthUrl = action({
+    args: {
+        state: v.optional(v.string()),
+    },
+    handler: async (ctx, args) => {
+        if (!HMRC_CLIENT_ID || !HMRC_CLIENT_SECRET) {
+            throw new Error("HMRC credentials not configured.");
+        }
+
+        const hmrc = HMRCService.create(HMRC_CLIENT_ID, HMRC_CLIENT_SECRET, HMRC_REDIRECT_URI, HMRC_ENVIRONMENT);
+        return hmrc.getAuthorizationUrl(args.state || "default");
+    },
+});
+
+/**
+ * Exchange the code from HMRC for tokens and save them.
+ */
+export const exchangeAuthorizationCode = action({
+    args: {
+        code: v.string(),
+    },
+    handler: async (ctx, args) => {
+        if (!HMRC_CLIENT_ID || !HMRC_CLIENT_SECRET) {
+            throw new Error("HMRC credentials not configured in environment.");
+        }
+
+        const hmrc = HMRCService.create(HMRC_CLIENT_ID, HMRC_CLIENT_SECRET, HMRC_REDIRECT_URI, HMRC_ENVIRONMENT);
+
+        try {
+            const tokens = await hmrc.getAuthorizationCodeToken(args.code);
+            const expiresAt = Date.now() + (tokens.expiresIn * 1000);
+
+            // Save to Integrations table (Centralized/Platform level if orgId is null)
+            await ctx.runMutation(internal.integrations.saveIntegration, {
+                provider: "hmrc",
+                accessToken: tokens.accessToken,
+                refreshToken: tokens.refreshToken,
+                expiresAt,
+                status: "active",
+            });
+
+            console.log("Successfully exchanged and saved HMRC tokens");
+
+            return {
+                success: true,
+                message: "HMRC account connected successfully",
+                expiresAt
+            };
+        } catch (error: any) {
+            console.error("HMRC Token Exchange Error:", error);
+            throw new Error(error.message);
+        }
+    },
+});
+
+/**
+ * Check Duty Deferment Account Balance.
+ * Uses the saved OAuth token for authentication.
+ */
+export const getDutyDeferment = action({
+    args: {
+        eori: v.string(),
+    },
+    handler: async (ctx, args) => {
+        if (!HMRC_CLIENT_ID || !HMRC_CLIENT_SECRET) {
+            throw new Error("HMRC credentials not configured.");
+        }
+
+        // 1. Look up the saved integration
+        const integration = await ctx.runQuery(internal.integrations.getIntegration, { provider: "hmrc" });
+
+        const hmrc = HMRCService.create(
+            HMRC_CLIENT_ID,
+            HMRC_CLIENT_SECRET,
+            HMRC_REDIRECT_URI,
+            HMRC_ENVIRONMENT,
+            integration?.accessToken,
+            integration?.refreshToken
+        );
+
+        try {
+            return await withTimeout(hmrc.getDutyDefermentBalance(args.eori), "HMRC duty deferment");
+        } catch (error: any) {
+            console.error("HMRC DDA Action Error:", error);
+            throw new Error(error.message);
+        }
+    },
+});
+
+// -- Other public data APIs (Client Credentials Flow) --
 
 export const searchHSCode = action({
     args: {
@@ -13,17 +123,16 @@ export const searchHSCode = action({
     },
     handler: async (ctx, args) => {
         if (!HMRC_CLIENT_ID || !HMRC_CLIENT_SECRET) {
-            console.log("HMRC credentials not configured, returning empty search");
             return [];
         }
 
         const hmrc = HMRCService.create(HMRC_CLIENT_ID, HMRC_CLIENT_SECRET, HMRC_REDIRECT_URI, HMRC_ENVIRONMENT);
 
         try {
-            return await hmrc.searchCommodities(args.query);
+            return await withTimeout(hmrc.searchCommodities(args.query), "HMRC HS search");
         } catch (error: any) {
-            console.error("HMRC Search Action Error:", error);
-            throw new Error(error.message);
+            console.warn("HMRC Search (Public):", error.message);
+            return [];
         }
     },
 });
@@ -31,29 +140,20 @@ export const searchHSCode = action({
 export const validateHSCode = action({
     args: {
         code: v.string(),
-        countryCode: v.optional(v.string()), // e.g. "CN"
+        countryCode: v.optional(v.string()),
     },
     handler: async (ctx, args) => {
         if (!HMRC_CLIENT_ID || !HMRC_CLIENT_SECRET) {
-            console.log("HMRC credentials not configured, returning mock validation");
-            return {
-                valid: true,
-                description: "MOCK: Validated HS Code via HMRC Sandbox",
-                declarable: true,
-                measures: [
-                    { dutyRate: "6.50 %", measureType: "Third country duty" },
-                    { dutyRate: "20.00 %", measureType: "Value added tax" }
-                ]
-            };
+            throw new Error("HMRC credentials not configured.");
         }
 
         const hmrc = HMRCService.create(HMRC_CLIENT_ID, HMRC_CLIENT_SECRET, HMRC_REDIRECT_URI, HMRC_ENVIRONMENT);
 
         try {
-            const validation = await hmrc.validateCommodityCode(args.code);
+            const validation = await withTimeout(hmrc.validateCommodityCode(args.code), "HMRC HS validation");
 
             if (validation.valid) {
-                const measures = await hmrc.getMeasures(args.code, args.countryCode);
+                const measures = await withTimeout(hmrc.getMeasures(args.code, args.countryCode), "HMRC measures lookup");
                 return {
                     ...validation,
                     measures
@@ -74,20 +174,15 @@ export const validateEORI = action({
     },
     handler: async (ctx, args) => {
         if (!HMRC_CLIENT_ID || !HMRC_CLIENT_SECRET) {
-            return {
-                valid: true,
-                companyName: "MOCK: Global Logistics Ltd",
-                address: "10 Downing Street, London",
-                eori: args.eori
-            };
+            throw new Error("HMRC credentials not configured.");
         }
 
         const hmrc = HMRCService.create(HMRC_CLIENT_ID, HMRC_CLIENT_SECRET, HMRC_REDIRECT_URI, HMRC_ENVIRONMENT);
 
         try {
-            return await hmrc.validateEORI(args.eori);
+            return await withTimeout(hmrc.validateEORI(args.eori), "HMRC EORI validation");
         } catch (error: any) {
-            console.error("HMRC EORI Action Error:", error);
+            console.error("HMRC EORI Error:", error);
             throw new Error(error.message);
         }
     },
@@ -99,47 +194,15 @@ export const getENSStatus = action({
     },
     handler: async (ctx, args) => {
         if (!HMRC_CLIENT_ID || !HMRC_CLIENT_SECRET) {
-            return {
-                success: true,
-                status: "ACCEPTED",
-                receivedDateTime: new Date().toISOString(),
-                mrn: args.mrn
-            };
+            throw new Error("HMRC credentials not configured.");
         }
 
         const hmrc = HMRCService.create(HMRC_CLIENT_ID, HMRC_CLIENT_SECRET, HMRC_REDIRECT_URI, HMRC_ENVIRONMENT);
 
         try {
-            return await hmrc.checkENSStatus(args.mrn);
+            return await withTimeout(hmrc.checkENSStatus(args.mrn), "HMRC ENS status");
         } catch (error: any) {
-            console.error("HMRC ENS Action Error:", error);
-            throw new Error(error.message);
-        }
-    },
-});
-
-export const getDutyDeferment = action({
-    args: {
-        eori: v.string(),
-    },
-    handler: async (ctx, args) => {
-        if (!HMRC_CLIENT_ID || !HMRC_CLIENT_SECRET) {
-            return {
-                success: true,
-                accountNumber: "MOCK-DDA-9988",
-                creditLimit: 25000,
-                availableCredit: 4500.00,
-                currency: "GBP",
-                status: "ACTIVE"
-            };
-        }
-
-        const hmrc = HMRCService.create(HMRC_CLIENT_ID, HMRC_CLIENT_SECRET, HMRC_REDIRECT_URI, HMRC_ENVIRONMENT);
-
-        try {
-            return await hmrc.getDutyDefermentBalance(args.eori);
-        } catch (error: any) {
-            console.error("HMRC DDA Action Error:", error);
+            console.error("HMRC ENS Error:", error);
             throw new Error(error.message);
         }
     },

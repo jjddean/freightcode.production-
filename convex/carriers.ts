@@ -48,14 +48,15 @@ export const fetchCarrierRates = action({
         }),
     },
     handler: async (ctx, args): Promise<CarrierRate[]> => {
-        const SHIPPO_TOKEN = process.env.SHIPPO_TOKEN;
-        const REACHSHIP_KEY = process.env.REACHSHIP_KEY;
+        const SHIPPO_API_KEY = process.env.SHIPPO_API_KEY;
+        const REACHSHIP_CLIENT_ID = process.env.REACHSHIP_CLIENT_ID;
+        const REACHSHIP_CLIENT_SECRET = process.env.REACHSHIP_CLIENT_SECRET;
         const EASYSHIP_TOKEN = process.env.EASYSHIP_TOKEN;
 
         const allRates: CarrierRate[] = [];
 
         // 1. Fetch from Shippo
-        if (SHIPPO_TOKEN) {
+        if (SHIPPO_API_KEY) {
             try {
                 const response = await axios.post(
                     "https://api.goshippo.com/shipments/",
@@ -90,7 +91,7 @@ export const fetchCarrierRates = action({
                     },
                     {
                         headers: {
-                            Authorization: `ShippoToken ${SHIPPO_TOKEN}`,
+                            Authorization: `ShippoToken ${SHIPPO_API_KEY}`,
                             "Content-Type": "application/json",
                         },
                     }
@@ -123,62 +124,78 @@ export const fetchCarrierRates = action({
         }
 
         // 2. Fetch from ReachShip
-        if (REACHSHIP_KEY) {
+        if (REACHSHIP_CLIENT_ID && REACHSHIP_CLIENT_SECRET) {
             try {
-                const response = await axios.post(
-                    "https://api.reachship.com/v1/quotes",
-                    {
-                        origin: {
-                            address: args.origin.street1,
-                            city: args.origin.city,
-                            state: args.origin.state,
-                            postal_code: args.origin.zip,
-                            country: args.origin.country,
-                        },
-                        destination: {
-                            address: args.destination.street1,
-                            city: args.destination.city,
-                            state: args.destination.state,
-                            postal_code: args.destination.zip,
-                            country: args.destination.country,
-                        },
-                        parcel: {
-                            length: args.parcel.length,
-                            width: args.parcel.width,
-                            height: args.parcel.height,
-                            weight: args.parcel.weight,
-                            units: args.parcel.distance_unit === "in" ? "imperial" : "metric",
-                        },
-                    },
-                    {
-                        headers: {
-                            Authorization: `Bearer ${REACHSHIP_KEY}`,
-                            "Content-Type": "application/json",
-                        },
-                    }
+                // ReachShip requires OAuth token exchange
+                const authBody = new URLSearchParams();
+                authBody.append('grant_type', 'client_credentials');
+                authBody.append('client_id', REACHSHIP_CLIENT_ID);
+                authBody.append('client_secret', REACHSHIP_CLIENT_SECRET);
+
+                const authResponse = await axios.post(
+                    "https://api.reachship.com/sandbox/v1/oauth/token",
+                    authBody,
+                    { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
                 );
 
-                const reachShipRates = (response.data.quotes || []).map((quote: any) => {
-                    const cost = quote.total_cost;
-                    return {
-                        carrierId: `reachship-${Date.now()}-${Math.random()}`,
-                        carrier: quote.carrier,
-                        service: quote.service,
-                        cost: cost,
-                        amount: cost,
-                        currency: quote.currency || "USD",
-                        transit_time: quote.transit_time,
-                        transitTime: quote.transit_time,
-                        delivery_date: quote.delivery_date,
-                        provider: "reachship",
-                        price: {
+                const token = authResponse.data.access_token;
+
+                if (token) {
+                    const response = await axios.post(
+                        "https://api.reachship.com/sandbox/v1/quotes",
+                        {
+                            origin: {
+                                address: args.origin.street1,
+                                city: args.origin.city,
+                                state: args.origin.state,
+                                postal_code: args.origin.zip,
+                                country: args.origin.country,
+                            },
+                            destination: {
+                                address: args.destination.street1,
+                                city: args.destination.city,
+                                state: args.destination.state,
+                                postal_code: args.destination.zip,
+                                country: args.destination.country,
+                            },
+                            parcel: {
+                                length: args.parcel.length,
+                                width: args.parcel.width,
+                                height: args.parcel.height,
+                                weight: args.parcel.weight,
+                                units: args.parcel.distance_unit === "in" ? "imperial" : "metric",
+                            },
+                        },
+                        {
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                                "Content-Type": "application/json",
+                            },
+                        }
+                    );
+
+                    const reachShipRates = (response.data.quotes || []).map((quote: any) => {
+                        const cost = quote.total_cost;
+                        return {
+                            carrierId: `reachship-${Date.now()}-${Math.random()}`,
+                            carrier: quote.carrier,
+                            service: quote.service,
+                            cost: cost,
                             amount: cost,
                             currency: quote.currency || "USD",
-                            lineItems: generateMockLineItems(args.origin.city, args.destination.city),
-                        },
-                    };
-                });
-                allRates.push(...reachShipRates);
+                            transit_time: quote.transit_time,
+                            transitTime: quote.transit_time,
+                            delivery_date: quote.delivery_date,
+                            provider: "reachship",
+                            price: {
+                                amount: cost,
+                                currency: quote.currency || "USD",
+                                lineItems: generateMockLineItems(args.origin.city, args.destination.city),
+                            },
+                        };
+                    });
+                    allRates.push(...reachShipRates);
+                }
             } catch (e: any) {
                 console.error("ReachShip fetch failed:", e.response?.data || e.message);
             }
@@ -217,6 +234,7 @@ export const fetchCarrierRates = action({
                         headers: {
                             Authorization: `Bearer ${EASYSHIP_TOKEN}`,
                             "Content-Type": "application/json",
+                            "Easyship-API-Version": "2024-09",
                         },
                     }
                 );

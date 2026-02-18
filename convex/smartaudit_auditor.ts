@@ -1,3 +1,4 @@
+"use node";
 /**
  * SMARTAUDIT AI: THE MODULAR BRAIN
  * 
@@ -21,10 +22,25 @@ export interface SmartAuditResult {
 export class SmartAuditAuditor {
     private apiKey: string;
     private model: string = "gpt-4o-mini";
+    private ollamaTimeoutMs: number;
 
-    constructor(apiKey: string) {
-        if (!apiKey) throw new Error("SmartAuditAuditor requires an OpenAI API Key");
-        this.apiKey = apiKey;
+    constructor(apiKey: string | undefined) {
+        // No longer strictly required if using local mode (Ollama)
+        this.apiKey = apiKey || "placeholder";
+        this.ollamaTimeoutMs = Number(process.env.OLLAMA_TIMEOUT_MS || 180000);
+    }
+
+    private getOllamaHeaders(ollamaUrl: string): Record<string, string> {
+        const headers: Record<string, string> = { "Content-Type": "application/json" };
+        try {
+            const hostname = new URL(ollamaUrl).hostname;
+            if (hostname.endsWith(".ngrok-free.app") || hostname.endsWith(".ngrok.app")) {
+                headers["ngrok-skip-browser-warning"] = "1";
+            }
+        } catch {
+            // Ignore invalid URL parsing and use default headers.
+        }
+        return headers;
     }
 
     /**
@@ -56,13 +72,20 @@ export class SmartAuditAuditor {
         "incoterms": "string",
         "value": number,
         "ensMRN": "string (optional)",
-        "eoriNumber": "string (optional)",
-        ...normalized fields... 
+        "eoriNumber": "string (optional)"
       },
       "correctedData": { ...suggested fixes for the fields... }
     }`;
 
+        // Fallback to Ollama if no API Key is provided
+        if (!this.apiKey || this.apiKey.includes("placeholder")) {
+            return await this.auditWithOllama(rawText, docType, systemPrompt);
+        }
+
         try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 60000); // 60s timeout
+
             const response = await fetch("https://api.openai.com/v1/chat/completions", {
                 method: "POST",
                 headers: {
@@ -80,7 +103,10 @@ export class SmartAuditAuditor {
                     ],
                     response_format: { type: "json_object" },
                 }),
+                signal: controller.signal,
             });
+
+            clearTimeout(timeoutId);
 
             if (!response.ok) {
                 const error = await response.json();
@@ -92,18 +118,61 @@ export class SmartAuditAuditor {
 
             return content as SmartAuditResult;
         } catch (error: any) {
+            if (error.name === 'AbortError') {
+                throw new Error("SmartAudit: OpenAI request timed out (60s).");
+            }
             console.error("SmartAudit Audit Error:", error);
-            return {
-                status: "flagged",
-                type: "audit_result",
-                riskChecklist: [{
+            throw error;
+        }
+    }
+
+    /**
+     * Local AI Fallback using Ollama
+     */
+    private async auditWithOllama(rawText: string, docType: string, systemPrompt: string): Promise<SmartAuditResult> {
+        const ollamaUrl = (typeof process !== "undefined" && process.env.OLLAMA_HOST) || "http://localhost:11434";
+        console.log(`SmartAudit: Attempting local audit via ${ollamaUrl}/api/generate`);
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), this.ollamaTimeoutMs);
+
+        try {
+            const response = await fetch(`${ollamaUrl}/api/generate`, {
+                method: "POST",
+                headers: this.getOllamaHeaders(ollamaUrl),
+                body: JSON.stringify({
+                    model: "phi3:mini",
+                    prompt: `${systemPrompt}\n\nAudit this document (${docType}):\n\nContent:\n${rawText.substring(0, 5000)}\n\nIMPORTANT: Return ONLY the raw JSON object.`,
+                    stream: false,
+                    format: "json"
+                }),
+                signal: controller.signal,
+            });
+
+            if (!response.ok) {
+                throw new Error(`Ollama Error: ${response.statusText}`);
+            }
+
+            const result = await response.json();
+            const content = JSON.parse(result.response);
+
+            if (content.riskChecklist) {
+                content.riskChecklist.push({
                     type: "system",
-                    severity: "high",
-                    message: `Internal processing error: ${error.message}`,
-                }],
-                extractedData: {},
-                correctedData: {},
-            };
+                    severity: "low",
+                    message: "AUDIT BRAIN: Processed locally via Ollama."
+                });
+            }
+
+            return content as SmartAuditResult;
+        } catch (error: any) {
+            if (error.name === 'AbortError') {
+                throw new Error(`SmartAudit: Local Ollama request timed out (${Math.floor(this.ollamaTimeoutMs / 1000)}s).`);
+            }
+            console.error("Ollama Local Brain Error:", error);
+            throw new Error(`Local Brain Offline: ${error.message}. Please ensure Ollama is running at ${ollamaUrl}`);
+        } finally {
+            clearTimeout(timeoutId);
         }
     }
 
@@ -112,6 +181,35 @@ export class SmartAuditAuditor {
      * Generates formatted document text based on audit results.
      */
     async generateCorrectedText(originalText: string, correctedData: any): Promise<string> {
+        // Fallback for correction
+        if (!this.apiKey || this.apiKey.includes("placeholder")) {
+            const ollamaUrl = (typeof process !== "undefined" && process.env.OLLAMA_HOST) || "http://localhost:11434";
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), this.ollamaTimeoutMs);
+
+            try {
+                const response = await fetch(`${ollamaUrl}/api/generate`, {
+                    method: "POST",
+                    headers: this.getOllamaHeaders(ollamaUrl),
+                    body: JSON.stringify({
+                        model: "phi3:mini",
+                        prompt: `You are a Logistics Document Specialist. Take the original document and the corrected data provided, and generate a clean, professional, and compliant document text block. Use a structured, tabular layout for the itemized list.\n\nOriginal: ${originalText}\n\nCorrected Data: ${JSON.stringify(correctedData)}`,
+                        stream: false
+                    }),
+                    signal: controller.signal,
+                });
+                const result = await response.json();
+                return result.response;
+            } catch (e: any) {
+                if (e.name === "AbortError") {
+                    throw new Error(`Correction Generation timed out (${Math.floor(this.ollamaTimeoutMs / 1000)}s).`);
+                }
+                throw new Error(`Correction Generation Failed: ${e.message}`);
+            } finally {
+                clearTimeout(timeoutId);
+            }
+        }
+
         try {
             const response = await fetch("https://api.openai.com/v1/chat/completions", {
                 method: "POST",

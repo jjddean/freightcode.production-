@@ -119,47 +119,8 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
   const [originOpen, setOriginOpen] = useState(false);
   const [destOpen, setDestOpen] = useState(false);
 
-  const totalSteps = 5; // Added Summary Step (Pre-Rates)
+  const totalSteps = 5; // Restored Step 5 (Live Rates)
 
-  const rateRequest = React.useMemo<RateRequest>(() => ({
-    origin: {
-      street1: '123 Business St',
-      city: formData.origin.split(', ')[0] || 'London',
-      state: '',
-      zip: 'SW1A 1AA',
-      country: 'GB',
-    },
-    destination: {
-      street1: '456 Commerce Ave',
-      city: formData.destination.split(', ')[0] || 'Hamburg',
-      state: '',
-      zip: '20095',
-      country: formData.destination.includes('DE') ? 'DE' :
-        formData.destination.includes('US') ? 'US' :
-          formData.destination.includes('CN') ? 'CN' : 'DE',
-    },
-    parcel: {
-      length: parseFloat(formData.dimensions.length) || 40,
-      width: parseFloat(formData.dimensions.width) || 30,
-      height: parseFloat(formData.dimensions.height) || 20,
-      distance_unit: 'cm',
-      weight: parseFloat(formData.weight) || 100,
-      mass_unit: 'kg',
-    },
-  }), [formData.origin, formData.destination, formData.dimensions, formData.weight]);
-
-  const handleRateSelect = (rate: CarrierRate) => {
-    setSelectedRate(rate);
-  };
-
-  const handleBookRate = React.useCallback((rate: CarrierRate, allRates?: CarrierRate[]) => {
-    setSelectedRate(rate);
-    onSubmit({
-      ...formData,
-      selectedRate: rate,
-      rates: allRates || formData.rates || []
-    });
-  }, [formData, onSubmit]);
 
   const handleInputChange = (field: string, value: string) => {
     if (field.includes('.')) {
@@ -192,10 +153,7 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
       nextStep();
       return;
     }
-    onSubmit({
-      ...formData,
-      selectedRate: selectedRate || undefined
-    });
+    onSubmit(formData);
   };
 
   const validateStep = (step: number) => {
@@ -632,23 +590,50 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
         );
 
       case 5:
-        return (
-          <div className="space-y-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Live Shipping Rates</h3>
-            <p className="text-sm text-gray-600 mb-6">
-              Compare live rates from multiple carriers for your shipment.
-            </p>
+        const rateRequest: RateRequest = {
+          origin: {
+            street1: "Main St",
+            city: formData.origin.split(',')[0].trim(),
+            state: "",
+            zip: "SW1A 1AA",
+            country: formData.origin.toLowerCase().includes('uk') || formData.origin.toLowerCase().includes('london') ? 'GB' : 'CN',
+          },
+          destination: {
+            street1: "Port St",
+            city: formData.destination.split(',')[0].trim(),
+            state: "",
+            zip: "20095",
+            country: formData.destination.toLowerCase().includes('china') || formData.destination.toLowerCase().includes('shanghai') ? 'CN' : 'DE',
+          },
+          parcel: {
+            length: parseFloat(formData.dimensions.length) || 10,
+            width: parseFloat(formData.dimensions.width) || 10,
+            height: parseFloat(formData.dimensions.height) || 10,
+            weight: parseFloat(formData.weight) || 1,
+            distance_unit: 'cm',
+            mass_unit: 'kg',
+          }
+        };
 
+        return (
+          <div className="space-y-4">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">Select Shipping Rate</h3>
             <LiveRateComparison
               rateRequest={rateRequest}
-              onRateSelect={handleRateSelect}
-              onBook={handleBookRate}
+              onRateSelect={(rate) => {
+                setFormData(prev => ({ ...prev, selectedRate: rate }));
+              }}
               onRatesFetched={(rates) => {
                 setFormData(prev => ({ ...prev, rates }));
+              }}
+              onBook={(rate) => {
+                setFormData(prev => ({ ...prev, selectedRate: rate }));
+                onSubmit({ ...formData, selectedRate: rate });
               }}
             />
           </div>
         );
+
 
       default:
         return null;
@@ -687,11 +672,9 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
         </div>
 
         <div className="flex space-x-3">
-          {currentStep < totalSteps && (
-            <Button type="button" onClick={nextStep}>
-              {currentStep === 4 ? 'Submit Quote Request' : 'Next'}
-            </Button>
-          )}
+          <Button type="submit">
+            {currentStep === totalSteps ? 'Complete Quote' : currentStep === 4 ? 'View Rates' : 'Next'}
+          </Button>
         </div>
       </div>
     </form>

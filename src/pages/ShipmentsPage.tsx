@@ -57,7 +57,6 @@ import {
   DialogFooter
 } from "@/components/ui/dialog";
 
-import { ShipmentMap } from '@/components/ui/ShipMapFinal';
 import { LiveVesselMap } from '@/components/ui/live-vessel-map';
 
 const ShipmentsPage = () => {
@@ -474,7 +473,6 @@ const ShipmentsPage = () => {
             setIsMapExpanded((v) => !v);
             window.scrollTo({ top: 0, behavior: "smooth" });
           }}
-          backgroundComponent={<ShipmentMap shipments={filteredShipments.active} isExpanded={isMapExpanded} />}
         />
 
         {/* Action Toolbar */}

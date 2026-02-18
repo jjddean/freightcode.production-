@@ -5,7 +5,25 @@ export interface OllamaResponse {
     done: boolean;
 }
 
-export async function askOllama(prompt: string, model: string = "llama3:8b", format: string | undefined = "json"): Promise<string> {
+function getOllamaHeaders(ollamaUrl: string): Record<string, string> {
+    const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+    };
+    try {
+        const hostname = new URL(ollamaUrl).hostname;
+        if (hostname.endsWith(".ngrok-free.app") || hostname.endsWith(".ngrok.app")) {
+            headers["ngrok-skip-browser-warning"] = "1";
+        }
+    } catch {
+        // Ignore invalid URL parsing and use default headers.
+    }
+    return headers;
+}
+
+export async function askOllama(prompt: string, model?: string, format: string | undefined = "json"): Promise<string> {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 60000); // 60s timeout
+
     try {
         const body: any = {
             model,
@@ -15,23 +33,35 @@ export async function askOllama(prompt: string, model: string = "llama3:8b", for
         if (format) body.format = format;
 
         const OLLAMA_URL = import.meta.env.VITE_OLLAMA_URL || "http://localhost:11434";
+        const OLLAMA_MODEL = import.meta.env.VITE_OLLAMA_MODEL || "phi3:mini";
+
         const response = await fetch(`${OLLAMA_URL}/api/generate`, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(body),
+            headers: getOllamaHeaders(OLLAMA_URL),
+            body: JSON.stringify({
+                ...body,
+                model: body.model || OLLAMA_MODEL
+            }),
+            signal: controller.signal,
         });
 
         if (!response.ok) {
-            throw new Error("Ollama connection failed. Ensure OLLAMA_ORIGINS='*' is set.");
+            if (response.status === 404) {
+                throw new Error(`Model '${body.model || OLLAMA_MODEL}' not found. Try 'ollama pull ${body.model || OLLAMA_MODEL}'`);
+            }
+            throw new Error(`Ollama failed (Status ${response.status}).`);
         }
 
         const data = await response.json();
         return data.response;
-    } catch (error) {
+    } catch (error: any) {
+        if (error.name === 'AbortError') {
+            throw new Error("Ollama request timed out (60s). Check if service is responsive.");
+        }
         console.error("Ollama Error:", error);
-        throw error;
+        throw new Error(`Ollama connection failed: ${error.message}. Check if Ollama is running at http://localhost:11434`);
+    } finally {
+        clearTimeout(timeoutId);
     }
 }
 

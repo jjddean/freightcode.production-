@@ -1,3 +1,4 @@
+"use node";
 import { action } from "./_generated/server";
 import { v } from "convex/values";
 
@@ -8,6 +9,20 @@ import { v } from "convex/values";
 
 // Check if OpenAI API key is configured
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+const OLLAMA_TIMEOUT_MS = Number(process.env.OLLAMA_TIMEOUT_MS || 180000);
+
+function getOllamaHeaders(ollamaUrl: string): Record<string, string> {
+    const headers: Record<string, string> = { "Content-Type": "application/json" };
+    try {
+        const hostname = new URL(ollamaUrl).hostname;
+        if (hostname.endsWith(".ngrok-free.app") || hostname.endsWith(".ngrok.app")) {
+            headers["ngrok-skip-browser-warning"] = "1";
+        }
+    } catch {
+        // Ignore invalid URL parsing and use default headers.
+    }
+    return headers;
+}
 
 export const parseDocument = action({
     args: {
@@ -17,19 +32,44 @@ export const parseDocument = action({
     handler: async (ctx, args) => {
         console.log(`Analyzing document: ${args.fileName}`);
 
-        // If OpenAI is configured, use real AI parsing
-        if (OPENAI_API_KEY) {
-            try {
-                return await parseWithOpenAI(args.fileData, args.fileName);
-            } catch (error) {
-                console.error("OpenAI parsing failed, falling back to mock:", error);
-                return getMockData(args.fileName);
-            }
-        }
+        const ollamaUrl = process.env.OLLAMA_HOST || "http://localhost:11434";
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), OLLAMA_TIMEOUT_MS);
 
-        // Fallback to mock data
-        console.log("No OpenAI API key configured, using mock data");
-        return getMockData(args.fileName);
+        try {
+            const systemPrompt = `You are an AI that extracts structured data from shipping documents. 
+            Return ONLY a JSON object: 
+            {
+                "type": "bill_of_lading" | "air_waybill" | "commercial_invoice",
+                "confidence": number,
+                "data": { ... }
+            }`;
+
+            const response = await fetch(`${ollamaUrl}/api/generate`, {
+                method: "POST",
+                headers: getOllamaHeaders(ollamaUrl),
+                body: JSON.stringify({
+                    model: "phi3:mini",
+                    prompt: `${systemPrompt}\n\nParse this shipping document:\nFilename: ${args.fileName}\nContent: ${args.fileData.substring(0, 5000)}`,
+                    stream: false,
+                    format: "json"
+                }),
+                signal: controller.signal,
+            });
+
+            if (!response.ok) throw new Error(`Ollama failed: ${response.statusText}`);
+
+            const result = await response.json();
+            return JSON.parse(result.response);
+        } catch (error: any) {
+            if (error.name === 'AbortError') {
+                throw new Error(`Ollama request timed out (${Math.floor(OLLAMA_TIMEOUT_MS / 1000)}s).`);
+            }
+            console.error("Ollama parsing failed:", error);
+            throw new Error(`Document parsing failed. Ensure Ollama is running at ${ollamaUrl}`);
+        } finally {
+            clearTimeout(timeoutId);
+        }
     },
 });
 
@@ -92,105 +132,17 @@ If information is missing, use null. Be accurate and extract only what you see.`
     return JSON.parse(content);
 }
 
-// Mock data fallback
-function getMockData(fileName: string): any {
-    // Generate different mock data based on filename hints
-    const lowerName = fileName.toLowerCase();
 
-    if (lowerName.includes('invoice')) {
-        return {
-            type: "commercial_invoice",
-            confidence: 0.92,
-            data: {
-                shipper: {
-                    name: "Shanghai Export Co.",
-                    address: "789 Trade Rd, Shanghai, CN",
-                },
-                consignee: {
-                    name: "Import Distributors LLC",
-                    address: "321 Commerce Blvd, Los Angeles, CA",
-                },
-                cargoDetails: {
-                    description: "Textile Products - Cotton Fabric",
-                    weight: "2500 kg",
-                    dimensions: "150x100x120 cm",
-                    value: "28000 USD",
-                },
-                routeDetails: {
-                    origin: "Shanghai",
-                    destination: "Los Angeles",
-                },
-                documentNumber: `INV-${Date.now()}`,
-                date: new Date().toISOString().split('T')[0],
-            },
-        };
-    }
-
-    if (lowerName.includes('air')) {
-        return {
-            type: "air_waybill",
-            confidence: 0.94,
-            data: {
-                shipper: {
-                    name: "Express Cargo Ltd",
-                    address: "Dubai Logistics Park, Dubai, AE",
-                },
-                consignee: {
-                    name: "Fast Delivery Inc",
-                    address: "555 Airport Rd, Miami, FL",
-                },
-                cargoDetails: {
-                    description: "Medical Equipment - Diagnostic Devices",
-                    weight: "350 kg",
-                    dimensions: "80x60x50 cm",
-                    value: "125000 USD",
-                },
-                routeDetails: {
-                    origin: "Dubai",
-                    destination: "Miami",
-                },
-                documentNumber: `AWB-${Date.now()}`,
-                date: new Date().toISOString().split('T')[0],
-            },
-        };
-    }
-
-    // Default: Bill of Lading
-    return {
-        type: "bill_of_lading",
-        confidence: 0.95,
-        data: {
-            shipper: {
-                name: "Global Electronics Ltd",
-                address: "123 Tech Park, Shenzhen, CN",
-            },
-            consignee: {
-                name: "TechRetail USA",
-                address: "456 Market St, San Francisco, CA",
-            },
-            cargoDetails: {
-                description: "Consumer Electronics - Laptops",
-                weight: "1500 kg",
-                dimensions: "120x80x100 cm",
-                value: "45000 USD",
-            },
-            routeDetails: {
-                origin: "Shenzhen",
-                destination: "Oakland",
-            },
-            documentNumber: `BOL-${Date.now()}`,
-            date: new Date().toISOString().split('T')[0],
-        },
-    };
-}
 
 // Helper action to check if AI is configured
 export const checkAIStatus = action({
     args: {},
     handler: async () => {
+        const ollamaUrl = process.env.OLLAMA_HOST || "http://localhost:11434";
         return {
-            configured: !!OPENAI_API_KEY,
-            provider: OPENAI_API_KEY ? "OpenAI GPT-4" : "Mock Data",
+            configured: true,
+            provider: "Ollama (phi3:mini)",
+            endpoint: ollamaUrl
         };
     },
 });
@@ -198,51 +150,6 @@ export const checkAIStatus = action({
 export const generateAdvisory = action({
     args: { prompt: v.string() },
     handler: async (ctx, args) => {
-        console.log("Generating advisory for prompt:", args.prompt);
-
-        // Check for OpenAI key
-        if (OPENAI_API_KEY) {
-            try {
-                const response = await fetch("https://api.openai.com/v1/chat/completions", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${OPENAI_API_KEY}`,
-                    },
-                    body: JSON.stringify({
-                        model: "gpt-4o",
-                        messages: [
-                            {
-                                role: "system",
-                                content: `You are a global logistics risk analyst. 
-                                Provide a JSON response with:
-                                {
-                                  "score": number (0-100),
-                                  "text": "short prescriptive advisory"
-                                }`
-                            },
-                            { role: "user", content: args.prompt }
-                        ],
-                        response_format: { type: "json_object" }
-                    }),
-                });
-                if (response.ok) {
-                    const result = await response.json();
-                    const content = JSON.parse(result.choices[0].message.content);
-                    return {
-                        score: content.score || 75,
-                        text: content.text || "Advisory generated."
-                    };
-                }
-            } catch (e) {
-                console.error("OpenAI error in advisory:", e);
-            }
-        }
-
-        // Mock Fallback
-        return {
-            score: 78,
-            text: "Advisory: Transit through high-risk zones detected. Suggest rerouting via alternative verified safe corridors. Monitor local alerts for potential disruptions."
-        };
+        throw new Error("Advisory generation requires OpenAI. Local path not yet implemented.");
     }
 });

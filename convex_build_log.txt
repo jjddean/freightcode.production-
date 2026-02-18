@@ -1,2 +1,0 @@
-convex/docmate.ts(6,10): error TS2440: Import declaration conflicts with local declaration of 'TextractExtractor'.
-convex/docmate.ts(6,29): error TS2440: Import declaration conflicts with local declaration of 'DocumentExtractionResult'.

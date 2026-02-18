@@ -47,13 +47,8 @@ export function AIAssistant() {
             try {
                 const mod = await import('@/lib/ollama');
                 askOllama = mod.askOllama;
-            } catch (e) {
-                // Fallback Mock
-                setTimeout(() => {
-                    setMessages(prev => [...prev, { role: 'assistant', content: "I'm in 'Mock Mode' because I couldn't reach your Local Ollama. In a real app, I would tell you about shipment SH-1234." }]);
-                    setLoading(false);
-                }, 1000);
-                return;
+            } catch (e: any) {
+                throw new Error(`Assistant initialization failed: ${e?.message || "Ollama helper unavailable."}`);
             }
 
             // Construct Context
@@ -67,7 +62,7 @@ Answer briefly and professionally.
 `;
 
             // Pass undefined for format to allow free text (not JSON)
-            const response = await askOllama(contextPrompt, "llama3:8b", undefined);
+            const response = await askOllama(contextPrompt, undefined, undefined);
 
             let displayText = response;
             // Attempt to clean up if it still returns JSON by accident

@@ -27,8 +27,8 @@ const CompliancePage = () => {
   const [lastKycStatus, setLastKycStatus] = useState<string | null>(null);
 
   useEffect(() => {
-    if (kycStatus !== undefined) {
-      setLastKycStatus(kycStatus?.status ?? 'pending');
+    if (kycStatus?.status) {
+      setLastKycStatus(kycStatus.status);
     }
   }, [kycStatus]);
 
@@ -38,8 +38,12 @@ const CompliancePage = () => {
   const [isKycOpen, setIsKycOpen] = React.useState(false);
 
   // Derive status UI from real data
-  // If undefined (loading), verify if we have stale data. If not, default to 'loading' to avoid incorrect Action Required.
-  const currentStatus = kycStatus?.status ?? (lastKycStatus ?? 'loading');
+  // If undefined (loading Convex query), verify if we have stale data. If not, default to 'loading'.
+  // IF NULL (query finished, no record), it means 'pending' (ACTION REQUIRED).
+  const currentStatus = kycStatus === undefined
+    ? (lastKycStatus ?? 'loading')
+    : (kycStatus?.status ?? 'pending');
+
   const isVerified = currentStatus === 'verified';
 
 

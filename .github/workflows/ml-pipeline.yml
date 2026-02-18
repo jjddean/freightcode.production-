@@ -1,0 +1,38 @@
+name: ML Training Pipeline
+
+on:
+  push:
+    paths:
+      - 'ml/**'
+  workflow_dispatch:
+  schedule:
+    - cron: '0 2 * * *'  # Retrain nightly at 2 AM
+
+jobs:
+  train-models:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install -r ml/requirements.txt
+      
+      - name: Train all models
+        run: |
+          python ml/scripts/train_all.py
+      
+      - name: Test models
+        run: |
+          python ml/scripts/test_models.py
+      
+      - name: Upload model artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ml-models
+          path: ml/models/*.joblib

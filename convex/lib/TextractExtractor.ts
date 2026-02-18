@@ -11,9 +11,11 @@ export interface DocumentExtractionResult {
 
 export class TextractExtractor {
     private client: TextractClient;
+    private textractTimeoutMs: number;
 
     constructor(region: string = process.env.AWS_REGION || "us-east-1") {
         console.log("TextractExtractor: Initializing with Region:", region);
+        this.textractTimeoutMs = Number(process.env.TEXTRACT_TIMEOUT_MS || 60000);
 
         this.client = new TextractClient({
             region,
@@ -32,30 +34,35 @@ export class TextractExtractor {
     ): Promise<DocumentExtractionResult> {
         console.log("TextractExtractor: extractDocument started. Bytes length:", documentBytes.length);
 
-        // TEMPORARY: Back to Mock mode until AWS billing/subscription is resolved.
-        const USE_MOCK = true;
-        if (USE_MOCK) {
-            console.log("TextractExtractor: Using MOCK data (USE_MOCK=true)");
-            return {
-                documentType: "commercial_invoice",
-                rawText: "MOCK INVOICE\nInvoice Number: INV-2024-001\nDate: 2024-02-14\nTotal: $1,250.00\n\nItems:\n1. Widget A - $500\n2. Widget B - $750",
-                fields: [
-                    { key: "Invoice Number", value: "INV-2024-001", confidence: 100 },
-                    { key: "Date", value: "2024-02-14", confidence: 100 },
-                    { key: "Total", value: "$1,250.00", confidence: 100 }
-                ],
-                tables: [],
-                confidence: 0.99
-            };
+        // Use live AWS Textract if keys are present
+        const hasKeys = process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY;
+        const buf = Buffer.from(documentBytes);
+
+        console.log("TextractExtractor: Buffer prepared. Size:", buf.length, "bytes");
+        if (buf.length > 0) {
+            console.log("TextractExtractor: First bytes:", buf.slice(0, 10).toString('hex'));
+        }
+
+        if (!hasKeys) {
+            throw new Error("AWS Textract Keys missing. Live extraction required.");
         }
 
         try {
             const command = new AnalyzeDocumentCommand({
-                Document: { Bytes: documentBytes },
+                Document: { Bytes: Buffer.from(documentBytes) },
                 FeatureTypes: [FeatureType.TABLES, FeatureType.FORMS],
             });
 
-            const response = await this.client.send(command);
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), this.textractTimeoutMs);
+
+            const response = await (async () => {
+                try {
+                    return await this.client.send(command, { abortSignal: controller.signal });
+                } finally {
+                    clearTimeout(timeoutId);
+                }
+            })();
 
             // Extract raw text
             const rawText = this.extractRawText(response.Blocks || []);
@@ -79,9 +86,13 @@ export class TextractExtractor {
                 tables,
                 confidence,
             };
-        } catch (error) {
+        } catch (error: any) {
+            if (error?.name === "AbortError") {
+                throw new Error(`Textract timed out after ${Math.floor(this.textractTimeoutMs / 1000)}s.`);
+            }
             console.error("Textract extraction error:", error);
-            throw new Error(`Document extraction failed: ${error}`);
+
+            throw new Error(`Document extraction failed: ${error.message}`);
         }
     }
 

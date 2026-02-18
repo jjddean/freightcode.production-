@@ -10,6 +10,21 @@ import { SmartAuditAuditor } from "./smartaudit_auditor";
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const ML_GATEWAY_URL = "http://127.0.0.1:8000";
+const HMRC_STEP_TIMEOUT_MS = 9000;
+
+async function withTimeout<T>(promise: Promise<T>, label: string, timeoutMs: number = HMRC_STEP_TIMEOUT_MS): Promise<T> {
+    let timeout: ReturnType<typeof setTimeout> | undefined;
+    try {
+        return await Promise.race([
+            promise,
+            new Promise<T>((_, reject) => {
+                timeout = setTimeout(() => reject(new Error(`${label} timed out after ${timeoutMs}ms`)), timeoutMs);
+            }),
+        ]);
+    } finally {
+        if (timeout) clearTimeout(timeout);
+    }
+}
 
 /**
  * Validates the format of an ENS Movement Reference Number (MRN).
@@ -39,11 +54,7 @@ export const auditDocument = action({
         docType: v.string(), // "commercial_invoice", "packing_list", "bol"
     },
     handler: async (ctx, args) => {
-        if (!OPENAI_API_KEY) {
-            console.log("No OpenAI API key configured, using mock auditor");
-            return getMockAudit(args.docType);
-        }
-
+        // Create the auditor (it handles fallback to local mode if OPENAI_API_KEY is missing)
         const auditor = new SmartAuditAuditor(OPENAI_API_KEY);
         const result = await auditor.audit(args.rawText, args.docType);
 
@@ -51,12 +62,17 @@ export const auditDocument = action({
         // We use our custom ML models to provide more accurate HS suggestions and detect anomalies.
         if (result.extractedData?.description) {
             try {
-                // Call ML Brain for HS Classification Suggestion
+                // Call ML Brain with a short timeout (Avoid hanging)
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 second timeout for ML Brain
+
                 const hsResponse = await fetch(`${ML_GATEWAY_URL}/classify-hs`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ description: result.extractedData.description }),
+                    signal: controller.signal,
                 });
+                clearTimeout(timeoutId);
 
                 if (hsResponse.ok) {
                     const hsResult = await hsResponse.json();
@@ -80,9 +96,25 @@ export const auditDocument = action({
                             field: "hsCode"
                         });
                     }
+                } else if (hsResponse.status === 403) {
+                    console.warn("ML Brain HS Suggestion Forbidden (403). Gateway may need configuration.");
+                    result.riskChecklist.push({
+                        type: "system",
+                        severity: "low",
+                        message: "ML BRAIN OFFLINE: Local HS classification gateway returned access error (403). Using basic AI logic.",
+                    });
                 }
-            } catch (err) {
-                console.error("ML Brain HS Error:", err);
+            } catch (err: any) {
+                if (err.name === 'AbortError') {
+                    console.warn("ML Brain HS Suggestion timed out.");
+                    result.riskChecklist.push({
+                        type: "system",
+                        severity: "low",
+                        message: "ML BRAIN TIMEOUT: Local classification took too long. Proceeding with basic AI check.",
+                    });
+                } else {
+                    console.error("ML Brain HS Error:", err);
+                }
             }
         }
 
@@ -90,9 +122,9 @@ export const auditDocument = action({
         // If the AI extracted an HS code, we verify it against the official HMRC Trade Tariff.
         if (result.extractedData?.hsCode) {
             try {
-                const hmrcValidation = await ctx.runAction(api.hmrc_actions.validateHSCode, {
+                const hmrcValidation = await withTimeout<any>(ctx.runAction(api.hmrc_actions.validateHSCode, {
                     code: result.extractedData.hsCode
-                }) as any;
+                }), "HMRC HS validation");
 
                 if (hmrcValidation.valid) {
                     result.riskChecklist.push({
@@ -129,8 +161,13 @@ export const auditDocument = action({
                         field: "hsCode"
                     });
                 }
-            } catch (error) {
-                console.error("HMRC Integration Error during audit:", error);
+            } catch (error: any) {
+                console.warn("HMRC Integration Error during audit:", error.message);
+                result.riskChecklist.push({
+                    type: "system",
+                    severity: "low",
+                    message: "HMRC OFFLINE: Regulatory fact-checking unavailable. Check keys in .env.",
+                });
             }
         }
 
@@ -143,9 +180,9 @@ export const auditDocument = action({
                 if (mrnValidation.valid) {
                     // REACH OUT TO HMRC FOR COMPLIANCE
                     try {
-                        const ensStatus = await ctx.runAction(api.hmrc_actions.getENSStatus, {
+                        const ensStatus = await withTimeout<any>(ctx.runAction(api.hmrc_actions.getENSStatus, {
                             mrn: mrn
-                        }) as any;
+                        }), "HMRC ENS status check");
 
                         if (ensStatus.success) {
                             result.riskChecklist.push({
@@ -195,9 +232,9 @@ export const auditDocument = action({
         // STAGE 5: HMRC EORI Validation
         if (result.extractedData?.eoriNumber) {
             try {
-                const eoriValidation = await ctx.runAction(api.hmrc_actions.validateEORI, {
+                const eoriValidation = await withTimeout<any>(ctx.runAction(api.hmrc_actions.validateEORI, {
                     eori: result.extractedData.eoriNumber
-                }) as any;
+                }), "HMRC EORI validation");
 
                 if (eoriValidation.valid) {
                     result.riskChecklist.push({
@@ -233,8 +270,8 @@ export const saveAudit = mutation({
         status: v.string(),
         extractedData: v.any(),
         riskChecklist: v.array(v.object({
-            type: v.string(),
-            severity: v.string(),
+            type: v.string(), // "mismatch" | "compliance" | "missing_data" | "system"
+            severity: v.string(), // "low" | "medium" | "high"
             message: v.string(),
             field: v.optional(v.string()),
         })),
@@ -325,28 +362,7 @@ export const generateRawCorrection = action({
     }
 });
 
-function getMockAudit(docType: string) {
-    return {
-        status: "flagged",
-        type: "audit_result",
-        riskChecklist: [
-            {
-                type: "compliance",
-                severity: "high",
-                message: `MOCK AUDIT: Mismatched HS Code detected for ${docType}.`,
-                field: "hsCode"
-            }
-        ],
-        extractedData: {
-            type: docType,
-            value: "10,000",
-            description: "Sample Electronics"
-        },
-        correctedData: {
-            description: "Calculators and Data Processing units"
-        }
-    };
-}
+
 
 /**
  * Cross-references multiple documents for a shipment to detect compliance anomalies.
@@ -375,11 +391,16 @@ export const triangulateShipmentDocuments = action({
 
         // 3. Call ML Brain for Anomaly Detection
         try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 second timeout
+
             const response = await fetch(`${ML_GATEWAY_URL}/detect-anomalies`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ bol_weight, inv_value, pl_weight, weight_diff }),
+                signal: controller.signal,
             });
+            clearTimeout(timeoutId);
 
             if (response.ok) {
                 const mlResult = await response.json();
@@ -393,12 +414,14 @@ export const triangulateShipmentDocuments = action({
                     return { status: "anomaly_detected", mlResult };
                 }
             }
-        } catch (err) {
-            console.error("ML Brain Anomaly Error:", err);
+        } catch (err: any) {
+            if (err.name === 'AbortError') {
+                console.warn("ML Brain Anomaly Detection timed out.");
+            } else {
+                console.error("ML Brain Anomaly Error:", err);
+            }
         }
 
         return { status: "passed" };
     }
 });
-
-

@@ -257,16 +257,16 @@ const QuickQuoteForm: React.FC<QuickQuoteFormProps> = ({ onSelectRate }) => {
                 {showResults && (
                     <div className="animate-in fade-in slide-in-from-top-4 duration-500 delay-150">
                         <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
-                            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between px-5 py-4 border-b border-gray-100">
-                                <div>
-                                    <h3 className="text-base font-semibold text-primary-800">Available Freight Rates</h3>
-                                    <p className="text-xs text-muted-foreground">
-                                        {origin} to {destination} • {weight} kg
-                                    </p>
+                            <div className="px-6 py-4 border-b border-gray-100">
+                                <div className="flex items-center justify-between gap-3">
+                                    <h3 className="text-base font-semibold text-primary-800 leading-tight">Available Freight Rates</h3>
+                                    <span className="inline-flex items-center shrink-0 rounded-full bg-secondary-100 text-secondary-800 px-2.5 py-1 text-xs font-medium">
+                                        {MOCK_RATES.length} options
+                                    </span>
                                 </div>
-                                <span className="inline-flex items-center rounded-full bg-secondary-100 text-secondary-800 px-2.5 py-1 text-xs font-medium w-fit">
-                                    {MOCK_RATES.length} options
-                                </span>
+                                <p className="mt-2 text-xs text-muted-foreground pr-1">
+                                    {origin} to {destination} • {weight} kg
+                                </p>
                             </div>
 
                             <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">

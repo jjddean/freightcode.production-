@@ -180,6 +180,7 @@ const DashboardPage = () => {
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-500">Revenue</p>
                   <p className="text-2xl font-semibold text-gray-900">{formatCurrency(liveMetrics.monthlyRevenue)}</p>
+                  <p className="text-[11px] text-gray-400 mt-1 whitespace-nowrap">MTD estimate</p>
                 </div>
               </div>
               <div className="absolute top-2 right-2 w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>

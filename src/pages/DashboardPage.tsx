@@ -8,10 +8,8 @@ import { Button } from '@/components/ui/button';
 import Footer from '@/components/layout/Footer';
 import MobileDashboard from '@/components/mobile/MobileDashboard';
 
-import { useQuery, useMutation } from "convex/react";
+import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
-import { toast } from 'sonner';
-import { Play, Wrench } from 'lucide-react';
 import { formatCurrency } from '@/lib/currency';
 import { useOrganization, useUser } from "@clerk/clerk-react";
 
@@ -87,16 +85,44 @@ const DashboardPage = () => {
 
 
   const shipmentColumns: Column<Shipment>[] = [
-    { key: 'id' as any, header: 'Shipment ID', sortable: true, mono: true },
-    { key: 'origin' as any, header: 'Origin', sortable: true },
-    { key: 'destination' as any, header: 'Destination', sortable: true },
+    {
+      key: 'id' as any,
+      header: 'Shipment ID',
+      sortable: true,
+      mono: true,
+      render: (value: string) => <span className="block max-w-[170px] truncate">{value}</span>
+    },
+    {
+      key: 'origin' as any,
+      header: 'Origin',
+      sortable: true,
+      render: (value: string) => <span className="block max-w-[130px] truncate">{value}</span>
+    },
+    {
+      key: 'destination' as any,
+      header: 'Destination',
+      sortable: true,
+      render: (value: string) => <span className="block max-w-[130px] truncate">{value}</span>
+    },
     {
       key: 'status' as any,
       header: 'Status',
       sortable: true,
       render: (value: string) => <StatusBadge status={value} />
     },
-    { key: 'eta' as any, header: 'ETA', sortable: true },
+    {
+      key: 'eta' as any,
+      header: 'ETA',
+      sortable: true,
+      render: (value: string) => {
+        const parsed = value ? new Date(value) : null;
+        return (
+          <span className="whitespace-nowrap">
+            {parsed && !isNaN(parsed.getTime()) ? parsed.toLocaleDateString() : '-'}
+          </span>
+        );
+      }
+    },
     {
       key: 'value' as any,
       header: 'Value',
@@ -195,99 +221,83 @@ const DashboardPage = () => {
                 <Link to="/shipments">View All Shipments</Link>
               </Button>
             </div>
-            <DataTable
-              data={displayShipments}
-              columns={shipmentColumns}
-              searchPlaceholder="Search shipments..."
-              rowsPerPage={5}
-            />
-          </div>
-
-          {/* Quick Actions */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Quick Actions</h3>
-              <div className="space-y-3">
-                <Button asChild variant="outline" className="w-full justify-start h-auto whitespace-normal">
-                  <Link to="/quotes" state={{ mode: 'create' }} className="flex items-center py-2">
-                    <span className="mr-2 shrink-0">📋</span>
-                    <span className="text-left">New Quote</span>
-                  </Link>
-                </Button>
-                <Button asChild variant="outline" className="w-full justify-start h-auto whitespace-normal">
-                  <Link to="/shipments" className="flex items-center py-2">
-                    <span className="mr-2 shrink-0">🚢</span>
-                    <span className="text-left">Track Shipment</span>
-                  </Link>
-                </Button>
-                <Button asChild variant="outline" className="w-full justify-start h-auto whitespace-normal">
-                  <Link to="/compliance" className="flex items-center py-2">
-                    <span className="mr-2 shrink-0">📄</span>
-                    <span className="text-left">Upload Document</span>
-                  </Link>
-                </Button>
-                <Button asChild variant="outline" className="w-full justify-start h-auto whitespace-normal">
-                  <Link to="/payments" className="flex items-center py-2">
-                    <span className="mr-2 shrink-0">💳</span>
-                    <span className="text-left">View Invoices</span>
-                  </Link>
-                </Button>
-                <div className="flex flex-col gap-2">
-                  <SimulateTrafficButton />
-                  <RepairDataButton />
-                </div>
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+              <div className="lg:col-span-3">
+                <DataTable
+                  data={displayShipments}
+                  columns={shipmentColumns}
+                  searchPlaceholder="Search shipments..."
+                  rowsPerPage={5}
+                />
               </div>
-            </div>
+              <div className="space-y-6">
+                <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">Quick Actions</h3>
+                  <div className="space-y-3">
+                    <Button asChild variant="outline" className="w-full justify-start h-auto whitespace-normal">
+                      <Link to="/quotes" state={{ mode: 'create' }} className="flex items-center py-2">
+                        <span className="mr-2 shrink-0">📋</span>
+                        <span className="text-left">New Quote</span>
+                      </Link>
+                    </Button>
+                    <Button asChild variant="outline" className="w-full justify-start h-auto whitespace-normal">
+                      <Link to="/shipments" className="flex items-center py-2">
+                        <span className="mr-2 shrink-0">🚢</span>
+                        <span className="text-left">Track Shipment</span>
+                      </Link>
+                    </Button>
+                    <Button asChild variant="outline" className="w-full justify-start h-auto whitespace-normal">
+                      <Link to="/compliance" className="flex items-center py-2">
+                        <span className="mr-2 shrink-0">📄</span>
+                        <span className="text-left">Upload Document</span>
+                      </Link>
+                    </Button>
+                    <Button asChild variant="outline" className="w-full justify-start h-auto whitespace-normal">
+                      <Link to="/payments" className="flex items-center py-2">
+                        <span className="mr-2 shrink-0">💳</span>
+                        <span className="text-left">View Invoices</span>
+                      </Link>
+                    </Button>
+                  </div>
+                </div>
 
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Pending Actions</h3>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between py-2">
-                  <span className="text-sm text-gray-600">Commercial Invoice</span>
-                  <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">Pending</span>
+                <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">Pending Actions</h3>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between py-2">
+                      <span className="text-sm text-gray-600">Commercial Invoice</span>
+                      <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">Pending</span>
+                    </div>
+                    <div className="flex items-center justify-between py-2">
+                      <span className="text-sm text-gray-600">Certificate of Origin</span>
+                      <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">Pending</span>
+                    </div>
+                    <div className="flex items-center justify-between py-2">
+                      <span className="text-sm text-gray-600">Payment Due</span>
+                      <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">Overdue</span>
+                    </div>
+                  </div>
+                  <Button asChild variant="link" className="w-full mt-4 p-0">
+                    <Link to="/compliance">View All →</Link>
+                  </Button>
                 </div>
-                <div className="flex items-center justify-between py-2">
-                  <span className="text-sm text-gray-600">Certificate of Origin</span>
-                  <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">Pending</span>
-                </div>
-                <div className="flex items-center justify-between py-2">
-                  <span className="text-sm text-gray-600">Payment Due</span>
-                  <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">Overdue</span>
-                </div>
-              </div>
-              <Button asChild variant="link" className="w-full mt-4 p-0">
-                <Link to="/compliance">View All →</Link>
-              </Button>
-            </div>
 
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Recent Activity</h3>
-              <div className="space-y-3">
-                <div className="text-sm">
-                  <p className="text-gray-900">SH-2024-001 cleared customs</p>
-                  <p className="text-gray-500 text-xs">2 hours ago</p>
-                </div>
-                <div className="text-sm">
-                  <p className="text-gray-900">Payment received for SH-2024-003</p>
-                  <p className="text-gray-500 text-xs">5 hours ago</p>
-                </div>
-                <div className="text-sm">
-                  <p className="text-gray-900">New quote request submitted</p>
-                  <p className="text-gray-500 text-xs">1 day ago</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Support</h3>
-              <div className="space-y-3">
-                <p className="text-sm text-gray-600">Need assistance with your shipments?</p>
-                <Button asChild variant="outline" className="w-full">
-                  <Link to="/contact">Contact Support</Link>
-                </Button>
-                <div className="text-xs text-gray-500">
-                  <p>UK: +44 20 7946 0958</p>
-                  <p>Available 24/7</p>
+                <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">Recent Activity</h3>
+                  <div className="space-y-3">
+                    <div className="text-sm">
+                      <p className="text-gray-900">SH-2024-001 cleared customs</p>
+                      <p className="text-gray-500 text-xs">2 hours ago</p>
+                    </div>
+                    <div className="text-sm">
+                      <p className="text-gray-900">Payment received for SH-2024-003</p>
+                      <p className="text-gray-500 text-xs">5 hours ago</p>
+                    </div>
+                    <div className="text-sm">
+                      <p className="text-gray-900">New quote request submitted</p>
+                      <p className="text-gray-500 text-xs">1 day ago</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -300,63 +310,5 @@ const DashboardPage = () => {
     </div>
   );
 };
-
-function SimulateTrafficButton() {
-  const moveShipments = useMutation((api as any).simulation.moveShipments);
-  const [running, setRunning] = useState(false);
-
-  const handleRun = async () => {
-    setRunning(true);
-    try {
-      const count = await moveShipments();
-      toast.success("Simulation update: " + count);
-    } catch (e) {
-      toast.error("Simulation failed (is the function defined?)");
-    } finally {
-      setTimeout(() => setRunning(false), 500);
-    }
-  };
-
-  return (
-    <Button
-      onClick={handleRun}
-      variant="outline"
-      className="w-full justify-start text-blue-600 border-blue-200 hover:bg-blue-50 h-auto whitespace-normal py-2"
-      disabled={running}
-    >
-      <Play className={`mr-2 h-4 w-4 shrink-0 ${running ? 'animate-spin' : ''}`} />
-      <span className="text-left">{running ? "Simulating..." : "Simulate Traffic"}</span>
-    </Button>
-  )
-}
-function RepairDataButton() {
-  const repair = useMutation(api.bookings.fixMissingDocuments);
-  const [running, setRunning] = useState(false);
-
-  const handleRun = async () => {
-    setRunning(true);
-    try {
-      const result = await repair();
-      toast.success(`Repair complete! Generated ${result.fixedCount} documents.`);
-    } catch (e: any) {
-      console.error("Repair failed:", e);
-      toast.error(`Repair failed: ${e.message}`);
-    } finally {
-      setRunning(false);
-    }
-  };
-
-  return (
-    <Button
-      onClick={handleRun}
-      variant="outline"
-      className="w-full justify-start text-orange-600 border-orange-200 hover:bg-orange-50 h-auto whitespace-normal py-2"
-      disabled={running}
-    >
-      <Wrench className={`mr-2 h-4 w-4 shrink-0 ${running ? 'animate-spin' : ''}`} />
-      <span className="text-left">{running ? "Repairing..." : "Repair Missing Documents"}</span>
-    </Button>
-  );
-}
 
 export default DashboardPage;

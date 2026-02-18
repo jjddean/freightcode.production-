@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
-import { toast } from "sonner";
 
 interface Notification {
   _id: string;
@@ -35,45 +34,12 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({ className }) =>
   const markRead = useMutation(api.notifications.markRead);
   const markAllRead = useMutation(api.notifications.markAllRead);
 
-  // Tracks notifications already toasted to avoid duplicates
-  const toastedIds = useRef<Set<string>>(new Set());
-  const isInitialLoad = useRef(true);
-  const mountTime = useRef(Date.now());
-
   // Normalize data format
   const notifications = (rawNotifications || []).map((n: any) => ({
     ...n,
     id: n._id, // map _id to id for compatibility
     timestamp: new Date(n.createdAt).toISOString()
   }));
-
-  // Real-time toast alerts for new unread notifications
-  useEffect(() => {
-    if (Array.isArray(rawNotifications)) {
-      if (isInitialLoad.current) {
-        // Just Mark existing ones as "seen" on first load
-        rawNotifications.forEach(n => toastedIds.current.add(n._id));
-        isInitialLoad.current = false;
-      } else {
-        // Check for new unread notifications
-        rawNotifications.forEach(n => {
-          // Robust suppression: Only toast if:
-          // 1. It's unread
-          // 2. We haven't toasted it in this session
-          // 3. It was created AFTER the component mounted (with a 2s safety buffer for clock skew)
-          const isFresh = n.createdAt > (mountTime.current - 2000);
-
-          if (!n.read && !toastedIds.current.has(n._id) && isFresh) {
-            toastedIds.current.add(n._id);
-            toast.info(n.title, {
-              description: n.message,
-              duration: 5000,
-            });
-          }
-        });
-      }
-    }
-  }, [rawNotifications, navigate]);
 
   const unreadCount = dbUnreadCount;
   const urgentCount = notifications.filter((n: any) => n.priority === 'urgent' && !n.read).length;

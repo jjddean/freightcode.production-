@@ -134,7 +134,7 @@ function DataTable<T extends Record<string, any>>({
                 <th
                   key={String(column.key)}
                   className={cn(
-                    "px-4 py-3 text-left text-[11px] font-semibold text-slate-500 uppercase tracking-wider",
+                    "px-2 py-3 text-left text-[11px] font-semibold text-slate-500 uppercase tracking-wider",
                     column.sortable && "cursor-pointer hover:bg-gray-100",
                     column.align === 'right' && "text-right",
                     column.align === 'center' && "text-center",
@@ -195,7 +195,7 @@ function DataTable<T extends Record<string, any>>({
                   <td
                     key={String(column.key)}
                     className={cn(
-                      "px-4 py-3 text-sm text-slate-700",
+                      "px-2 py-3 text-sm text-slate-700",
                       column.mono && "font-mono text-[13px] font-semibold tracking-tight text-slate-500",
                       column.align === 'right' && "text-right",
                       column.align === 'center' && "text-center",

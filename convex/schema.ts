@@ -170,6 +170,7 @@ export default defineSchema({
       brokerEmail: v.optional(v.string()),
       filingStatus: v.optional(v.string()),
       entryNumber: v.optional(v.string()), // 7501 Entry Number or HMRC ref
+      eoriNumber: v.optional(v.string()), // Added for HMRC integration
       clearedAt: v.optional(v.number()),
       filedAt: v.optional(v.number()),
       docs: v.optional(v.array(v.id("documents"))),

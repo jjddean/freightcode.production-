@@ -32,7 +32,7 @@ import DataTable from '@/components/ui/data-table';
 import { Button } from '@/components/ui/button';
 import { useQuery, useAction, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
-import { Sparkles, Mail } from "lucide-react";
+import { Sparkles, Mail, Play } from "lucide-react";
 import { toast } from 'sonner';
 import { useUser, useAuth, useOrganization } from "@clerk/clerk-react";
 import { Input } from '@/components/ui/input';
@@ -57,7 +57,6 @@ import {
   DialogFooter
 } from "@/components/ui/dialog";
 
-import { LiveVesselMap } from '@/components/ui/live-vessel-map';
 
 const ShipmentsPage = () => {
   const { user } = useUser();
@@ -67,8 +66,8 @@ const ShipmentsPage = () => {
   const [sheetMode, setSheetMode] = useState<'details' | 'tracking'>('details');
   const [emailing, setEmailing] = useState(false);
   const [limitDialogOpen, setLimitDialogOpen] = useState(false);
-  const [isMapExpanded, setIsMapExpanded] = useState(false);
   const createShipment = useMutation(api.shipments.upsertShipment);
+  const moveShipments = useMutation((api as any).simulation.moveShipments);
 
   // Search & Filter State
   const [searchTerm, setSearchTerm] = useState('');
@@ -128,6 +127,19 @@ const ShipmentsPage = () => {
       } else {
         toast.error("Failed to create shipment: " + error.message);
       }
+    }
+  };
+
+  const [simulating, setSimulating] = useState(false);
+  const handleSimulateTraffic = async () => {
+    setSimulating(true);
+    try {
+      const count = await moveShipments();
+      toast.success(`Simulation update: ${count}`);
+    } catch {
+      toast.error("Simulation failed (is the function defined?)");
+    } finally {
+      setTimeout(() => setSimulating(false), 500);
     }
   };
 
@@ -288,7 +300,6 @@ const ShipmentsPage = () => {
     }))
   } : { active: [], completed: [] };
 
-
   // Search filters configuration
   const searchFilters = [
     {
@@ -372,6 +383,18 @@ const ShipmentsPage = () => {
 
   const handleClearSearch = () => {
     setFilteredShipments(currentShipments);
+  };
+
+  const openTrackingHub = () => {
+    const firstShipment = filteredShipments.active[0] || filteredShipments.completed[0];
+    if (!firstShipment) {
+      toast.error("No shipments available for tracking");
+      return;
+    }
+
+    setActiveTab(firstShipment.status === 'Delivered' ? 'completed' : 'active');
+    setSheetMode('tracking');
+    setSelectedShipment(firstShipment);
   };
 
   const shipmentColumns = [
@@ -467,18 +490,12 @@ const ShipmentsPage = () => {
           backgroundImage="/shipments-bg.jpg"
           overlayOpacity={0.5}
           className="mb-8"
-          isExpandable={true}
-          isExpanded={isMapExpanded}
-          onToggle={() => {
-            setIsMapExpanded((v) => !v);
-            window.scrollTo({ top: 0, behavior: "smooth" });
-          }}
         />
 
         {/* Action Toolbar */}
         <div className="mb-6">
           <div className="border-b border-gray-200">
-            <nav className="-mb-px flex space-x-8">
+            <nav className="-mb-px flex items-center space-x-8">
               <button
                 onClick={() => setActiveTab('active')}
                 className={`py-2 px-1 border-b-2 font-medium text-sm ${activeTab === 'active'
@@ -496,6 +513,13 @@ const ShipmentsPage = () => {
                   }`}
               >
                 Completed Shipments ({filteredShipments.completed.length})
+              </button>
+              <button
+                type="button"
+                onClick={openTrackingHub}
+                className="py-2 px-1 border-b-2 border-transparent text-sm font-medium text-gray-600 hover:text-primary hover:border-primary/40 transition-colors"
+              >
+                Tracking Hub
               </button>
             </nav>
           </div>
@@ -564,6 +588,16 @@ const ShipmentsPage = () => {
             </div>
 
             <Button variant="outline" size="sm">Export</Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleSimulateTraffic}
+              disabled={simulating}
+              className="text-blue-600 border-blue-200 hover:bg-blue-50"
+            >
+              <Play className={`w-4 h-4 mr-2 ${simulating ? 'animate-spin' : ''}`} />
+              {simulating ? "Simulating..." : "Simulate Traffic"}
+            </Button>
             <Button
               size="sm"
               onClick={handleCreateTestShipment}
@@ -785,17 +819,15 @@ const ShipmentsPage = () => {
                 {/* MODE: TRACKING */}
                 {sheetMode === 'tracking' && (
                   <div className="space-y-6">
-                    {/* Map Section */}
-                    <div className="h-64 w-full rounded-lg overflow-hidden border border-gray-200 relative">
-                      <div className="absolute top-2 right-2 bg-white/90 px-2 py-1 rounded text-xs font-bold z-10 shadow-sm">
-                        Live Satellite Feed
-                      </div>
-                      <LiveVesselMap
-                        shipmentId={selectedShipment.id}
-                        origin={selectedShipment.origin}
-                        destination={selectedShipment.destination}
-                        progress={selectedShipment.progress || 45}
-                      />
+                    <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+                      <h4 className="text-sm font-semibold text-gray-900 mb-2">Tracking Overview</h4>
+                      <p className="text-sm text-gray-600">
+                        Route: <span className="font-medium text-gray-900">{selectedShipment.origin}</span> to{" "}
+                        <span className="font-medium text-gray-900">{selectedShipment.destination}</span>
+                      </p>
+                      <p className="text-sm text-gray-600 mt-1">
+                        Current status: <span className="font-medium text-gray-900">{selectedShipment.status}</span>
+                      </p>
                     </div>
 
                     {/* AI Risk Analysis Widget - GATED */}

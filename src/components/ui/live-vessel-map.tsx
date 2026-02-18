@@ -1,77 +1,123 @@
-import React, { useEffect, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Ship, Anchor, Navigation, Wind, Waves } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import React from 'react';
+import Map, { Marker, Source, Layer, NavigationControl } from 'react-map-gl/mapbox';
+import { Card, CardContent } from "@/components/ui/card";
+import { Ship, Navigation, Wind, Waves } from 'lucide-react';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
-export const LiveVesselMap = ({ shipmentId, origin, destination, progress = 0 }: { shipmentId: string; origin: string; destination: string; progress?: number }) => {
-    // Determine random start/end coordinates for visual simulation
-    // This is "Mocking" a real Mapbox implementation for the demo
-    const [animatedProgress, setAnimatedProgress] = useState(0);
+const CITY_COORDS: Record<string, { lat: number; lng: number }> = {
+    london: { lat: 51.5074, lng: -0.1278 },
+    hamburg: { lat: 53.5511, lng: 9.9937 },
+    rotterdam: { lat: 51.9225, lng: 4.4792 },
+    newyork: { lat: 40.7128, lng: -74.0060 },
+    "new york": { lat: 40.7128, lng: -74.0060 },
+    shanghai: { lat: 31.2304, lng: 121.4737 },
+    singapore: { lat: 1.3521, lng: 103.8198 },
+    tokyo: { lat: 35.6762, lng: 139.6503 },
+    miami: { lat: 25.7617, lng: -80.1918 },
+    brisbane: { lat: -27.4698, lng: 153.0251 },
+    losangeles: { lat: 34.0522, lng: -118.2437 },
+    "los angeles": { lat: 34.0522, lng: -118.2437 }
+};
 
-    useEffect(() => {
-        // Animate the progress bar on mount
-        const timer = setTimeout(() => {
-            setAnimatedProgress(progress || 45); // Default to 45% if unknown
-        }, 500);
-        return () => clearTimeout(timer);
-    }, [progress]);
+const resolveCoords = (place?: string) => {
+    const raw = (place || '').toLowerCase();
+    for (const [key, coords] of Object.entries(CITY_COORDS)) {
+        if (raw.includes(key)) return coords;
+    }
+    return { lat: 51.5074, lng: -0.1278 };
+};
+
+export const LiveVesselMap = ({
+    shipmentId,
+    origin,
+    destination,
+    progress = 0
+}: {
+    shipmentId: string;
+    origin: string;
+    destination: string;
+    progress?: number;
+}) => {
+    const mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN as string | undefined;
+    const start = resolveCoords(origin);
+    const end = resolveCoords(destination);
+    const t = Math.max(0, Math.min(1, (progress || 45) / 100));
+    const vessel = {
+        lat: start.lat + (end.lat - start.lat) * t,
+        lng: start.lng + (end.lng - start.lng) * t
+    };
+    const center = {
+        latitude: (start.lat + end.lat) / 2,
+        longitude: (start.lng + end.lng) / 2
+    };
+
+    const routeGeoJson = {
+        type: 'FeatureCollection' as const,
+        features: [
+            {
+                type: 'Feature' as const,
+                geometry: {
+                    type: 'LineString' as const,
+                    coordinates: [
+                        [start.lng, start.lat],
+                        [end.lng, end.lat]
+                    ]
+                },
+                properties: {}
+            }
+        ]
+    };
 
     return (
         <Card className="w-full overflow-hidden border-slate-200 shadow-lg bg-white">
-            <div className="relative h-64 w-full bg-slate-900 overflow-hidden group">
-                {/* Ocean Background Animation */}
-                <div className="absolute inset-0 opacity-30">
-                    <div className="absolute top-10 left-10 w-96 h-96 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-                    <div className="absolute top-10 right-10 w-96 h-96 bg-cyan-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-                    <div className="absolute -bottom-8 left-20 w-96 h-96 bg-indigo-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
-                </div>
+            <div className="relative h-80 w-full overflow-hidden">
+                {mapboxToken ? (
+                    <Map
+                        mapboxAccessToken={mapboxToken}
+                        initialViewState={{
+                            latitude: center.latitude,
+                            longitude: center.longitude,
+                            zoom: 2
+                        }}
+                        mapStyle="mapbox://styles/mapbox/navigation-night-v1"
+                        style={{ width: '100%', height: '100%' }}
+                    >
+                        <NavigationControl position="top-right" />
 
-                {/* Map Grid overlay */}
-                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
+                        <Source id={`route-${shipmentId}`} type="geojson" data={routeGeoJson as any}>
+                            <Layer
+                                id={`route-line-${shipmentId}`}
+                                type="line"
+                                paint={{
+                                    'line-color': '#22c55e',
+                                    'line-width': 3,
+                                    'line-opacity': 0.85
+                                }}
+                            />
+                        </Source>
 
-                {/* Simulated Path Line */}
-                <div className="absolute top-1/2 left-10 right-10 h-0.5 bg-slate-700/50"></div>
+                        <Marker latitude={start.lat} longitude={start.lng}>
+                            <div className="h-3 w-3 rounded-full bg-white border border-slate-300 shadow" />
+                        </Marker>
 
-                {/* Origin Dot */}
-                <div className="absolute top-1/2 left-10 transform -translate-y-1/2 flex flex-col items-center group-hover:scale-110 transition-transform">
-                    <div className="w-3 h-3 bg-white rounded-full shadow-[0_0_10px_rgba(255,255,255,0.5)]"></div>
-                    <div className="mt-2 text-[10px] text-slate-400 uppercase tracking-widest font-bold">{origin.split(',')[0]}</div>
-                </div>
+                        <Marker latitude={end.lat} longitude={end.lng}>
+                            <div className="h-3 w-3 rounded-full bg-slate-300 border border-slate-500 shadow" />
+                        </Marker>
 
-                {/* Destination Dot */}
-                <div className="absolute top-1/2 right-10 transform -translate-y-1/2 flex flex-col items-center group-hover:scale-110 transition-transform">
-                    <div className="w-3 h-3 bg-slate-600 rounded-full border border-slate-500"></div>
-                    <div className="mt-2 text-[10px] text-slate-400 uppercase tracking-widest font-bold">{destination.split(',')[0]}</div>
-                </div>
-
-                {/* The Vessel (animated via style left%) */}
-                <div
-                    className="absolute top-1/2 transform -translate-y-1/2 -translate-x-1/2 transition-all duration-1000 ease-out z-10"
-                    style={{ left: `calc(2.5rem + (100% - 5rem) * ${animatedProgress / 100})` }}
-                >
-                    <div className="relative">
-                        {/* Pulse Effect */}
-                        <div className="absolute -inset-4 bg-emerald-500/20 rounded-full animate-ping"></div>
-                        <div className="absolute -inset-2 bg-emerald-500/30 rounded-full animate-pulse"></div>
-
-                        {/* Ship Icon */}
-                        <div className="relative bg-emerald-500 p-2 rounded-full shadow-[0_0_15px_rgba(16,185,129,0.5)] border-2 border-slate-900">
-                            <Ship className="w-5 h-5 text-slate-900 fill-slate-900" />
-                        </div>
-
-                        {/* Info Tooltip (Always visible for demo) */}
-                        <div className="absolute -top-16 left-1/2 transform -translate-x-1/2 bg-slate-800 text-white px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap shadow-xl border border-slate-700">
-                            <div className="flex items-center gap-1.5">
-                                <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
-                                <span>18.4 kts</span>
+                        <Marker latitude={vessel.lat} longitude={vessel.lng}>
+                            <div className="relative">
+                                <div className="absolute -inset-3 rounded-full bg-emerald-400/30 animate-pulse" />
+                                <div className="relative rounded-full bg-emerald-500 p-2 border border-slate-900 shadow-lg">
+                                    <Ship className="w-4 h-4 text-slate-900" />
+                                </div>
                             </div>
-                            <div className="text-slate-400 text-[10px] mt-0.5">Heading 270° W</div>
-                            {/* Triangle arrow down */}
-                            <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-slate-800 rotate-45 border-b border-r border-slate-700"></div>
-                        </div>
+                        </Marker>
+                    </Map>
+                ) : (
+                    <div className="h-full w-full bg-slate-900 text-slate-200 flex items-center justify-center text-sm">
+                        Missing `VITE_MAPBOX_TOKEN` for map view
                     </div>
-                </div>
-
+                )}
             </div>
 
             <CardContent className="p-4 bg-slate-50 grid grid-cols-3 divide-x divide-slate-200">

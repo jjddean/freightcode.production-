@@ -1,4 +1,4 @@
-import { internalMutation, internalQuery } from "./_generated/server";
+import { query, internalMutation, internalQuery } from "./_generated/server";
 import { v } from "convex/values";
 
 /**
@@ -55,5 +55,29 @@ export const getIntegration = internalQuery({
             .withIndex("byProvider", (q) => q.eq("provider", args.provider))
             .filter((q) => q.eq(q.field("orgId"), args.orgId))
             .first();
+    },
+});
+/**
+ * Get the status of an integration (Public version for UI)
+ */
+export const getIntegrationStatus = query({
+    args: {
+        provider: v.string(),
+        orgId: v.optional(v.union(v.string(), v.null())),
+    },
+    handler: async (ctx, args) => {
+        const integration = await ctx.db
+            .query("integrations")
+            .withIndex("byProvider", (q) => q.eq("provider", args.provider))
+            .filter((q) => q.eq(q.field("orgId"), args.orgId))
+            .first();
+
+        if (!integration) return null;
+
+        return {
+            status: integration.status,
+            provider: integration.provider,
+            expiresAt: integration.expiresAt,
+        };
     },
 });

@@ -46,53 +46,32 @@ export const seedDffShipments = internalMutation({
         // 2. Insert Samples
         const shipments = [
             {
-                shipmentId: "SH-001",
-                status: "IN_TRANSIT",
+                shipmentId: "SH-HMRC-01",
+                status: "ARRIVED",
                 carrier: "Maersk",
                 trackingNumber: "MAEU123456",
                 service: "Standard Ocean",
                 shipmentDetails: {
                     origin: "CNSHA",
-                    destination: "USLAX",
+                    destination: "GBSOU",
                     weight: "12000kg",
                     dimensions: "40HC",
-                    value: "$45,000",
+                    value: "45000",
+                },
+                customs: {
+                    filingStatus: "pending",
+                    entryNumber: "GB202698765432",
+                    eoriNumber: "GB853432453900", // User's Test EORI
                 },
                 currentLocation: {
-                    city: "Pacific Ocean",
-                    state: "NA",
-                    country: "INT",
-                    coordinates: { lat: 34.05, lng: -118.24 }
+                    city: "Southampton",
+                    country: "UK",
                 },
-                estimatedDelivery: "2026-03-01T00:00:00Z",
                 createdAt: Date.now(),
                 lastUpdated: Date.now(),
             },
             {
-                shipmentId: "SH-002",
-                status: "ARRIVED",
-                carrier: "DHL",
-                trackingNumber: "DHL789012",
-                service: "Express Air",
-                shipmentDetails: {
-                    origin: "LHR",
-                    destination: "JFK",
-                    weight: "250kg",
-                    dimensions: "3 Pallets",
-                    value: "$125,000",
-                },
-                currentLocation: {
-                    city: "New York",
-                    state: "NY",
-                    country: "USA",
-                    coordinates: { lat: 40.71, lng: -74.00 }
-                },
-                estimatedDelivery: "2026-02-18T00:00:00Z",
-                createdAt: Date.now(),
-                lastUpdated: Date.now(),
-            },
-            {
-                shipmentId: "SH-003",
+                shipmentId: "SH-HMRC-02",
                 status: "CUSTOMS_HOLD",
                 carrier: "MSC",
                 trackingNumber: "MSCU987654",
@@ -102,17 +81,19 @@ export const seedDffShipments = internalMutation({
                     destination: "GBSOU",
                     weight: "18000kg",
                     dimensions: "20GP",
-                    value: "$12,000",
+                    value: "12000",
                 },
-                currentLocation: {
-                    city: "Southampton",
-                    state: "Hampshire",
-                    country: "UK",
-                    coordinates: { lat: 50.90, lng: -1.40 }
+                customs: {
+                    filingStatus: "review",
+                    entryNumber: "GB202611223344",
+                    eoriNumber: "GB853432453900", // User's Test EORI
                 },
-                estimatedDelivery: "2026-02-20T00:00:00Z",
                 riskLevel: "high",
                 flagReason: "HS Code Mismatch Detected by SmartAudit",
+                currentLocation: {
+                    city: "Southampton",
+                    country: "UK",
+                },
                 createdAt: Date.now(),
                 lastUpdated: Date.now(),
             }

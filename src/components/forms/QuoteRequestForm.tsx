@@ -478,6 +478,7 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
                 <label className="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
                 <Input
                   type="text"
+                  className="bg-white"
                   value={formData.contactInfo.name}
                   onChange={(e) => handleInputChange('contactInfo.name', e.target.value)}
                   placeholder="Enter your full name"
@@ -490,6 +491,7 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
                 <label className="block text-sm font-medium text-gray-700 mb-2">Company</label>
                 <Input
                   type="text"
+                  className="bg-white"
                   value={formData.contactInfo.company}
                   onChange={(e) => handleInputChange('contactInfo.company', e.target.value)}
                   placeholder="Enter company name"
@@ -502,6 +504,7 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
                 <label className="block text-sm font-medium text-gray-700 mb-2">Email Address *</label>
                 <Input
                   type="email"
+                  className="bg-white"
                   value={formData.contactInfo.email}
                   onChange={(e) => handleInputChange('contactInfo.email', e.target.value)}
                   placeholder="Enter email address"
@@ -514,6 +517,7 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ onSubmit, onCancel,
                 <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
                 <Input
                   type="tel"
+                  className="bg-white"
                   value={formData.contactInfo.phone}
                   onChange={(e) => handleInputChange('contactInfo.phone', e.target.value)}
                   placeholder="Enter phone number"

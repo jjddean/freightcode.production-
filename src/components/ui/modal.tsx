@@ -65,7 +65,7 @@ const Modal: React.FC<ModalProps> = ({
       >
         {/* Overlay */}
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 transition-opacity cursor-pointer"
+          className="fixed inset-0 bg-black/35 transition-opacity cursor-pointer"
           onClick={(e) => {
             e.stopPropagation();
             if (closeOnOverlayClick) onClose();

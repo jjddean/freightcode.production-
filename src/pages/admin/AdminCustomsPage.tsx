@@ -35,12 +35,16 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { formatCurrency } from '@/lib/currency';
 
-const CDSStatusCell = ({ row }: { row: any }) => {
+const CDSStatusCell = ({ row, isConnected }: { row: any, isConnected: boolean }) => {
     const [status, setStatus] = useState<any>(null);
     const [loading, setLoading] = useState(false);
     const getENSAction = useAction(api.hmrc_actions.getENSStatus);
 
     const handleCheck = async () => {
+        if (!isConnected) {
+            toast.error("Please connect HMRC first");
+            return;
+        }
         if (!row.customs?.entryNumber) {
             toast.error("No HMRC Reference Found");
             return;
@@ -63,7 +67,7 @@ const CDSStatusCell = ({ row }: { row: any }) => {
     };
 
     return (
-        <div className="flex flex-col gap-1 min-w-[100px]">
+        <div className="flex flex-col gap-1 min-w-[80px]">
             {status ? (
                 <Badge className={status.status === 'ACCEPTED' ? "bg-emerald-50 text-emerald-700 border-emerald-200" : "bg-red-50 text-red-700 border-red-200"}>
                     {status.status}
@@ -74,21 +78,26 @@ const CDSStatusCell = ({ row }: { row: any }) => {
                     size="sm"
                     className="h-7 px-2 text-[10px] w-full"
                     onClick={handleCheck}
-                    disabled={loading}
+                    disabled={loading || !isConnected}
+                    title={!isConnected ? "Connect HMRC to verify" : ""}
                 >
-                    {loading ? "Checking..." : "Verify in CDS"}
+                    {loading ? "Checking..." : isConnected ? "Verify in CDS" : "Offline"}
                 </Button>
             )}
         </div>
     );
 };
 
-const DutyDefermentCell = ({ row }: { row: any }) => {
+const DutyDefermentCell = ({ row, isConnected }: { row: any, isConnected: boolean }) => {
     const [balance, setBalance] = useState<any>(null);
     const [loading, setLoading] = useState(false);
     const getDDAction = useAction(api.hmrc_actions.getDutyDeferment);
 
     const checkBalance = async () => {
+        if (!isConnected) {
+            toast.error("Please connect HMRC first");
+            return;
+        }
         if (!row.customs?.eoriNumber) {
             toast.error("No EORI Found for Financials");
             return;
@@ -110,7 +119,7 @@ const DutyDefermentCell = ({ row }: { row: any }) => {
     };
 
     return (
-        <div className="min-w-[100px]">
+        <div className="min-w-[80px]">
             {balance ? (
                 <div className="text-[10px] font-mono leading-tight">
                     <div className="text-emerald-600 font-bold whitespace-nowrap">{formatCurrency(balance.availableCredit)}</div>
@@ -122,9 +131,10 @@ const DutyDefermentCell = ({ row }: { row: any }) => {
                     size="sm"
                     className="h-7 px-2 text-[10px] w-full"
                     onClick={checkBalance}
-                    disabled={loading}
+                    disabled={loading || !isConnected}
+                    title={!isConnected ? "Connect HMRC to check" : ""}
                 >
-                    {loading ? "···" : "Check DDA"}
+                    {loading ? "···" : isConnected ? "Check DDA" : "Offline"}
                 </Button>
             )}
         </div>
@@ -134,6 +144,8 @@ const DutyDefermentCell = ({ row }: { row: any }) => {
 const AdminCustomsPage = () => {
     const pendingShipments = useQuery(api.customs.getPendingCustoms) || [];
     const submitFiling = useMutation(api.customs.submitCustomsFiling);
+    const hmrcIntegration = useQuery(api.integrations.getIntegrationStatus, { provider: "hmrc" });
+    const isConnected = !!(hmrcIntegration && hmrcIntegration.status === "active");
 
     const [selectedShipment, setSelectedShipment] = useState<any>(null);
     const [isFilingModalOpen, setIsFilingModalOpen] = useState(false);
@@ -190,11 +202,11 @@ const AdminCustomsPage = () => {
             render: (details: any) => (
                 <div className="text-xs">
                     <div className="flex items-center text-slate-600">
-                        <span className="w-12 text-slate-400 uppercase font-bold text-[9px]">Route</span>
+                        <span className="w-10 text-slate-400 uppercase font-bold text-[9px]">Route</span>
                         {details.origin} → {details.destination}
                     </div>
                     <div className="flex items-center text-slate-900 mt-1 font-medium">
-                        <span className="w-12 text-slate-400 uppercase font-bold text-[9px]">Value</span>
+                        <span className="w-10 text-slate-400 uppercase font-bold text-[9px]">Value</span>
                         {details.value ? formatCurrency(details.value) : 'N/A'}
                     </div>
                 </div>
@@ -233,12 +245,12 @@ const AdminCustomsPage = () => {
         {
             key: 'cds_check',
             header: 'HMRC CDS Status',
-            render: (_: any, row: any) => <CDSStatusCell row={row} />
+            render: (_: any, row: any) => <CDSStatusCell row={row} isConnected={isConnected} />
         },
         {
             key: 'financials',
             header: 'Duty Deferment',
-            render: (_: any, row: any) => <DutyDefermentCell row={row} />
+            render: (_: any, row: any) => <DutyDefermentCell row={row} isConnected={isConnected} />
         },
         {
             key: 'actions',
@@ -249,7 +261,14 @@ const AdminCustomsPage = () => {
                         variant="ghost"
                         size="sm"
                         className="h-8 text-[11px] font-semibold text-blue-600 hover:bg-blue-50"
-                        onClick={() => window.open(`https://www.tax.service.gov.uk/customs-declaration-service/declaration/${row.customs?.entryNumber || ''}/status`, "_blank")}
+                        onClick={() => {
+                            const entryNumber = row.customs?.entryNumber;
+                            if (!entryNumber) return;
+                            const domain = import.meta.env.VITE_HMRC_ENVIRONMENT === 'sandbox'
+                                ? 'www.test.tax.service.gov.uk'
+                                : 'www.tax.service.gov.uk';
+                            window.open(`https://${domain}/customs-declaration-service/declaration/${entryNumber}/status`, "_blank");
+                        }}
                     >
                         <ExternalLink className="w-3.5 h-3.5 mr-1" />
                         Portal
@@ -275,21 +294,28 @@ const AdminCustomsPage = () => {
                 icon={FileSearch}
             >
                 <div className="flex gap-2">
-                    <Button
-                        variant="outline"
-                        className="bg-white border-blue-200 text-blue-700 hover:bg-blue-50"
-                        onClick={async () => {
-                            try {
-                                const url = await getAuthUrl({});
-                                window.open(url, "_blank");
-                            } catch (e) {
-                                toast.error("Failed to generate auth URL");
-                            }
-                        }}
-                    >
-                        <ExternalLink className="w-4 h-4 mr-2" />
-                        Connect HMRC
-                    </Button>
+                    {isConnected ? (
+                        <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 px-4 py-2 text-sm flex items-center gap-2 h-10 ring-1 ring-emerald-200">
+                            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                            HMRC Connected
+                        </Badge>
+                    ) : (
+                        <Button
+                            variant="outline"
+                            className="bg-white border-blue-200 text-blue-700 hover:bg-blue-50"
+                            onClick={async () => {
+                                try {
+                                    const url = await getAuthUrl({});
+                                    window.open(url, "_blank");
+                                } catch (e) {
+                                    toast.error("Failed to generate auth URL");
+                                }
+                            }}
+                        >
+                            <ExternalLink className="w-4 h-4 mr-2" />
+                            Connect HMRC
+                        </Button>
+                    )}
                 </div>
             </AdminPageHeader>
 

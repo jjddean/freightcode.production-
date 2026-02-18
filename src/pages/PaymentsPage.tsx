@@ -274,7 +274,7 @@ const PaymentsPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="px-4 sm:px-6 lg:px-8 py-4">
+      <div className="px-4 sm:px-6 lg:pl-8 lg:pr-24 py-4">
         {/* Payments Header */}
         <MediaCardHeader
           title="Payment Management"

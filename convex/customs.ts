@@ -11,10 +11,6 @@ export const getPendingCustoms = query({
         const identity = await ctx.auth.getUserIdentity();
         if (!identity) return [];
 
-        // Check if admin (optional but recommended for this specific query)
-        // const user = await ctx.db.query("users").withIndex("byExternalId", (q) => q.eq("externalId", identity.subject)).unique();
-        // if (user?.role !== "admin" && user?.role !== "platform:superadmin") return [];
-
         return await ctx.db
             .query("shipments")
             .filter((q) =>

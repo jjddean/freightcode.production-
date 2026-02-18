@@ -12,6 +12,7 @@ export class HMRCService {
     private authUrl: string;
     private eoriBaseUrl: string;
 
+    private environment: string;
     private accessToken?: string;
     private refreshToken?: string;
 
@@ -22,6 +23,7 @@ export class HMRCService {
         baseUrl: string,
         authUrl: string,
         eoriBaseUrl: string,
+        environment: string = "sandbox",
         accessToken?: string,
         refreshToken?: string
     ) {
@@ -31,6 +33,7 @@ export class HMRCService {
         this.baseUrl = baseUrl;
         this.authUrl = authUrl;
         this.eoriBaseUrl = eoriBaseUrl;
+        this.environment = environment;
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
     }
@@ -51,6 +54,7 @@ export class HMRCService {
             isProd ? "https://api.trade-tariff.service.gov.uk" : "https://api.dev.trade-tariff.service.gov.uk",
             isProd ? "https://api.service.hmrc.gov.uk/oauth/token" : "https://test-api.service.hmrc.gov.uk/oauth/token",
             isProd ? "https://api.service.hmrc.gov.uk" : "https://test-api.service.hmrc.gov.uk",
+            environment,
             accessToken,
             refreshToken
         );
@@ -60,7 +64,11 @@ export class HMRCService {
      * Generate the Authorization URL for the User-Restricted OAuth flow.
      */
     getAuthorizationUrl(state: string = "default"): string {
-        const baseUrl = this.baseUrl.replace("api.", "www.").replace("test-api.", "test-www.") + "/oauth/authorize";
+        const isProd = this.environment === "production";
+        const authBase = isProd
+            ? "https://www.tax.service.gov.uk/oauth/authorize"
+            : "https://test-api.service.hmrc.gov.uk/oauth/authorize";
+
         const params = new URLSearchParams({
             response_type: "code",
             client_id: this.clientId,
@@ -68,12 +76,6 @@ export class HMRCService {
             state: state,
             redirect_uri: this.redirectUri,
         });
-
-        // HMRC Sandbox usually uses https://test-api.service.hmrc.gov.uk/oauth/authorize
-        // But the interactive login is on the www/test-www domain
-        const authBase = this.baseUrl === "https://api.service.hmrc.gov.uk"
-            ? "https://www.tax.service.gov.uk/oauth/authorize"
-            : "https://test-api.service.hmrc.gov.uk/oauth/authorize";
 
         return `${authBase}?${params.toString()}`;
     }

@@ -61,6 +61,20 @@ def test_all_models():
         except Exception as e:
             print(f"   CDS Test failed (shape mismatch?): {e}\n")
 
+    # 5. Anomaly Detector
+    anomaly_path = MODELS_DIR / "anomaly_detector.joblib"
+    if anomaly_path.exists():
+        print("5. Testing Anomaly Detector...")
+        model = joblib.load(anomaly_path)
+        # Features: bol_weight, inv_value, pl_weight, weight_diff, val_weight_ratio
+        dummy_input = pd.DataFrame([[100, 5000, 100, 0, 50]], 
+                                 columns=["bol_weight", "inv_value", "pl_weight", "weight_diff", "val_weight_ratio"])
+        try:
+            score = model.predict(dummy_input)[0]
+            print(f"   Anomaly Score: {score} ({'Normal' if score == 1 else 'Anomaly'})\n")
+        except Exception as e:
+            print(f"   Anomaly Test failed: {e}\n")
+
     print("=== End of Testing ===")
 
 if __name__ == "__main__":

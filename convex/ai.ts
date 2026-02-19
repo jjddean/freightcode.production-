@@ -153,3 +153,190 @@ export const generateAdvisory = action({
         throw new Error("Advisory generation requires OpenAI. Local path not yet implemented.");
     }
 });
+
+// Main Brain: Intelligent Chat Orchestrator
+export const intelligentChat = action({
+    args: {
+        messages: v.array(v.object({ role: v.string(), content: v.string() })),
+        shipmentId: v.optional(v.string())
+    },
+    handler: async (ctx, args) => {
+        const apiKey = process.env.OPENAI_API_KEY;
+        const ollamaHost = process.env.OLLAMA_HOST || "http://localhost:11434";
+
+        // 1. Define Tools
+        const tools = [
+            {
+                type: "function",
+                function: {
+                    name: "get_shipment_history",
+                    description: "Fetch the user's recent shipment history including status and destination.",
+                    parameters: { type: "object", properties: {} }
+                }
+            },
+            {
+                type: "function",
+                function: {
+                    name: "get_tracking_details",
+                    description: "Get detailed tracking events for a specific shipment.",
+                    parameters: {
+                        type: "object",
+                        properties: {
+                            shipmentId: { type: "string", description: "The shipment ID to look up" }
+                        },
+                        required: ["shipmentId"]
+                    }
+                }
+            },
+            {
+                type: "function",
+                function: {
+                    name: "predict_eta",
+                    description: "Predict the estimated arrival of a shipment using historical performance models.",
+                    parameters: {
+                        type: "object",
+                        properties: {
+                            shipmentId: { type: "string" }
+                        },
+                        required: ["shipmentId"]
+                    }
+                }
+            },
+            {
+                type: "function",
+                function: {
+                    name: "check_customs_compliance",
+                    description: "Audit a shipment for customs risk and CDS compliance.",
+                    parameters: {
+                        type: "object",
+                        properties: {
+                            shipmentId: { type: "string" }
+                        },
+                        required: ["shipmentId"]
+                    }
+                }
+            }
+        ];
+
+        // 2. Call LLM (OpenAI favored, Ollama as fallback)
+        let responseContent = "";
+
+        if (apiKey) {
+            // OpenAI Path
+            const response = await fetch("https://api.openai.com/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${apiKey}`,
+                },
+                body: JSON.stringify({
+                    model: "gpt-4o",
+                    messages: [
+                        { role: "system", content: "You are the FreightCode Main Brain. Use your tools to access real account data and specialized ML experts. Be concise and professional." },
+                        ...args.messages
+                    ],
+                    tools,
+                    tool_choice: "auto"
+                }),
+            });
+
+            const result = (await response.json()) as any;
+            const message = result.choices[0].message;
+
+            if (message.tool_calls) {
+                // Execute tools in parallel
+                const toolMessages = [...args.messages] as any[];
+                toolMessages.push(message);
+
+                const toolTasks = (message.tool_calls as any[]).map(async (toolCall) => {
+                    const functionName = toolCall.function.name;
+                    const functionArgs = JSON.parse(toolCall.function.arguments);
+                    let toolResult;
+
+                    const { api } = await import("./_generated/api");
+
+                    if (functionName === "get_shipment_history") {
+                        toolResult = await ctx.runQuery(api.shipments.listShipments, {});
+                    } else if (functionName === "get_tracking_details") {
+                        const data = await ctx.runQuery(api.shipments.getShipment, { shipmentId: functionArgs.shipmentId });
+                        toolResult = data?.events || [];
+                    } else if (functionName === "predict_eta") {
+                        const ML_GATEWAY_URL = "http://127.0.0.1:8000";
+                        const ship = await ctx.runQuery(api.shipments.getShipment, { shipmentId: functionArgs.shipmentId });
+                        if (ship) {
+                            try {
+                                const mlRes = await fetch(`${ML_GATEWAY_URL}/predict-eta`, {
+                                    method: "POST",
+                                    headers: { "Content-Type": "application/json" },
+                                    body: JSON.stringify({
+                                        carrier: ship.shipment.carrier,
+                                        service_type: ship.shipment.service.includes("Air") ? "express_air" : "standard_ocean",
+                                        distance: 5000,
+                                        congestion_index: 0.5,
+                                        weather_risk: 0.2
+                                    })
+                                });
+                                toolResult = await mlRes.json();
+                            } catch (e) { toolResult = { error: "ML Gateway unavailable" }; }
+                        }
+                    } else if (functionName === "check_customs_compliance") {
+                        const ML_GATEWAY_URL = "http://127.0.0.1:8000";
+                        try {
+                            const mlRes = await fetch(`${ML_GATEWAY_URL}/validate-cds`, {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({
+                                    doc_present: [1, 1, 1, 1, 1, 1],
+                                    value: 45000.0
+                                })
+                            });
+                            toolResult = await mlRes.json();
+                        } catch (e) { toolResult = { error: "ML Gateway unavailable" }; }
+                    }
+
+                    return {
+                        role: "tool",
+                        tool_call_id: toolCall.id,
+                        name: functionName,
+                        content: JSON.stringify(toolResult)
+                    };
+                });
+
+                const results = await Promise.all(toolTasks);
+                toolMessages.push(...results);
+
+                // Final call to summarize tool results
+                const finalResponse = await fetch("https://api.openai.com/v1/chat/completions", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${apiKey}`,
+                    },
+                    body: JSON.stringify({
+                        model: "gpt-4o",
+                        messages: toolMessages
+                    }),
+                });
+                const finalResult = await finalResponse.json();
+                responseContent = finalResult.choices[0].message.content;
+            } else {
+                responseContent = message.content;
+            }
+        } else {
+            // Ollama Fallback (Simpler context-based for now)
+            const response = await fetch(`${ollamaHost}/api/generate`, {
+                method: "POST",
+                headers: getOllamaHeaders(ollamaHost),
+                body: JSON.stringify({
+                    model: "phi3:mini",
+                    prompt: `You are the FreightCode Assistant. The user provided this question: ${args.messages[args.messages.length - 1].content}. Provide a helpful, concise response.`,
+                    stream: false
+                }),
+            });
+            const result = await response.json();
+            responseContent = result.response;
+        }
+
+        return { content: responseContent };
+    }
+});

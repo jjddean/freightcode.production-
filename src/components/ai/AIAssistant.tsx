@@ -4,10 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sparkles, Send, X, MessageSquare, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
+import { useAction } from "convex/react";
+import { api } from "../../../convex/_generated/api";
 
-// Import our client-side Ollama helper
-// Note: This requires dynamic import in some setups, but here static is fine if file exists.
-// We'll use a try-catch dynamic import inside the function to be safe.
 
 interface Message {
     role: 'user' | 'assistant';
@@ -33,59 +32,41 @@ export function AIAssistant() {
         }
     }, [messages]);
 
+    const chatAction = useAction(api.ai.intelligentChat);
+
     const handleSend = async () => {
         if (!input.trim()) return;
 
         const userMsg = input;
-        setMessages(prev => [...prev, { role: 'user', content: userMsg }]);
+        const newMessages = [...messages, { role: 'user', content: userMsg }] as Message[];
+        setMessages(newMessages);
         setInput('');
         setLoading(true);
 
         try {
-            // Dynamically load Ollama to handle potential missing file/errors gracefully
-            let askOllama;
-            try {
-                const mod = await import('@/lib/ollama');
-                askOllama = mod.askOllama;
-            } catch (e: any) {
-                throw new Error(`Assistant initialization failed: ${e?.message || "Ollama helper unavailable."}`);
-            }
+            const result = await chatAction({
+                messages: newMessages.map(m => ({ role: m.role, content: m.content }))
+            });
 
-            // Construct Context
-            // In a real app, we would fetch relevant data context here
-            const contextPrompt = `
-You are a helpful logistics assistant for freightcode.
-Current active shipments: 5.
-Recent revenue: £125,000.
-User asks: "${userMsg}"
-Answer briefly and professionally.
-`;
-
-            // Pass undefined for format to allow free text (not JSON)
-            const response = await askOllama(contextPrompt, undefined, undefined);
-
-            let displayText = response;
-            // Attempt to clean up if it still returns JSON by accident
-            try {
-                const parsed = JSON.parse(response);
-                if (parsed.response) displayText = parsed.response;
-            } catch (e) { }
-
-            setMessages(prev => [...prev, { role: 'assistant', content: displayText }]);
-
+            setMessages(prev => [...prev, { role: 'assistant', content: result.content }]);
         } catch (error: any) {
             console.error("AI Error Details:", error);
-            setMessages(prev => [...prev, { role: 'assistant', content: `Error: ${error.message || "Connection failed"}. Check console (F12) for details.` }]);
+            setMessages(prev => [...prev, { role: 'assistant', content: `Error: ${error.message || "Connection failed"}.` }]);
+            toast.error("Failed to connect to the Freight Brain");
         } finally {
             setLoading(false);
         }
     };
+
 
     const containerRef = useRef<HTMLDivElement>(null);
 
     // Close on click outside
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
+            if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+                setIsOpen(false);
+            }
             if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
                 setIsOpen(false);
             }

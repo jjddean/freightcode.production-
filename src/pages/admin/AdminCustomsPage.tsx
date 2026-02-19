@@ -265,7 +265,7 @@ const AdminCustomsPage = () => {
                             const entryNumber = row.customs?.entryNumber;
                             if (!entryNumber) return;
                             const domain = import.meta.env.VITE_HMRC_ENVIRONMENT === 'sandbox'
-                                ? 'www.test.tax.service.gov.uk'
+                                ? 'test-www.tax.service.gov.uk'
                                 : 'www.tax.service.gov.uk';
                             window.open(`https://${domain}/customs-declaration-service/declaration/${entryNumber}/status`, "_blank");
                         }}

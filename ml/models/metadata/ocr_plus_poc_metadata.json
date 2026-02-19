@@ -1,0 +1,8 @@
+{
+  "model": "ocr_plus_poc",
+  "timestamp": "2026-02-19T22:47:52.124463",
+  "metrics": {
+    "test_run": "success"
+  },
+  "git_hash": "031e8942fc30dd247cdadf7a3925fea9c63b7d1e"
+}

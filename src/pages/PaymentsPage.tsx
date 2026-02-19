@@ -274,7 +274,7 @@ const PaymentsPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="px-4 sm:px-6 lg:pl-8 lg:pr-24 py-4">
+      <div className="px-4 sm:px-6 lg:px-8 py-4">
         {/* Payments Header */}
         <MediaCardHeader
           title="Payment Management"
@@ -323,7 +323,12 @@ const PaymentsPage = () => {
         {activeTab === 'invoices' && (
           <div>
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-semibold text-gray-900">Invoices & Payments</h2>
+              <h2 className="text-xl font-semibold text-gray-900">
+                Invoices & Payments
+                <span className="text-sm text-gray-500 ml-2">
+                  ({invoices.length})
+                </span>
+              </h2>
               <Button variant="outline" onClick={() => {
                 const csvContent = "data:text/csv;charset=utf-8,"
                   + ["ID,Date,Description,Amount,Status"].join(",") + "\n"

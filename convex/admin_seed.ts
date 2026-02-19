@@ -65,8 +65,11 @@ export const seedDffShipments = internalMutation({
                 },
                 currentLocation: {
                     city: "Southampton",
+                    state: "Hampshire",
                     country: "UK",
+                    coordinates: { lat: 50.9097, lng: -1.4044 }
                 },
+                estimatedDelivery: "2026-03-01",
                 createdAt: Date.now(),
                 lastUpdated: Date.now(),
             },
@@ -92,8 +95,11 @@ export const seedDffShipments = internalMutation({
                 flagReason: "HS Code Mismatch Detected by SmartAudit",
                 currentLocation: {
                     city: "Southampton",
+                    state: "Hampshire",
                     country: "UK",
+                    coordinates: { lat: 50.9097, lng: -1.4044 }
                 },
+                estimatedDelivery: "2026-03-05",
                 createdAt: Date.now(),
                 lastUpdated: Date.now(),
             }

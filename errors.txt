@@ -1,0 +1,1 @@
+convex/ai.ts(296,25): error TS2353: Object literal may only specify known properties, and 'tool_call_id' does not exist in type '{ role: string; content: string; }'.

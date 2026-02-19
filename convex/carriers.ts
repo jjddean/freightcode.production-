@@ -271,18 +271,6 @@ export const fetchCarrierRates = action({
 
         if (SEARATES_API_KEY) {
             try {
-                // SeaRates requires a two-step process: 
-                // 1. Get Platform Token
-                // 2. Use Token to query GraphQL
-
-                // Note: Coordinates geocoding is ideally needed here as SeaRates uses Lat/Lon.
-                // For this implementation, we will use a simplified approach or mock coordinates for major hubs if actual geocoding isn't available in this function context.
-                // In a production app, we would use args.origin.city to lookup lat/lon via Google Maps API or similar before this step.
-                // Hardcoding Shanghai -> Hamburg for testing as per user context unless we add dynamic geocoding.
-
-                // Dynamic Geocoding Hint: We'd typically call a helper here.
-                // For now, to "Test the key", we will try a request.
-
                 const authUrl = `https://www.searates.com/auth/platform-token?id=${SEARATES_PLATFORM_ID}&api_key=${SEARATES_API_KEY}`;
                 const authResponse = await axios.get(authUrl);
 
@@ -290,11 +278,7 @@ export const fetchCarrierRates = action({
                     const token = authResponse.data.token;
                     const graphqlUrl = "https://api.searates.com/graphql";
 
-                    // Defaulting to FCL for test/demo purposes if parcel is large, otherwise LCL/Air
                     const shippingType = args.parcel.weight > 500 ? "FCL" : "AIR";
-
-                    // Mock coordinates for demo (Shanghai -> Hamburg) to ensure connection success
-                    // In real app, replace with: await getCoordinates(args.origin.city)
                     const coordsFrom = [31.2304, 121.4737];
                     const coordsTo = [53.5511, 9.9937];
 
@@ -332,9 +316,7 @@ export const fetchCarrierRates = action({
 
                     if (rateResponse.data.data && rateResponse.data.data.rates) {
                         const srRates = (Array.isArray(rateResponse.data.data.rates) ? rateResponse.data.data.rates : [rateResponse.data.data.rates]).map((rate: any, idx: number) => {
-                            // Extract provider from points if available, or default
                             const providerName = rate.points?.[0]?.provider || "SeaRates Carrier";
-
                             return {
                                 carrierId: rate.shipmentId || `searates-${Date.now()}-${idx}`,
                                 carrier: providerName,
@@ -357,23 +339,14 @@ export const fetchCarrierRates = action({
                 }
             } catch (e: any) {
                 console.error("SeaRates fetch failed:", e.response?.data || e.message);
-                // Fallback / Mock for SeaRates if key fails/limit reached (simulating the 15 call limit behavior)
-                if (process.env.NODE_ENV === 'development') {
-                    allRates.push({
-                        carrierId: "searates-mock-1",
-                        carrier: "Maersk (SeaRates)",
-                        service: "Ocean FCL",
-                        cost: 2450,
-                        amount: 2450,
-                        currency: "USD",
-                        transit_time: "32 days",
-                        transitTime: "32 days",
-                        provider: "searates",
-                        price: { amount: 2450, currency: "USD", lineItems: generateMockLineItems(args.origin.city, args.destination.city) }
-                    });
-                }
             }
         }
+
+
+
+
+
+
 
         // Sort by cost before returning
         return allRates.sort((a, b) => a.cost - b.cost);

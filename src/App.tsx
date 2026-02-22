@@ -63,6 +63,7 @@ const AdminCompliancePage = lazy(() => import('./pages/admin/AdminCompliancePage
 const AdminSettingsPage = lazy(() => import('./pages/admin/AdminSettingsPage'));
 const AdminMessagesPage = lazy(() => import('./pages/admin/AdminMessagesPage'));
 const AdminCustomsPage = lazy(() => import('./pages/admin/AdminCustomsPage'));
+const SmartAuditPlayground = lazy(() => import('./pages/admin/SmartAuditPlayground'));
 
 
 // --- Helper Components ---
@@ -165,6 +166,7 @@ export default function App() {
                 <Route path="documents" element={<AdminDocumentsPage />} />
                 <Route path="compliance" element={<AdminCompliancePage />} />
                 <Route path="customs" element={<AdminCustomsPage />} />
+                <Route path="smartaudit-test" element={<SmartAuditPlayground />} />
                 <Route path="settings" element={<AdminSettingsPage />} />
               </Route>
 

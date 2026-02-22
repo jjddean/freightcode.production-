@@ -63,6 +63,8 @@ export const DocMateUploader: React.FC<DocMateUploaderProps> = ({
     const [uploading, setUploading] = useState(false);
     const [uploadStage, setUploadStage] = useState("");
     const [dragActive, setDragActive] = useState(false);
+    const [selectedDocType, setSelectedDocType] = useState<string>("auto");
+
     const extractMetadata = useAction(api.docmate.extractDocumentMetadata);
     const auditDocument = useAction(api.smartaudit.auditDocument);
     const saveDocument = useMutation(api.docmate_db.saveProcessedDocument);
@@ -90,10 +92,14 @@ export const DocMateUploader: React.FC<DocMateUploaderProps> = ({
 
             // Step 2: Audit in Convex action (uses OLLAMA_HOST on backend)
             setUploadStage("Running SmartAudit via Convex/Ollama...");
+
+            // Determine docType: Use manual selection if not "auto", else use Textract detection
+            const docType = selectedDocType === "auto" ? extraction.documentType : selectedDocType;
+
             const auditResult = await withTimeout(
                 auditDocument({
                     rawText: extraction.rawText,
-                    docType: extraction.documentType,
+                    docType: docType,
                 }),
                 "SmartAudit analysis",
                 SMARTAUDIT_TIMEOUT_MS
@@ -104,7 +110,7 @@ export const DocMateUploader: React.FC<DocMateUploaderProps> = ({
             const docId = await withTimeout(
                 saveDocument({
                     fileName: file.name,
-                    documentType: extraction.documentType,
+                    documentType: docType, // Use the same type here
                     rawText: extraction.rawText,
                     extractedFields: extraction.fields,
                     tables: extraction.tables,
@@ -138,53 +144,72 @@ export const DocMateUploader: React.FC<DocMateUploaderProps> = ({
     };
 
     return (
-        <Card
-            className={`border-2 border-dashed transition-colors ${dragActive ? "border-purple-500 bg-purple-50" : "border-gray-300"
-                }`}
-            onDragOver={(e) => {
-                e.preventDefault();
-                setDragActive(true);
-            }}
-            onDragLeave={() => setDragActive(false)}
-            onDrop={handleDrop}
-        >
-            <CardContent className="p-8 text-center bg-gray-50/50 hover:bg-gray-100/50 transition-colors cursor-pointer" onClick={() => document.getElementById("file-upload")?.click()}>
-                {uploading ? (
-                    <div className="space-y-4 py-8">
-                        <Loader2 className="h-12 w-12 mx-auto animate-spin text-purple-600" />
-                        <p className="text-sm text-gray-600 font-medium">
-                            {uploadStage || "Processing document with AI (Textract + SmartAudit)..."}
-                        </p>
-                        <p className="text-xs text-gray-400">This can take up to 2-3 minutes if the model is cold.</p>
-                    </div>
-                ) : (
-                    <div className="py-4">
-                        <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <Upload className="h-8 w-8 text-purple-600" />
+        <div className="space-y-4">
+            {/* Document Type Selector */}
+            <div className="flex items-center justify-between px-1">
+                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Document Type</label>
+                <div className="w-48">
+                    <select
+                        className="w-full text-xs border rounded px-2 py-1 bg-white"
+                        value={selectedDocType}
+                        onChange={(e) => setSelectedDocType(e.target.value)}
+                    >
+                        <option value="auto">Auto-detect Type</option>
+                        <option value="commercial_invoice">Commercial Invoice</option>
+                        <option value="packing_list">Packing List</option>
+                        <option value="bol">Bill of Lading</option>
+                    </select>
+                </div>
+            </div>
+
+            <Card
+                className={`border-2 border-dashed transition-colors ${dragActive ? "border-purple-500 bg-purple-50" : "border-gray-300"
+                    }`}
+                onDragOver={(e) => {
+                    e.preventDefault();
+                    setDragActive(true);
+                }}
+                onDragLeave={() => setDragActive(false)}
+                onDrop={handleDrop}
+            >
+                <CardContent className="p-8 text-center bg-gray-50/50 hover:bg-gray-100/50 transition-colors cursor-pointer" onClick={() => document.getElementById("file-upload")?.click()}>
+                    {uploading ? (
+                        <div className="space-y-4 py-8">
+                            <Loader2 className="h-12 w-12 mx-auto animate-spin text-purple-600" />
+                            <p className="text-sm text-gray-600 font-medium">
+                                {uploadStage || "Processing document with AI (Textract + SmartAudit)..."}
+                            </p>
+                            <p className="text-xs text-gray-400">This can take up to 2-3 minutes if the model is cold.</p>
                         </div>
-                        <p className="text-lg font-semibold mb-2 text-gray-900">
-                            Upload Shipping Document
-                        </p>
-                        <p className="text-sm text-gray-500 mb-6 max-w-sm mx-auto">
-                            Drag & drop PDFs or images here to automatically extract data and run compliance checks.
-                        </p>
-                        <input
-                            type="file"
-                            id="file-upload"
-                            className="hidden"
-                            accept=".pdf,.jpg,.jpeg,.png,.tif,.tiff"
-                            onChange={handleFileInput}
-                        />
-                        <Button variant="outline" className="border-purple-200 text-purple-700 hover:bg-purple-50">
-                            <FileText className="h-4 w-4 mr-2" />
-                            Select File
-                        </Button>
-                        <p className="text-xs text-gray-400 mt-4">
-                            Supported formats: PDF, JPG, PNG, TIFF
-                        </p>
-                    </div>
-                )}
-            </CardContent>
-        </Card>
+                    ) : (
+                        <div className="py-4">
+                            <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <Upload className="h-8 w-8 text-purple-600" />
+                            </div>
+                            <p className="text-lg font-semibold mb-2 text-gray-900">
+                                Upload Shipping Document
+                            </p>
+                            <p className="text-sm text-gray-500 mb-6 max-w-sm mx-auto">
+                                Drag & drop PDFs or images here to automatically extract data and run compliance checks.
+                            </p>
+                            <input
+                                type="file"
+                                id="file-upload"
+                                className="hidden"
+                                accept=".pdf,.jpg,.jpeg,.png,.tif,.tiff"
+                                onChange={handleFileInput}
+                            />
+                            <Button variant="outline" className="border-purple-200 text-purple-700 hover:bg-purple-50">
+                                <FileText className="h-4 w-4 mr-2" />
+                                Select File
+                            </Button>
+                            <p className="text-xs text-gray-400 mt-4">
+                                Supported formats: PDF, JPG, PNG, TIFF
+                            </p>
+                        </div>
+                    )}
+                </CardContent>
+            </Card>
+        </div>
     );
 };

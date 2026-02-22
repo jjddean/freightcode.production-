@@ -31,12 +31,17 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Checkbox } from "@/components/ui/checkbox";
 
 import { useAuth } from "@clerk/clerk-react";
+import { useStickyQueryData } from "@/hooks/useStickyQueryData";
 
 // ...
 
 const ClientBookingsPage = () => {
-    const { orgId } = useAuth();
-    const bookings = useQuery(api.bookings.listBookings, { orgId: orgId ?? null }) || [];
+    const { orgId, isLoaded } = useAuth();
+    const bookingsQuery = useQuery(
+        api.bookings.listBookings,
+        isLoaded ? { orgId: orgId ?? null } : "skip"
+    );
+    const bookings = useStickyQueryData(`bookings:${orgId ?? "personal"}`, bookingsQuery, []);
     const [isCreateOpen, setIsCreateOpen] = useState(false);
     // const createCheckout = useAction(api.billing.createCheckoutSession);
 
@@ -292,6 +297,7 @@ const ClientBookingsPage = () => {
                     <DataTable
                         data={bookings}
                         columns={columns as any}
+                        rowKey="bookingId"
                         searchPlaceholder="Search bookings..."
                         rowsPerPage={10}
                     />

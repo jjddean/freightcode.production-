@@ -10,6 +10,7 @@ import {
   BarChart3,
   Settings,
   Wrench,
+  Zap,
 } from "lucide-react"
 import { IconCirclePlusFilled, IconMail } from "@tabler/icons-react"
 
@@ -17,6 +18,7 @@ import { useLocation, Link } from "react-router-dom"
 import { useUser } from "@clerk/clerk-react"
 import { useQuery } from "convex/react"
 import { api } from "../../convex/_generated/api"
+import { useStickyQueryData } from "@/hooks/useStickyQueryData"
 
 import { NavMain } from "@/components/nav-main"
 import { NavDocuments } from "@/components/nav-documents"
@@ -44,6 +46,11 @@ const navMain = [
     title: "Dashboard",
     url: "/dashboard",
     icon: LayoutDashboard,
+  },
+  {
+    title: "Intelligence",
+    url: "/intelligence/forwarders",
+    icon: Zap,
   },
   {
     title: "Shipments",
@@ -121,13 +128,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       avatar: "",
     }
 
-  const unreadCount = useQuery(api.messages.unreadCount, user?.id ? { userId: user.id } : "skip") || 0;
+  const unreadCountQuery = useQuery(api.messages.unreadCount, user?.id ? { userId: user.id } : "skip");
+  const unreadCount = useStickyQueryData("sidebar:messages:unread", unreadCountQuery, 0);
 
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader className="border-b-0 px-2 pt-1">
         <Link to="/dashboard" className="flex h-11 items-center px-4 mb-1">
-          <BrandLogo />
+          <BrandLogo size="lg" />
         </Link>
         <SidebarMenu className="pt-0 pb-0">
           <SidebarMenuItem className="flex items-center gap-2">

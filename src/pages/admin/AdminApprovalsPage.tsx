@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
+import { useStickyQueryData } from '@/hooks/useStickyQueryData';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -17,13 +18,12 @@ import {
     ArrowUpRight,
     CreditCard
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import AdminPageHeader from '@/components/layout/admin/AdminPageHeader';
 
 const AdminApprovalsPage = () => {
-    const pendingActions = useQuery(api.admin.getPendingActions) || [];
+    const pendingActionsQuery = useQuery(api.admin.getPendingActions);
+    const pendingActions = useStickyQueryData("admin:approvals:pending", pendingActionsQuery, []);
 
-    // Mutations for different types
     const approveBooking = useMutation(api.bookings.approveBooking);
     const rejectBooking = useMutation(api.bookings.rejectBooking);
     const approveKyc = useMutation(api.compliance.approveKyc);
@@ -55,11 +55,11 @@ const AdminApprovalsPage = () => {
 
     const getIcon = (type: string) => {
         switch (type) {
-            case 'booking': return <Truck className="h-5 w-5 text-primary-500" />;
-            case 'kyc': return <Users className="h-5 w-5 text-purple-500" />;
-            case 'document': return <FileText className="h-5 w-5 text-orange-500" />;
-            case 'payment': return <CreditCard className="h-5 w-5 text-red-500" />;
-            default: return <AlertTriangle className="h-5 w-5 text-gray-500" />;
+            case 'booking': return <Truck className="h-4 w-4 text-primary-500" />;
+            case 'kyc': return <Users className="h-4 w-4 text-purple-500" />;
+            case 'document': return <FileText className="h-4 w-4 text-orange-500" />;
+            case 'payment': return <CreditCard className="h-4 w-4 text-red-500" />;
+            default: return <AlertTriangle className="h-4 w-4 text-gray-500" />;
         }
     };
 
@@ -71,19 +71,19 @@ const AdminApprovalsPage = () => {
                 icon={FileText}
             >
                 <div className="flex space-x-2">
-                    <Badge variant="outline" className="px-3 py-1 text-sm bg-white">
+                    <Badge variant="outline" className="px-2 py-0.5 text-[10px] bg-white font-bold uppercase tracking-tight">
                         {pendingActions.length} Pending
                     </Badge>
                 </div>
             </AdminPageHeader>
 
             {pendingActions.length === 0 ? (
-                <div className="text-center py-20 bg-white rounded-xl shadow-sm border border-gray-100">
-                    <div className="bg-green-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <Check className="h-8 w-8 text-green-500" />
+                <div className="text-center py-16 bg-white rounded-xl shadow-sm border border-gray-100">
+                    <div className="bg-emerald-50 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Check className="h-6 w-6 text-emerald-500" />
                     </div>
-                    <h3 className="text-lg font-medium text-gray-900">All caught up!</h3>
-                    <p className="text-gray-500">No pending actions requiring your attention.</p>
+                    <h3 className="text-base font-bold text-gray-900">All caught up!</h3>
+                    <p className="text-xs text-gray-500">No pending actions requiring your attention.</p>
                 </div>
             ) : (
                 <div className="space-y-4">
@@ -96,24 +96,24 @@ const AdminApprovalsPage = () => {
                                     </div>
                                     <div>
                                         <div className="flex items-center gap-2 mb-1">
-                                            <Badge variant={item.priority === 'critical' ? 'destructive' : 'secondary'} className="uppercase text-[10px]">
+                                            <Badge variant={item.priority === 'critical' ? 'destructive' : 'secondary'} className="uppercase text-[9px] px-1.5 py-0 font-bold">
                                                 {item.priority}
                                             </Badge>
-                                            <span className="text-xs text-gray-500 flex items-center">
+                                            <span className="text-[10px] text-gray-400 flex items-center">
                                                 <Clock className="h-3 w-3 mr-1" />
                                                 {new Date(item.createdAt).toLocaleDateString()}
                                             </span>
                                         </div>
-                                        <h3 className="font-semibold text-gray-900">{item.title}</h3>
-                                        <p className="text-sm text-gray-600">{item.subtitle}</p>
+                                        <h3 className="font-bold text-gray-900 text-sm">{item.title}</h3>
+                                        <p className="text-xs text-gray-600">{item.subtitle}</p>
                                     </div>
                                 </div>
 
-                                <div className="flex items-start gap-2">
+                                <div className="flex items-center gap-2">
                                     <Button
                                         variant="outline"
                                         size="sm"
-                                        className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                                        className="h-8 text-[10px] font-bold text-red-600 hover:text-red-700 hover:bg-red-50 px-3"
                                         onClick={() => handleAction(item, 'reject')}
                                         disabled={!!processingId}
                                     >
@@ -121,14 +121,14 @@ const AdminApprovalsPage = () => {
                                     </Button>
                                     <Button
                                         size="sm"
-                                        className="bg-primary hover:bg-primary-700"
+                                        className="h-8 text-[10px] font-bold bg-slate-900 hover:bg-slate-800 text-white px-3"
                                         onClick={() => handleAction(item, 'approve')}
                                         disabled={!!processingId}
                                     >
                                         {processingId === item.id ? '...' : 'Approve'}
                                     </Button>
-                                    <Button variant="ghost" size="icon" className="h-9 w-9">
-                                        <ChevronRight className="h-4 w-4 text-gray-400" />
+                                    <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-300">
+                                        <ChevronRight className="h-4 w-4" />
                                     </Button>
                                 </div>
                             </div>

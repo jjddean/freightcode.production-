@@ -19,6 +19,7 @@ import { toast } from 'sonner';
 import { useStripeCheckout } from '@/hooks/useStripeCheckout';
 import SubscriptionCards from '@/components/subscription/SubscriptionCards';
 import { formatCurrency, convertCurrency } from '@/lib/currency';
+import { useStickyQueryData } from '@/hooks/useStickyQueryData';
 
 const PaymentsPage = () => {
   const { user } = useUser();
@@ -30,8 +31,10 @@ const PaymentsPage = () => {
   const [selectedInvoice, setSelectedInvoice] = useState<any>(null);
 
   // Live payment data from Convex
-  const livePayments = useQuery(api.paymentAttempts.listMyPayments) || [];
-  const convexInvoices = useQuery(api.invoices.listMyInvoices) || [];
+  const livePaymentsQuery = useQuery(api.paymentAttempts.listMyPayments);
+  const convexInvoicesQuery = useQuery(api.invoices.listMyInvoices);
+  const livePayments = useStickyQueryData("payments:list", livePaymentsQuery, []);
+  const convexInvoices = useStickyQueryData("invoices:list", convexInvoicesQuery, []);
 
   // Checkout Action
   // const createCheckout = useAction(api.billing.createCheckoutSession);
@@ -345,6 +348,7 @@ const PaymentsPage = () => {
             <DataTable
               data={invoices}
               columns={invoiceColumns}
+              rowKey="id"
               searchPlaceholder="Search invoices by ID, shipment, or service..."
               rowsPerPage={10}
             />

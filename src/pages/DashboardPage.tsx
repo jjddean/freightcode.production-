@@ -12,16 +12,30 @@ import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { formatCurrency } from '@/lib/currency';
 import { useOrganization, useUser } from "@clerk/clerk-react";
+import { useStickyQueryData } from '@/hooks/useStickyQueryData';
 
 const DashboardPage = () => {
-  const { organization } = useOrganization();
+  const { organization, isLoaded: isOrgLoaded } = useOrganization();
   const { user } = useUser();
   const orgId = organization?.id;
 
 
-  const liveShipments = useQuery(api.shipments.listShipments, { orgId: orgId ?? null });
-  const liveDocuments = useQuery(api.documents.listDocuments, { orgId: orgId ?? null });
-  const liveBookings = useQuery(api.bookings.listBookings, { orgId: orgId ?? null });
+  const liveShipmentsQuery = useQuery(
+    api.shipments.listShipments,
+    isOrgLoaded ? { orgId: orgId ?? null } : "skip"
+  );
+  const liveDocumentsQuery = useQuery(
+    api.documents.listDocuments,
+    isOrgLoaded ? { orgId: orgId ?? null } : "skip"
+  );
+  const liveBookingsQuery = useQuery(
+    api.bookings.listBookings,
+    isOrgLoaded ? { orgId: orgId ?? null } : "skip"
+  );
+
+  const liveShipments = useStickyQueryData(`dashboard:shipments:${orgId ?? "personal"}`, liveShipmentsQuery, []);
+  const liveDocuments = useStickyQueryData(`dashboard:documents:${orgId ?? "personal"}`, liveDocumentsQuery, []);
+  const liveBookings = useStickyQueryData(`dashboard:bookings:${orgId ?? "personal"}`, liveBookingsQuery, []);
 
   // Dynamic metrics calculation
   const liveMetrics = {
@@ -226,6 +240,7 @@ const DashboardPage = () => {
                 <DataTable
                   data={displayShipments}
                   columns={shipmentColumns}
+                  rowKey="id"
                   searchPlaceholder="Search shipments..."
                   rowsPerPage={5}
                 />

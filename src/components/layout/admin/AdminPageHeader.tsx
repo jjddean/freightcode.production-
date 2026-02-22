@@ -6,6 +6,7 @@ interface AdminPageHeaderProps {
     subtitle?: string;
     actionLabel?: string;
     onAction?: () => void;
+    // Kept for backward compatibility with existing page usages.
     icon?: React.ElementType;
     children?: React.ReactNode;
 }
@@ -15,20 +16,14 @@ const AdminPageHeader: React.FC<AdminPageHeaderProps> = ({
     subtitle,
     actionLabel,
     onAction,
-    icon: Icon,
     children
 }) => {
     return (
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-            <div className="flex items-start gap-3">
-                {Icon && (
-                    <div className="p-2 bg-primary-50 text-primary-600 rounded-lg">
-                        <Icon className="h-6 w-6" />
-                    </div>
-                )}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 border-b border-slate-200/60 pb-8">
+            <div className="flex items-start gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-primary-800 tracking-tight">{title}</h1>
-                    {subtitle && <p className="text-muted-foreground text-sm mt-1">{subtitle}</p>}
+                    <h1 className="text-xl font-bold text-slate-800 tracking-tight leading-none">{title}</h1>
+                    {subtitle && <div className="text-slate-500 text-xs mt-2 flex items-center">{subtitle}</div>}
                 </div>
             </div>
 
@@ -38,7 +33,7 @@ const AdminPageHeader: React.FC<AdminPageHeaderProps> = ({
                     <Button
                         onClick={onAction}
                         size="sm"
-                        className="bg-primary hover:bg-primary-700 text-white shadow-sm"
+                        className="bg-[#003057] hover:bg-[#004e8a] text-white shadow-md shadow-[#003057]/10 h-9 px-6 font-bold rounded-lg"
                     >
                         {actionLabel}
                     </Button>

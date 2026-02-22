@@ -24,6 +24,39 @@ async function withTimeout<T>(promise: Promise<T>, label: string, timeoutMs: num
 }
 
 /**
+ * Common helper to ensure a valid HMRC token exists, refreshing if necessary.
+ */
+async function ensureValidHMRCIntegration(ctx: any, hmrc: HMRCService, integration: any) {
+    let currentToken = integration?.accessToken;
+
+    if (integration && integration.expiresAt && Date.now() > integration.expiresAt - 60000) {
+        console.log("HMRC Token expired, refreshing...");
+        try {
+            const tokens = await hmrc.refreshAccessToken();
+            const expiresAt = Date.now() + (tokens.expiresIn * 1000);
+
+            await ctx.runMutation(internal.integrations.saveIntegration, {
+                provider: "hmrc",
+                accessToken: tokens.accessToken,
+                refreshToken: tokens.refreshToken,
+                expiresAt,
+                status: "active",
+            });
+            currentToken = tokens.accessToken;
+        } catch (refreshError) {
+            console.error("Auto-refresh failed:", refreshError);
+            throw new Error("HMRC session expired. Please reconnect your account.");
+        }
+    }
+
+    if (!currentToken) {
+        throw new Error("HMRC account not connected. Please go to Integration settings.");
+    }
+
+    return currentToken;
+}
+
+/**
  * Generate the authorization link for the admin to connect HMRC.
  */
 export const getHMRCAuthUrl = action({
@@ -107,10 +140,20 @@ export const getDutyDeferment = action({
         );
 
         try {
+            await ensureValidHMRCIntegration(ctx, hmrc, integration);
             return await withTimeout(hmrc.getDutyDefermentBalance(args.eori), "HMRC duty deferment");
         } catch (error: any) {
-            console.error("HMRC DDA Action Error:", error);
-            throw new Error(error.message);
+            console.error("HMRC DDA Action Error:", {
+                message: error.message,
+                status: error.response?.status,
+                data: error.response?.data
+            });
+
+            if (error.response?.status === 401) {
+                throw new Error("HMRC authentication failed. Please reconnect your account.");
+            }
+
+            throw new Error(`DDA Lookup Failed: ${error.message}`);
         }
     },
 });
@@ -197,13 +240,34 @@ export const getENSStatus = action({
             throw new Error("HMRC credentials not configured.");
         }
 
-        const hmrc = HMRCService.create(HMRC_CLIENT_ID, HMRC_CLIENT_SECRET, HMRC_REDIRECT_URI, HMRC_ENVIRONMENT);
+        // 1. Look up the saved integration to get the User Token
+        const integration = await ctx.runQuery(internal.integrations.getIntegration, { provider: "hmrc" });
+
+        const hmrc = HMRCService.create(
+            HMRC_CLIENT_ID,
+            HMRC_CLIENT_SECRET,
+            HMRC_REDIRECT_URI,
+            HMRC_ENVIRONMENT,
+            integration?.accessToken,
+            integration?.refreshToken
+        );
 
         try {
+            await ensureValidHMRCIntegration(ctx, hmrc, integration);
             return await withTimeout(hmrc.checkENSStatus(args.mrn), "HMRC ENS status");
         } catch (error: any) {
-            console.error("HMRC ENS Error:", error);
-            throw new Error(error.message);
+            console.error("HMRC ENS Error Details:", {
+                message: error.message,
+                status: error.response?.status,
+                data: error.response?.data
+            });
+
+            // If we still get a 401, the token might be revoked or invalid
+            if (error.response?.status === 401) {
+                throw new Error("HMRC authentication failed. Please reconnect your account.");
+            }
+
+            throw new Error(`HMRC ENS Check Failed: ${error.message}`);
         }
     },
 });

@@ -15,6 +15,7 @@ export interface Column<T> {
 interface DataTableProps<T> {
   data: T[];
   columns: Column<T>[];
+  rowKey?: keyof T | ((row: T, index: number) => string | number);
   searchable?: boolean;
   searchPlaceholder?: string;
   onSearchChange?: (value: string) => void;
@@ -29,6 +30,7 @@ interface DataTableProps<T> {
 function DataTable<T extends Record<string, any>>({
   data,
   columns,
+  rowKey,
   searchable = true,
   searchPlaceholder = "Search...",
   onSearchChange,
@@ -87,6 +89,44 @@ function DataTable<T extends Record<string, any>>({
   const totalPages = Math.ceil(sortedData.length / rowsPerPage);
   const startIndex = (currentPage - 1) * rowsPerPage;
   const paginatedData = sortedData.slice(startIndex, startIndex + rowsPerPage);
+
+  const resolveRowKey = (row: T, index: number): string | number => {
+    if (typeof rowKey === "function") {
+      return rowKey(row, index);
+    }
+    if (typeof rowKey === "string" && row[rowKey] !== undefined && row[rowKey] !== null) {
+      return String(row[rowKey]);
+    }
+
+    const fallbackKeys = [
+      "_id",
+      "id",
+      "bookingId",
+      "quoteId",
+      "shipmentId",
+      "trackingNumber",
+      "invoiceNumber",
+      "payment_id",
+    ];
+
+    for (const key of fallbackKeys) {
+      if (row[key] !== undefined && row[key] !== null) {
+        return String(row[key]);
+      }
+    }
+
+    const signature = Object.keys(row)
+      .sort()
+      .slice(0, 6)
+      .map((key) => `${key}:${String(row[key])}`)
+      .join("|");
+
+    if (signature) {
+      return `row-${signature}`;
+    }
+
+    return `row-${startIndex + index}`;
+  };
 
   const handleSort = (column: keyof T) => {
     if (sortColumn === column) {
@@ -184,7 +224,7 @@ function DataTable<T extends Record<string, any>>({
           <tbody className="bg-white divide-y divide-gray-200">
             {paginatedData.map((row, index) => (
               <tr
-                key={index}
+                key={resolveRowKey(row, index)}
                 className={cn(
                   "hover:bg-gray-50 transition-colors",
                   onRowClick && "cursor-pointer"

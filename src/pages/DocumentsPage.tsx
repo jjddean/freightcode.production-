@@ -18,6 +18,7 @@ import Footer from '@/components/layout/Footer';
 import { useQuery, useMutation, useAction } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { useUser, useAuth } from "@clerk/clerk-react";
+import { useStickyQueryData } from '@/hooks/useStickyQueryData';
 import { Sparkles } from "lucide-react";
 import {
     Drawer,
@@ -120,13 +121,14 @@ const DocumentsPage = () => {
 
     // Live documents from Convex
     const { orgId } = useAuth();
-    const liveDocuments = useQuery(api.documents.listDocuments, {
+    const liveDocumentsQuery = useQuery(api.documents.listDocuments, {
         type: docTypeFilter === 'all' ? undefined : docTypeFilter,
         orgId: orgId ?? null
     });
+    const liveDocuments = useStickyQueryData(`documents:list:${orgId ?? "personal"}:${docTypeFilter}`, liveDocumentsQuery, []);
 
     const tableData = useMemo(() => {
-        return (liveDocuments || []).map((doc: any) => ({
+        return liveDocuments.map((doc: any) => ({
             ...doc,
             documentNumber: doc.documentData?.documentNumber || '-',
             issueDate: doc.documentData?.issueDate || '-',
@@ -160,7 +162,8 @@ const DocumentsPage = () => {
     const sendEnvelope = useAction((api as any).docusign.sendEnvelope);
 
     // Contacts
-    const contacts = useQuery((api as any).contacts.listContacts) || [];
+    const contactsQuery = useQuery((api as any).contacts.listContacts);
+    const contacts = useStickyQueryData("documents:contacts", contactsQuery, []);
     const createContact = useMutation((api as any).contacts.createContact);
 
     // --- Actions ---

@@ -131,6 +131,42 @@ export class HMRCService {
     }
 
     /**
+     * Refresh the Access Token using the Refresh Token
+     */
+    async refreshAccessToken(): Promise<{
+        accessToken: string;
+        refreshToken: string;
+        expiresIn: number;
+    }> {
+        if (!this.refreshToken) {
+            throw new Error("No refresh token available");
+        }
+
+        try {
+            const response = await axios.post(this.authUrl, new URLSearchParams({
+                grant_type: "refresh_token",
+                client_id: this.clientId,
+                client_secret: this.clientSecret,
+                refresh_token: this.refreshToken,
+            }).toString(), {
+                headers: { "Content-Type": "application/x-www-form-urlencoded" }
+            });
+
+            this.accessToken = response.data.access_token;
+            this.refreshToken = response.data.refresh_token;
+
+            return {
+                accessToken: response.data.access_token,
+                refreshToken: response.data.refresh_token,
+                expiresIn: response.data.expires_in,
+            };
+        } catch (error: any) {
+            console.error("HMRC Token Refresh Error:", error.response?.data || error.message);
+            throw new Error("Failed to refresh HMRC token");
+        }
+    }
+
+    /**
      * Search for HS/Commodity Codes by term
      * Note: This is a public search and does not require a user-level token.
      */
@@ -262,7 +298,8 @@ export class HMRCService {
      */
     async checkENSStatus(mrn: string) {
         try {
-            const token = await this.getClientAccessToken();
+            // Prefer User Token if available (for restricted views), else fallback to Client Creds
+            const token = this.accessToken || await this.getClientAccessToken();
             // Note: Customs Declarations Information API uses a slightly different path
             const url = `${this.eoriBaseUrl}/customs/declarations-information/mrn/${mrn.toUpperCase()}/status`;
 
@@ -285,10 +322,14 @@ export class HMRCService {
             return { success: false, message: "No status found for this MRN." };
         } catch (error: any) {
             console.error("HMRC ENS Status Error:", error.response?.data || error.message);
+            if (error.response) {
+                console.error("HMRC API Response:", JSON.stringify(error.response.data, null, 2));
+                console.error("HMRC API Status:", error.response.status);
+            }
             if (error.response?.status === 404) {
                 return { success: false, message: "MRN not found in HMRC records." };
             }
-            throw new Error("Failed to fetch ENS status from HMRC");
+            throw new Error(`Failed to fetch ENS status from HMRC: ${error.message} - ${JSON.stringify(error.response?.data || {})}`);
         }
     }
 

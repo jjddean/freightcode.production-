@@ -42,13 +42,13 @@ const ClientBookingsPage = lazy(() => import('./pages/client/ClientBookingsPage'
 const ApiDocsPage = lazy(() => import('./pages/ApiDocsPage'));
 const CurrencyPage = lazy(() => import('./pages/tools/CurrencyPage'));
 const HSCodePage = lazy(() => import('./pages/tools/HSCodePage'));
+const IntelligencePage = lazy(() => import('./pages/IntelligencePage'));
+const ForwarderFinderPage = lazy(() => import('./pages/ForwarderFinderPage'));
 const SharedDocumentPage = lazy(() => import('./pages/SharedDocumentPage'));
 const DocusignCallbackPage = lazy(() => import('./pages/DocusignCallbackPage'));
 const DocumentPrintPage = lazy(() => import('./pages/DocumentPrintPage'));
 const TestDashboardPage = lazy(() => import('./pages/TestDashboardPage'));
 const HmrcCallbackPage = lazy(() => import('./pages/HmrcCallbackPage'));
-
-// Admin Pages - Lazy Loaded
 const AdminDashboardPage = lazy(() => import('./pages/admin/AdminDashboardPage'));
 const AdminApprovalsPage = lazy(() => import('./pages/admin/AdminApprovalsPage'));
 const AdminBookingsPage = lazy(() => import('./pages/admin/AdminBookingsPage'));
@@ -117,8 +117,7 @@ export default function App() {
 
   return (
     <BrowserRouter future={{
-      v7_relativeSplatPath: true,
-      v7_startTransition: true
+      v7_relativeSplatPath: true
     }}>
       <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
         <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
@@ -143,30 +142,31 @@ export default function App() {
               <Route path="/documents/print/:documentId" element={<DocumentPrintPage />} />
 
               {/* Admin Routes (Wrapped in ProtectedRoute & AdminRoute & AdminLayout) */}
-              <Route path="/admin/*" element={
+              <Route path="/admin" element={
                 <ProtectedRoute>
                   <AdminRoute>
                     <AdminLayout>
-                      <Routes>
-                        <Route index element={<AdminDashboardPage />} />
-                        <Route path="messages" element={<AdminMessagesPage />} />
-                        <Route path="approvals" element={<AdminApprovalsPage />} />
-                        <Route path="bookings" element={<AdminBookingsPage />} />
-                        <Route path="payments" element={<AdminFinancePage />} />
-                        <Route path="waitlist" element={<AdminWaitlistPage />} />
-                        <Route path="audit" element={<AdminAuditPage />} />
-                        <Route path="customers" element={<AdminCustomersPage />} />
-                        <Route path="shipments" element={<AdminShipmentsPage />} />
-                        <Route path="carriers" element={<AdminCarriersPage />} />
-                        <Route path="documents" element={<AdminDocumentsPage />} />
-                        <Route path="compliance" element={<AdminCompliancePage />} />
-                        <Route path="customs" element={<AdminCustomsPage />} />
-                        <Route path="settings" element={<AdminSettingsPage />} />
-                      </Routes>
+                      <Outlet />
                     </AdminLayout>
                   </AdminRoute>
                 </ProtectedRoute>
-              } />
+              }>
+                <Route index element={<AdminDashboardPage />} />
+                <Route path="reports" element={<AdminDashboardPage />} />
+                <Route path="messages" element={<AdminMessagesPage />} />
+                <Route path="approvals" element={<AdminApprovalsPage />} />
+                <Route path="bookings" element={<AdminBookingsPage />} />
+                <Route path="payments" element={<AdminFinancePage />} />
+                <Route path="waitlist" element={<AdminWaitlistPage />} />
+                <Route path="audit" element={<AdminAuditPage />} />
+                <Route path="customers" element={<AdminCustomersPage />} />
+                <Route path="shipments" element={<AdminShipmentsPage />} />
+                <Route path="carriers" element={<AdminCarriersPage />} />
+                <Route path="documents" element={<AdminDocumentsPage />} />
+                <Route path="compliance" element={<AdminCompliancePage />} />
+                <Route path="customs" element={<AdminCustomsPage />} />
+                <Route path="settings" element={<AdminSettingsPage />} />
+              </Route>
 
               {/* Protected Client Routes (Wrapped in ProtectedRoute & ClientSidebar) */}
               <Route element={
@@ -177,6 +177,8 @@ export default function App() {
                 </ProtectedRoute>
               }>
                 <Route path="/dashboard" element={<DashboardPage />} />
+                <Route path="/intelligence" element={<IntelligencePage />} />
+                <Route path="/intelligence/forwarders" element={<ForwarderFinderPage />} />
                 <Route path="/shipments" element={<ShipmentsPage />} />
                 <Route path="/account" element={<AccountPage />} />
                 <Route path="/quotes" element={<ClientQuotesPage />} />

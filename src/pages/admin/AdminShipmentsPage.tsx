@@ -3,6 +3,7 @@ import { useQuery, useMutation } from "convex/react";
 import { StatusBadge } from '@/components/ui/status-badge';
 import { cn } from "@/lib/utils";
 import { api } from "../../../convex/_generated/api";
+import { useStickyQueryData } from '@/hooks/useStickyQueryData';
 import type { Id } from "../../../convex/_generated/dataModel";
 import DataTable from '@/components/ui/data-table';
 import { Button } from '@/components/ui/button';
@@ -16,7 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import { formatCurrency } from '@/lib/currency';
-import { MapPin, Navigation, Package, Truck, MoreHorizontal, AlertTriangle, CheckCircle } from 'lucide-react';
+import { MapPin, Navigation, Package, Truck, MoreHorizontal, AlertTriangle, CheckCircle, ExternalLink, ClipboardCheck, FileCheck } from 'lucide-react';
 import AdminPageHeader from '@/components/layout/admin/AdminPageHeader';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -36,14 +37,14 @@ import {
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { ExternalLink, ClipboardCheck, History, Clock, FileCheck } from 'lucide-react';
 
 const AdminShipmentsPage = () => {
-    // const { toast } = useToast(); // Removed
-    const shipments = useQuery(api.admin.listAllShipments, {}) || [];
+    const shipmentsQuery = useQuery(api.admin.listAllShipments, {});
+    const shipments = useStickyQueryData("admin:shipments:list", shipmentsQuery, []);
     const flagShipment = useMutation(api.shipments.flagShipment);
     const clearFlag = useMutation(api.shipments.clearShipmentFlag);
     const submitFiling = useMutation(api.customs.submitCustomsFiling);
+    const isSandboxEnv = import.meta.env.VITE_HMRC_ENVIRONMENT === 'sandbox';
 
     const [selectedShipment, setSelectedShipment] = useState<any>(null);
     const [isFilingModalOpen, setIsFilingModalOpen] = useState(false);
@@ -90,7 +91,6 @@ const AdminShipmentsPage = () => {
             });
             toast.success("Shipment marked as filed!");
             setIsFilingModalOpen(false);
-            // Refresh selected shipment in the sheet by finding it in the list
             const updated = shipments.find((s: any) => s._id === selectedShipment._id);
             if (updated) setSelectedShipment(updated);
         } catch (error) {
@@ -116,11 +116,11 @@ const AdminShipmentsPage = () => {
             header: 'Carrier',
             render: (value: string) => (
                 <div className="flex items-center space-x-2">
-                    <span className="text-lg">{
+                    <span className="text-base">{
                         value?.toLowerCase().includes('fedex') ? '🟣' :
                             value?.toLowerCase().includes('dhl') ? '🟡' : '📦'
                     }</span>
-                    <span>{value}</span>
+                    <span className="text-xs">{value}</span>
                 </div>
             )
         },
@@ -128,8 +128,8 @@ const AdminShipmentsPage = () => {
             key: 'currentLocation',
             header: 'Current Location',
             render: (location: any) => (
-                <div className="flex items-center text-sm text-gray-600">
-                    <MapPin className="h-4 w-4 mr-1 text-gray-400" />
+                <div className="flex items-center text-xs text-gray-600">
+                    <MapPin className="h-3 w-3 mr-1 text-gray-400" />
                     {location?.city || 'In Transit'}, {location?.country || ''}
                 </div>
             )
@@ -137,7 +137,7 @@ const AdminShipmentsPage = () => {
         {
             key: 'value',
             header: 'Value',
-            render: (val: string) => <span className="font-semibold text-gray-900">{formatCurrency(val)}</span>
+            render: (val: string) => <span className="font-semibold text-gray-900 text-xs">{formatCurrency(val)}</span>
         },
         {
             key: 'customs',
@@ -155,21 +155,21 @@ const AdminShipmentsPage = () => {
             render: (id: string, row: any) => (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-400 hover:text-blue-600">
-                            <MoreHorizontal className="h-4 w-4" />
+                        <Button variant="ghost" size="icon" className="h-7 w-7 text-gray-400 hover:text-blue-600">
+                            <MoreHorizontal className="h-3.5 w-3.5" />
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem onClick={() => { }}>View Details</DropdownMenuItem>
+                        <DropdownMenuLabel className="text-xs">Actions</DropdownMenuLabel>
+                        <DropdownMenuItem className="text-xs" onClick={() => setSelectedShipment(row)}>View Details</DropdownMenuItem>
                         <DropdownMenuSeparator />
                         {row.riskLevel === 'high' ? (
-                            <DropdownMenuItem onClick={() => handleClear(row.shipmentId)} className="text-green-600">
-                                <CheckCircle className="mr-2 h-4 w-4" /> Clear Risk Flag
+                            <DropdownMenuItem className="text-xs text-green-600" onClick={() => handleClear(row.shipmentId)}>
+                                <CheckCircle className="mr-2 h-3.5 w-3.5" /> Clear Risk Flag
                             </DropdownMenuItem>
                         ) : (
-                            <DropdownMenuItem onClick={() => handleFlag(row.shipmentId)} className="text-red-600">
-                                <AlertTriangle className="mr-2 h-4 w-4" /> Flag as High Risk
+                            <DropdownMenuItem className="text-xs text-red-600" onClick={() => handleFlag(row.shipmentId)}>
+                                <AlertTriangle className="mr-2 h-3.5 w-3.5" /> Flag as High Risk
                             </DropdownMenuItem>
                         )}
                     </DropdownMenuContent>
@@ -187,8 +187,8 @@ const AdminShipmentsPage = () => {
                 onAction={() => { }}
                 icon={Truck}
             >
-                <Button variant="outline">
-                    <Navigation className="h-4 w-4 mr-2" /> Live Map
+                <Button variant="outline" size="sm" className="h-9 px-4 text-xs font-bold">
+                    <Navigation className="h-3.5 w-3.5 mr-2" /> Live Map
                 </Button>
             </AdminPageHeader>
 
@@ -196,51 +196,51 @@ const AdminShipmentsPage = () => {
                 <DataTable
                     data={shipments}
                     columns={columns as any}
-                    searchPlaceholder="Search tracking number or carrier..."
+                    rowKey={(row: any) => row.shipmentId ?? row._id}
+                    searchPlaceholder="Search tracking..."
                     rowsPerPage={10}
                     onRowClick={(row) => setSelectedShipment(row)}
                 />
             </div>
 
-            {/* Shipment Detail Sheet */}
             <Sheet open={!!selectedShipment} onOpenChange={(open) => !open && setSelectedShipment(null)}>
-                <SheetContent side="right" className="w-[400px] sm:w-[540px] overflow-y-auto p-6">
+                <SheetContent side="right" className="w-[400px] sm:w-[480px] overflow-y-auto p-6">
                     <SheetHeader>
-                        <SheetTitle className="flex items-center gap-2">
-                            <Package className="h-5 w-5 text-primary-600" />
+                        <SheetTitle className="flex items-center gap-2 text-lg">
+                            <Package className="h-4 w-4 text-primary-600" />
                             Shipment Details
                         </SheetTitle>
-                        <SheetDescription>
+                        <SheetDescription className="text-xs">
                             Shipment ID: {selectedShipment?.shipmentId}
                         </SheetDescription>
                     </SheetHeader>
 
                     {selectedShipment && (
-                        <div className="py-6 space-y-8">
-                            <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div className="py-6 space-y-6">
+                            <div className="grid grid-cols-2 gap-4 text-xs">
                                 <div className="p-3 bg-gray-50 rounded-lg border border-gray-100">
-                                    <span className="text-gray-500 block text-xs uppercase font-bold tracking-tight mb-1">Status</span>
+                                    <span className="text-gray-500 block text-[10px] uppercase font-bold tracking-tight mb-1">Status</span>
                                     <span className="font-semibold text-gray-900">{selectedShipment.status}</span>
                                 </div>
                                 <div className="p-3 bg-gray-50 rounded-lg border border-gray-100">
-                                    <span className="text-gray-500 block text-xs uppercase font-bold tracking-tight mb-1">Carrier</span>
+                                    <span className="text-gray-500 block text-[10px] uppercase font-bold tracking-tight mb-1">Carrier</span>
                                     <span className="font-semibold text-gray-900">{selectedShipment.carrier}</span>
                                 </div>
                             </div>
 
-                            <div className="p-3 bg-gray-50 rounded-lg border border-gray-100 text-sm">
-                                <span className="text-gray-500 block text-xs uppercase font-bold tracking-tight mb-1">Value</span>
+                            <div className="p-3 bg-gray-50 rounded-lg border border-gray-100 text-xs">
+                                <span className="text-gray-500 block text-[10px] uppercase font-bold tracking-tight mb-1">Value</span>
                                 <span className="font-semibold text-gray-900">{selectedShipment.shipmentDetails?.value ? formatCurrency(selectedShipment.shipmentDetails.value) : 'N/A'}</span>
                             </div>
 
-                            {/* Customs Filing Section */}
                             <div className="space-y-4 border rounded-xl p-4 bg-slate-50/50">
                                 <div className="flex items-center justify-between">
-                                    <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                                        <FileCheck className="h-4 w-4 text-primary-600" />
+                                    <h3 className="text-xs font-bold text-slate-900 flex items-center gap-2">
+                                        <FileCheck className="h-3.5 w-3.5 text-primary-600" />
                                         Customs & Compliance
                                     </h3>
                                     <Badge variant="outline" className={cn(
+                                        "text-[10px] px-2 py-0",
                                         selectedShipment.customs?.filingStatus === 'filed' ? "bg-emerald-50 text-emerald-700 border-emerald-200" :
                                             selectedShipment.customs?.filingStatus === 'pending' ? "bg-amber-50 text-amber-700 border-amber-200" :
                                                 "bg-slate-100 text-slate-500"
@@ -250,7 +250,7 @@ const AdminShipmentsPage = () => {
                                 </div>
 
                                 {selectedShipment.customs?.filingStatus === 'filed' ? (
-                                    <div className="space-y-2 text-xs">
+                                    <div className="space-y-2 text-[11px]">
                                         <div className="flex justify-between">
                                             <span className="text-slate-500">HMRC Reference:</span>
                                             <span className="font-mono font-bold text-slate-900">{selectedShipment.customs.entryNumber}</span>
@@ -267,25 +267,33 @@ const AdminShipmentsPage = () => {
                                     </div>
                                 ) : (
                                     <div className="space-y-3">
-                                        <p className="text-xs text-slate-600">
-                                            This shipment requires customs filing. You can open the HMRC portal to file manually, then mark it as filed here.
+                                        <p className="text-[11px] text-slate-600 leading-relaxed">
+                                            {isSandboxEnv
+                                                ? "This shipment requires customs filing. Use the Customs Queue CDS checks and then mark as filed."
+                                                : "This shipment requires customs filing. Open the HMRC portal, then mark as filed."}
                                         </p>
                                         <div className="flex items-center gap-2">
                                             <Button
                                                 variant="outline"
                                                 size="sm"
-                                                className="w-full h-8 text-xs font-semibold"
-                                                onClick={() => window.open("https://import-notifications.service.gov.uk", "_blank")}
+                                                className="w-full h-8 text-[10px] font-bold"
+                                                onClick={() => {
+                                                    if (isSandboxEnv) {
+                                                        toast.info("Sandbox Portal Unavailable");
+                                                        return;
+                                                    }
+                                                    window.open("https://import-notifications.service.gov.uk", "_blank");
+                                                }}
                                             >
-                                                <ExternalLink className="w-3.5 h-3.5 mr-1.5" />
+                                                <ExternalLink className="w-3 h-3 mr-1.5" />
                                                 HMRC Portal
                                             </Button>
                                             <Button
                                                 size="sm"
-                                                className="w-full h-8 text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white"
+                                                className="w-full h-8 text-[10px] font-bold bg-emerald-600 hover:bg-emerald-700 text-white"
                                                 onClick={handleOpenFilingModal}
                                             >
-                                                <ClipboardCheck className="w-3.5 h-3.5 mr-1.5" />
+                                                <ClipboardCheck className="w-3 h-3 mr-1.5" />
                                                 Mark Filed
                                             </Button>
                                         </div>
@@ -293,14 +301,13 @@ const AdminShipmentsPage = () => {
                                 )}
                             </div>
 
-                            {/* Action Buttons */}
                             <div className="flex flex-col gap-2">
                                 {selectedShipment.riskLevel === 'high' ? (
-                                    <Button variant="outline" className="w-full text-green-600 border-green-200 hover:bg-green-50" onClick={() => handleClear(selectedShipment.shipmentId)}>
+                                    <Button variant="outline" size="sm" className="w-full text-green-600 border-green-200 hover:bg-green-50 text-xs font-bold h-9" onClick={() => handleClear(selectedShipment.shipmentId)}>
                                         <CheckCircle className="mr-2 h-4 w-4" /> Clear Risk Flag
                                     </Button>
                                 ) : (
-                                    <Button variant="outline" className="w-full text-red-600 border-red-200 hover:bg-red-50" onClick={() => handleFlag(selectedShipment.shipmentId)}>
+                                    <Button variant="outline" size="sm" className="w-full text-red-600 border-red-200 hover:bg-red-50 text-xs font-bold h-9" onClick={() => handleFlag(selectedShipment.shipmentId)}>
                                         <AlertTriangle className="mr-2 h-4 w-4" /> Flag as High Risk
                                     </Button>
                                 )}
@@ -310,39 +317,39 @@ const AdminShipmentsPage = () => {
                 </SheetContent>
             </Sheet>
 
-            {/* Filing Modal */}
             <Dialog open={isFilingModalOpen} onOpenChange={setIsFilingModalOpen}>
-                <DialogContent>
+                <DialogContent className="sm:max-w-[400px]">
                     <DialogHeader>
                         <DialogTitle>Confirm Customs Filing</DialogTitle>
-                        <DialogDescription>
+                        <DialogDescription className="text-xs">
                             Enter the HMRC reference number for {selectedShipment?.shipmentId}.
                         </DialogDescription>
                     </DialogHeader>
                     <div className="space-y-4 py-4">
                         <div className="space-y-2">
-                            <Label htmlFor="ref">HMRC Reference (CDS/IPAFFS)</Label>
+                            <Label htmlFor="ref" className="text-xs">HMRC Reference (CDS/IPAFFS)</Label>
                             <Input
                                 id="ref"
                                 value={hmrcRef}
                                 onChange={(e) => setHmrcRef(e.target.value)}
                                 placeholder="e.g. GB-2026-..."
+                                className="h-9 text-xs"
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor="notes">Notes</Label>
+                            <Label htmlFor="notes" className="text-xs">Notes</Label>
                             <textarea
                                 id="notes"
                                 value={filingNotes}
                                 onChange={(e) => setFilingNotes(e.target.value)}
                                 placeholder="Optional filing notes..."
-                                className="flex min-h-[80px] w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                                className="flex min-h-[80px] w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-primary-500"
                             />
                         </div>
                     </div>
                     <DialogFooter>
-                        <Button variant="outline" onClick={() => setIsFilingModalOpen(false)}>Cancel</Button>
-                        <Button className="bg-emerald-600 hover:bg-emerald-700 text-white" onClick={handleSubmitFiling} disabled={isSubmitting}>
+                        <Button variant="outline" size="sm" className="text-xs h-9" onClick={() => setIsFilingModalOpen(false)}>Cancel</Button>
+                        <Button className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs h-9" onClick={handleSubmitFiling} disabled={isSubmitting}>
                             {isSubmitting ? 'Submitting...' : 'Confirm'}
                         </Button>
                     </DialogFooter>

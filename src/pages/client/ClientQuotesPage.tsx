@@ -7,6 +7,8 @@ import { Button } from '@/components/ui/button';
 import Footer from '@/components/layout/Footer';
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
+import { useAuth } from "@clerk/clerk-react";
+import { useStickyQueryData } from "@/hooks/useStickyQueryData";
 import QuoteRequestForm from '@/components/forms/QuoteRequestForm';
 import LiveRateComparison from '@/components/shipping/LiveRateComparison';
 import QuoteResultsView from '@/components/shipping/QuoteResultsView';
@@ -243,7 +245,13 @@ const BookingDialog = ({ quote, selectedCarrier }: { quote: any, selectedCarrier
 
 
 const ClientQuotesPage = () => {
-    const quotes = useQuery(api.quotes.listMyQuotes) || [];
+    const { orgId, isLoaded } = useAuth();
+    const navigate = useNavigate();
+    const quotesQuery = useQuery(
+        api.quotes.listQuotes,
+        isLoaded ? { orgId: orgId ?? null } : "skip"
+    );
+    const quotes = useStickyQueryData(`quotes:${orgId ?? "personal"}`, quotesQuery, []);
     const [searchParams, setSearchParams] = useSearchParams();
     const createBooking = useMutation(api.bookings.createBooking);
     const upsertShipment = useMutation(api.shipments.upsertShipment);
@@ -346,7 +354,7 @@ const ClientQuotesPage = () => {
             });
 
             toast.success(`Booking confirmed with ${rate.carrier}!`);
-            setTimeout(() => { window.location.href = '/bookings'; }, 1000);
+            navigate('/bookings');
         } catch (e) {
             console.error(e);
             toast.error("Failed to create booking");
@@ -529,7 +537,7 @@ const ClientQuotesPage = () => {
                 ) : (
                     <>
                         {activeQuoteId && fetchedActiveQuote && (
-                            <div className="mb-12 bg-white rounded-xl shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-4 duration-500">
+                            <div className="mb-12 bg-white rounded-xl shadow-xl overflow-hidden">
                                 <div className="bg-primary/5 px-6 py-4 border-b border-primary/10 flex justify-between items-center">
                                     <div className="flex items-center gap-3">
                                         <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center text-primary">
@@ -592,6 +600,7 @@ const ClientQuotesPage = () => {
                         <DataTable
                             data={quotes}
                             columns={columns as any}
+                            rowKey="quoteId"
                             searchPlaceholder="Search by route, carrier, or ID..."
                             rowsPerPage={10}
                         />

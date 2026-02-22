@@ -3,6 +3,18 @@ import ReactDOMClient from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 
+async function cleanupServiceWorkersAndCaches() {
+  if ('serviceWorker' in navigator) {
+    const registrations = await navigator.serviceWorker.getRegistrations();
+    await Promise.all(registrations.map((registration) => registration.unregister()));
+  }
+
+  if ('caches' in window) {
+    const keys = await caches.keys();
+    await Promise.all(keys.map((key) => caches.delete(key)));
+  }
+}
+
 // Find the DOM element where your React app will be mounted
 const container = document.getElementById('root');
 
@@ -16,19 +28,15 @@ if (container) {
 
   const root = ReactDOMClient.createRoot(container);
 
-  // Register Service Worker for offline support (Production only)
+  // Service worker is opt-in to avoid stale-cache flashes during active development/deploys.
+  const enableServiceWorker = import.meta.env.VITE_ENABLE_SW === 'true';
   if ('serviceWorker' in navigator) {
-    if (import.meta.env.PROD) {
+    if (import.meta.env.PROD && enableServiceWorker) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js').catch(err => console.error('SW failed', err));
       });
     } else {
-      // Unregister SW in development
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.ready.then(registration => {
-          registration.unregister();
-        });
-      }
+      cleanupServiceWorkersAndCaches().catch((err) => console.error('SW cleanup failed', err));
     }
   }
 

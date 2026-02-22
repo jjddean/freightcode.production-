@@ -1,17 +1,22 @@
-import { clerk } from "./clerk";
-import { internal } from "./_generated/api";
 import { httpRouter } from "convex/server";
 import { httpAction } from "./_generated/server";
-import type { WebhookEvent } from "@clerk/backend";
-import { Webhook } from "svix";
+import { internal } from "./_generated/api";
 import Stripe from "stripe";
+import { Webhook } from "svix";
+import type { WebhookEvent } from "@clerk/backend";
 import { transformWebhookData } from "./paymentAttemptTypes";
+import { clerk } from "./clerk";
 
 const http = httpRouter();
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2024-06-20" as any,
-});
+const getStripe = () => {
+  if (!process.env.STRIPE_SECRET_KEY) {
+    throw new Error("STRIPE_SECRET_KEY is not set!");
+  }
+  return new Stripe(process.env.STRIPE_SECRET_KEY, {
+    apiVersion: "2024-06-20" as any,
+  });
+};
 
 http.route({
   path: "/stripe-webhook",
@@ -24,6 +29,7 @@ http.route({
 
     let event: Stripe.Event;
     try {
+      const stripe = getStripe();
       const payload = await request.text();
       event = stripe.webhooks.constructEvent(
         payload,

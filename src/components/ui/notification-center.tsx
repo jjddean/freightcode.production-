@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
+import { useStickyQueryData } from '@/hooks/useStickyQueryData';
 
 interface Notification {
   _id: string;
@@ -29,8 +30,10 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({ className }) =>
   const navigate = useNavigate();
 
   // Real Data
-  const rawNotifications = useQuery(api.notifications.list, { limit: 50 });
-  const dbUnreadCount = useQuery(api.notifications.getUnreadCount) || 0;
+  const rawNotificationsQuery = useQuery(api.notifications.list, { limit: 50 });
+  const dbUnreadCountQuery = useQuery(api.notifications.getUnreadCount);
+  const rawNotifications = useStickyQueryData("notifications:list", rawNotificationsQuery, []);
+  const dbUnreadCount = useStickyQueryData("notifications:unread", dbUnreadCountQuery, 0);
   const markRead = useMutation(api.notifications.markRead);
   const markAllRead = useMutation(api.notifications.markAllRead);
 
@@ -38,10 +41,10 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({ className }) =>
   const notifications = (rawNotifications || []).map((n: any) => ({
     ...n,
     id: n._id, // map _id to id for compatibility
-    timestamp: new Date(n.createdAt).toISOString()
+    timestamp: new Date(n?.createdAt || Date.now()).toISOString()
   }));
 
-  const unreadCount = dbUnreadCount;
+  const unreadCount = dbUnreadCount || 0;
   const urgentCount = notifications.filter((n: any) => n.priority === 'urgent' && !n.read).length;
 
   const filteredNotifications = notifications.filter((notification: any) => {

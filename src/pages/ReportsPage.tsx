@@ -17,15 +17,19 @@ import Footer from '@/components/layout/Footer';
 import AnalyticsDashboard from '@/components/charts/AnalyticsDashboard';
 import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
+import { useStickyQueryData } from '@/hooks/useStickyQueryData';
 
 const ReportsPage = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const downloadRef = React.useRef<HTMLAnchorElement>(null);
 
   // Live data from Convex for analytics
-  const shipments = useQuery(api.shipments.listShipments, {}) || [];
-  const quotes = useQuery(api.quotes.listMyQuotes) || [];
-  const bookings = useQuery(api.bookings.listMyBookings, {}) || [];
+  const shipmentsQuery = useQuery(api.shipments.listShipments, {});
+  const quotesQuery = useQuery(api.quotes.listMyQuotes);
+  const bookingsQuery = useQuery(api.bookings.listMyBookings, {});
+  const shipments = useStickyQueryData("reports:shipments", shipmentsQuery, []);
+  const quotes = useStickyQueryData("reports:quotes", quotesQuery, []);
+  const bookings = useStickyQueryData("reports:bookings", bookingsQuery, []);
 
   // Compute live stats
   const liveStats = useMemo(() => ({

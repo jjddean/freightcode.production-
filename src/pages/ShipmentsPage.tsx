@@ -40,6 +40,7 @@ import { Label } from '@/components/ui/label';
 import { useFeature } from '@/hooks/useFeature';
 import { Link } from 'react-router-dom'; // Ensure Link is imported for upgrade redo
 import { formatCurrency, parseCurrencyString, convertCurrency } from '@/lib/currency';
+import { useStickyQueryData } from '@/hooks/useStickyQueryData';
 
 import {
   Sheet,
@@ -220,9 +221,13 @@ const ShipmentsPage = () => {
     ]
   };
 
-  const { organization } = useOrganization();
+  const { organization, isLoaded: isOrgLoaded } = useOrganization();
   const orgId = organization?.id;
-  const liveData = useQuery(api.shipments.listShipments, { orgId: orgId ?? null });
+  const liveDataQuery = useQuery(
+    api.shipments.listShipments,
+    isOrgLoaded ? { orgId: orgId ?? null } : "skip"
+  );
+  const liveData = useStickyQueryData(`shipments:${orgId ?? "personal"}`, liveDataQuery, []);
 
   // State for filtering - initialized with fallback, updated via effect
   const [filteredShipments, setFilteredShipments] = useState<{ active: any[], completed: any[] }>({ active: [], completed: [] });
@@ -613,6 +618,7 @@ const ShipmentsPage = () => {
         <DataTable
           data={filteredShipments[activeTab as keyof typeof filteredShipments]}
           columns={shipmentColumns}
+          rowKey="id"
           searchPlaceholder="Search all shipments (ID, route, carrier, container)"
           rowsPerPage={10}
 

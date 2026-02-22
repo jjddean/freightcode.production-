@@ -494,4 +494,125 @@ export default defineSchema({
     status: v.string(),
     correctedText: v.optional(v.string()),
   }),
+
+  // --- Trade Intelligence (FreightIntel) ---
+
+  trade_shipments: defineTable({
+    // Core identifiers
+    billOfLading: v.string(),
+    masterBill: v.optional(v.string()),
+    houseBill: v.optional(v.string()),
+
+    // Parties
+    shipper: v.string(),
+    consignee: v.string(),
+    forwarder: v.optional(v.string()),
+    notifyParty: v.optional(v.string()),
+
+    // Location
+    originCountry: v.string(),
+    originPort: v.optional(v.string()),
+    destinationCountry: v.string(),
+    destinationPort: v.optional(v.string()),
+
+    // Cargo details
+    hsCode: v.optional(v.string()),
+    commodity: v.optional(v.string()),
+    containerType: v.optional(v.string()),
+    weight: v.optional(v.number()),
+    volume: v.optional(v.number()),
+
+    // Dates
+    shipmentDate: v.number(),
+    arrivalDate: v.optional(v.number()),
+
+    // Source
+    dataSource: v.string(), // "usa_ams", "india_dgcis", etc.
+    rawDataPath: v.optional(v.string()), // pointer to JSON file
+
+    // Metadata
+    createdAt: v.number(),
+  })
+    .index("by_forwarder", ["forwarder"])
+    .index("by_destination", ["destinationCountry"])
+    .index("by_origin", ["originCountry"])
+    .index("by_lane", ["originCountry", "destinationCountry"])
+    .index("by_date", ["shipmentDate"]),
+
+  forwarder_profiles: defineTable({
+    name: v.string(),
+    canonicalName: v.optional(v.string()), // Normalized for global identity resolution
+    originCountry: v.string(),
+
+    // Stats
+    totalShipments: v.number(),
+    shipmentsToUK: v.number(),
+    lastShipmentDate: v.number(),
+
+    // Partner need indicators
+    hasUKOffice: v.boolean(),
+    uniqueUKAgents: v.number(),
+    partnerNeedScore: v.number(), // 0-100
+
+    // Contact (if available)
+    email: v.optional(v.string()),
+    phone: v.optional(v.string()),
+    address: v.optional(v.string()),
+    website: v.optional(v.string()),
+    linkedin: v.optional(v.string()),
+
+    // Discovery State
+    discoveryStatus: v.optional(v.string()), // "pending" | "discovered" | "verified"
+    confidenceScore: v.optional(v.number()), // 0-100
+
+    // Metadata
+    updatedAt: v.number(),
+  })
+    .index("by_country", ["originCountry"])
+    .index("by_score", ["partnerNeedScore"])
+    .index("by_uk_shipments", ["shipmentsToUK"])
+    .index("by_canonical_name", ["canonicalName"]),
+
+  shipper_profiles: defineTable({
+    name: v.string(),
+    originCountry: v.string(),
+    totalShipments: v.number(),
+    shipmentsToUK: v.number(),
+    topCommodities: v.array(v.string()),
+    topForwarders: v.array(v.string()), // Names of forwarders they use
+    lastShipmentDate: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_country", ["originCountry"])
+    .index("by_shipments", ["shipmentsToUK"]),
+
+  consignee_profiles: defineTable({
+    name: v.string(),
+    ukLocation: v.string(),
+    totalShipments: v.number(),
+    topOrigins: v.array(v.string()),
+    topCommodities: v.array(v.string()),
+    topForwarders: v.array(v.string()),
+    lastShipmentDate: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_location", ["ukLocation"])
+    .index("by_shipments", ["totalShipments"]),
+
+  watchlist: defineTable({
+    userId: v.string(),
+    profileId: v.id("forwarder_profiles"),
+    createdAt: v.number(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_user_and_profile", ["userId", "profileId"]),
+
+  intelligence_alerts: defineTable({
+    userId: v.string(),
+    profileId: v.id("forwarder_profiles"),
+    message: v.string(),
+    type: v.string(), // "volume_spike", "score_change", "new_lane"
+    isRead: v.boolean(),
+    createdAt: v.number(),
+  }).index("by_user", ["userId", "isRead"]),
 });

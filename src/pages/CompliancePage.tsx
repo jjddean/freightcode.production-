@@ -3,7 +3,6 @@ import MediaCardHeader from '@/components/ui/media-card-header';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Skeleton } from "@/components/ui/skeleton";
 import { FileText, FileBadge, FileWarning, CheckCircle, Clock } from 'lucide-react';
 import { useQuery, useAction, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
@@ -17,10 +16,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Loader2, Sparkles, Wand2 } from 'lucide-react';
 import { DocMateUploader } from '@/components/ai/DocMateUploader';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useStickyQueryData } from '@/hooks/useStickyQueryData';
 
 const CompliancePage = () => {
   // Live documents for compliance monitoring
-  const liveDocuments = useQuery(api.documents.listMyDocuments, {}) || [];
+  const liveDocumentsQuery = useQuery(api.documents.listMyDocuments, {});
+  const liveDocuments = useStickyQueryData("compliance:documents", liveDocumentsQuery, []);
   const kycStatus = useQuery(api.compliance.getKycStatus);
 
   // Keep previous data pattern for KYC to prevent flash
@@ -97,7 +98,7 @@ const CompliancePage = () => {
           className="mb-8"
         />
 
-        <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 space-y-8">
+        <div className="space-y-8">
           {/* Status Overview */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow">

@@ -1,327 +1,277 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import {
-    LayoutDashboard,
-    Users,
-    ShoppingBag,
-    TrendingUp,
-    AlertTriangle,
-    Inbox,
-    ArrowRight,
+    BarChart3,
+    Box,
     FileText,
-    Shield
+    Users,
+    Ship,
+    Anchor,
+    ChevronRight,
+    ArrowRight,
+    ShoppingBag,
+    Shield,
+    Activity,
+    AlertTriangle
 } from 'lucide-react';
-import AdminPageHeader from '@/components/layout/admin/AdminPageHeader';
-import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Skeleton } from '@/components/ui/skeleton';
 import { formatCurrency } from '@/lib/currency';
+import { useStickyQueryData } from '@/hooks/useStickyQueryData';
 
-const StatCardSkeleton = () => (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <div className="flex items-center justify-between mb-4">
-            <Skeleton className="h-12 w-12 rounded-lg" />
-            <Skeleton className="h-4 w-16" />
-        </div>
-        <Skeleton className="h-4 w-24 mb-2" />
-        <Skeleton className="h-8 w-32" />
-    </div>
-);
+// --- Subcomponents from Command Center ---
 
-const PendingActionsSkeleton = () => (
-    <div className="divide-y divide-gray-100">
-        {[1, 2, 3].map((i) => (
-            <div key={i} className="p-4 flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                    <Skeleton className="h-10 w-10 rounded-lg" />
-                    <div className="space-y-2">
-                        <Skeleton className="h-4 w-32" />
-                        <Skeleton className="h-3 w-48" />
-                    </div>
-                </div>
-                <div className="flex items-center gap-2">
-                    <Skeleton className="h-6 w-16 rounded-full" />
-                </div>
-            </div>
-        ))}
-    </div>
-);
-
-const RecentActivitySkeleton = () => (
-    <div className="space-y-4">
-        {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="flex items-start space-x-3 pb-3 border-b border-gray-50 last:border-0">
-                <Skeleton className="h-8 w-8 rounded-full" />
-                <div className="flex-1 space-y-2">
-                    <Skeleton className="h-4 w-48" />
-                    <Skeleton className="h-3 w-64" />
-                </div>
-                <Skeleton className="h-3 w-12" />
-            </div>
-        ))}
-    </div>
-);
-
-const StatCard = ({ title, value, change, icon: Icon, trend }: any) => (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <div className="flex items-center justify-between mb-4">
-            <div className={`p-3 rounded-lg ${trend === 'up' ? 'bg-emerald-50 text-emerald-600' :
-                trend === 'down' ? 'bg-red-50 text-red-600' : 'bg-primary-50 text-primary-600'}`}>
-                <Icon className="h-6 w-6" />
-            </div>
-            <span className={`text-sm font-medium ${trend === 'up' ? 'text-emerald-600' :
-                trend === 'down' ? 'text-red-600' : 'text-gray-600'}`}>
+function StatCard({ label, value, change, highlight, trend }: any) {
+    return (
+        <div className={`p-5 rounded-xl border backdrop-blur-sm transition-all hover:shadow-lg ${highlight ? 'bg-slate-800 border-slate-700 shadow-blue-500/5' : 'bg-slate-900/50 border-slate-800'}`}>
+            <div className="text-xs text-slate-500 uppercase font-semibold tracking-wider">{label}</div>
+            <div className="text-2xl font-bold text-white mt-1 tracking-tight">{value}</div>
+            <div className={`text-[10px] mt-1 font-medium ${trend === 'up' ? 'text-emerald-400' : trend === 'down' ? 'text-red-400' : 'text-slate-400'}`}>
                 {change}
-            </span>
+            </div>
         </div>
-        <h3 className="text-gray-500 text-sm font-medium">{title}</h3>
-        <p className="text-2xl font-bold text-gray-900 mt-1">{value}</p>
-    </div>
-);
+    )
+}
+
+function TaskItem({ title, subtitle, priority, type }: any) {
+    const color = priority === 'critical' || priority === 'high' ? 'bg-red-500' : priority === 'medium' ? 'bg-orange-500' : 'bg-blue-500';
+    const Icon = type === 'booking' ? ShoppingBag : type === 'kyc' ? Shield : FileText;
+
+    return (
+        <div className="p-3 hover:bg-slate-800/50 rounded-lg flex items-start gap-3 cursor-pointer group transition-colors border border-transparent hover:border-slate-800">
+            <div className={`w-1.5 h-1.5 rounded-full mt-1.5 ${color} shadow-[0_0_8px_currentColor]`} />
+            <div className="flex-1 min-w-0">
+                <div className="text-sm font-medium text-slate-200 group-hover:text-white truncate">{title}</div>
+                <div className="text-[10px] text-slate-500 mt-0.5 truncate">{subtitle}</div>
+            </div>
+            <Icon className="w-3.5 h-3.5 text-slate-600 group-hover:text-slate-400 mt-1" />
+        </div>
+    )
+}
+
+function StatusBadge({ status }: { status: string }) {
+    const s = status?.toLowerCase() || '';
+    if (s === 'arrived' || s === 'delivered' || s === 'paid')
+        return <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 uppercase tracking-wider">Arrived</span>
+    if (s === 'in transit' || s === 'in_transit' || s === 'shipped')
+        return <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20 uppercase tracking-wider">In Transit</span>
+    if (s === 'customs' || s === 'customs clearance' || s === 'pending_review')
+        return <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-orange-500/10 text-orange-400 border border-orange-500/20 uppercase tracking-wider">Hold</span>
+    return <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-slate-700/50 text-slate-400 border border-slate-600 uppercase tracking-wider">Pending</span>
+}
+
+// --- Main Page Component ---
 
 const AdminDashboardPage = () => {
-    const navigate = useNavigate();
-    const stats = useQuery(api.admin.getDashboardStats);
+    // 1. Data Fetching
+    const statsQuery = useQuery(api.admin.getDashboardStats);
+    const shipmentsQuery = useQuery(api.admin.listAllShipments);
+    const actionsQuery = useQuery(api.admin.getPendingActions);
+
+    const stableStats = useStickyQueryData("admin:dashboard:stats", statsQuery, {
+        activeShipments: 0,
+        pendingApprovals: 0,
+        totalCustomers: 0,
+        totalBookings: 0,
+        trends: {
+            bookings: "+0%",
+            shipments: "+0",
+            customers: "+0%",
+            approvals: "0"
+        }
+    });
+
+    const shipments = useStickyQueryData("admin:dashboard:shipments", shipmentsQuery, []);
+    const actions = useStickyQueryData("admin:dashboard:actions", actionsQuery, []);
 
     return (
-        <div className="space-y-8">
-            {/* Header */}
-            <AdminPageHeader
-                title="Dashboard Overview"
-                subtitle="Welcome back, Administrator. Here is your platform summary."
-                icon={LayoutDashboard}
-            />
+        <div className="-m-8 p-8 min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-blue-500/30 space-y-8">
 
-            {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {!stats ? (
-                    <>
-                        <StatCardSkeleton />
-                        <StatCardSkeleton />
-                        <StatCardSkeleton />
-                        <StatCardSkeleton />
-                    </>
-                ) : (
-                    <>
-                        <StatCard
-                            title="Total Bookings"
-                            value={stats.totalBookings.toLocaleString()}
-                            change={stats.trends.bookings}
-                            icon={ShoppingBag}
-                            trend="up"
-                        />
-                        <StatCard
-                            title="Active Shipments"
-                            value={stats.activeShipments.toString()}
-                            change={stats.trends.shipments}
-                            icon={TrendingUp}
-                            trend="up"
-                        />
-                        <StatCard
-                            title="Total Customers"
-                            value={stats.totalCustomers.toLocaleString()}
-                            change={stats.trends.customers}
-                            icon={Users}
-                            trend="up"
-                        />
-                        <StatCard
-                            title="Pending Approvals"
-                            value={stats.pendingApprovals.toString()}
-                            change={stats.trends.approvals}
-                            icon={AlertTriangle}
-                            trend={stats.pendingApprovals > 5 ? 'down' : 'up'}
-                        />
-                    </>
-                )}
+            {/* Header Area */}
+            <div className="flex items-center justify-between">
+                <div>
+                    <h1 className="text-xl font-bold text-white mb-1 tracking-tight">Command Center</h1>
+                    <p className="text-slate-400 text-xs text-opacity-80">Live operational overview • <span className="text-green-400 font-medium text-opacity-100">All systems operational</span></p>
+                </div>
+                <div className="flex gap-3">
+                    <span className="px-2 py-1 rounded bg-slate-900 border border-slate-800 text-[9px] text-slate-500 font-mono flex items-center">
+                        Snapshot: Feb 2026
+                    </span>
+                    <Button className="bg-blue-600 hover:bg-blue-500 text-white shadow-md shadow-blue-500/10 border-0 text-[10px] font-bold px-4 h-8 rounded-lg">
+                        + New Operation
+                    </Button>
+                </div>
             </div>
 
-
-            {/* Main Content Grid */}
-            <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-
-                {/* Left Column Item 1: Inbox / Priority Actions */}
-                <Card className="xl:col-span-2 border-gray-200 shadow-sm overflow-hidden">
-                    <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-                        <div>
-                            <h2 className="text-lg font-bold text-primary-800 flex items-center">
-                                <Inbox className="w-5 h-5 mr-2 text-primary" />
-                                Inbox & Priority Actions
-                            </h2>
-                            <p className="text-sm text-gray-500">Items requiring your immediate approval.</p>
-                        </div>
-                        <Button variant="outline" size="sm" onClick={() => navigate('/admin/approvals')}>
-                            View All <ArrowRight className="ml-2 h-4 w-4" />
-                        </Button>
+            {/* 1. STATS ROW */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <StatCard
+                    label="Active Shipments"
+                    value={String(stableStats.activeShipments)}
+                    change={`${stableStats.trends?.shipments} from yesterday`}
+                    trend={stableStats.trends?.shipments?.startsWith('+') ? 'up' : 'down'}
+                />
+                <StatCard
+                    label="Pending Actions"
+                    value={String(stableStats.pendingApprovals)}
+                    change="Waiting internal review"
+                    trend={stableStats.pendingApprovals > 5 ? 'down' : 'up'}
+                />
+                <div className="bg-red-900/10 p-5 rounded-xl border border-red-900/20 backdrop-blur-sm relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <AlertTriangle className="w-12 h-12 text-red-500" />
                     </div>
-                    <PendingActionsWidget />
-                </Card>
-
-                {/* Right Column Item 1: Revenue */}
-                <Card className="border-blue-100 shadow-sm overflow-hidden bg-blue-50/50">
-                    <div className="p-6">
-                        <div className="flex items-center justify-between mb-4">
-                            <div className="p-3 rounded-lg bg-primary-50 text-primary-600">
-                                <TrendingUp className="h-6 w-6" />
-                            </div>
-                            <span className="text-sm font-medium text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
-                                +12.5% vs last month
-                            </span>
-                        </div>
-                        <h3 className="text-sm font-medium text-gray-500">Total Revenue (MTD)</h3>
-                        <div className="text-2xl font-bold text-gray-900 mt-1">{formatCurrency(124500, ((stats as any)?.currency || 'USD') as any)}</div>
+                    <div className="text-xs text-red-300 uppercase font-semibold tracking-wider">Critical Risks</div>
+                    <div className="text-2xl font-bold text-red-500 mt-1 flex items-center gap-2">
+                        {stableStats.pendingApprovals > 2 ? 'High' : 'Low'} <span className="animate-pulse">⚠️</span>
                     </div>
-                    <div className="bg-gray-50 p-4 border-t border-gray-100">
-                        <Button
-                            className="w-full bg-primary hover:bg-primary-700 text-white shadow-sm"
-                            onClick={() => navigate('/admin/payments')}
-                        >
-                            View Financial Reports
-                        </Button>
-                    </div>
-                </Card>
-
-                {/* Left Column Item 2: Recent Activity */}
-                <Card className="xl:col-span-2 border-gray-200 shadow-sm overflow-hidden">
-                    <div className="p-6 border-b border-gray-100 flex justify-between items-center">
-                        <h2 className="text-lg font-bold text-gray-900">Recent Activity</h2>
-                    </div>
-                    <div className="p-6">
-                        <RecentActivityFeed />
-                    </div>
-                </Card>
-
-                {/* Right Column Item 2: System Status */}
-                <Card className="border-gray-200 shadow-sm overflow-hidden">
-                    <div className="p-6">
-                        <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-4">System Status</h3>
-                        <div className="space-y-4">
-                            <div className="flex justify-between items-center">
-                                <span className="text-sm text-gray-700 flex items-center"><div className="w-2 h-2 rounded-full bg-green-500 mr-2"></div> API Gateway</span>
-                                <Badge variant="outline" className="text-green-600 bg-green-50 border-green-200">Operational</Badge>
-                            </div>
-                            <div className="flex justify-between items-center">
-                                <span className="text-sm text-gray-700 flex items-center"><div className="w-2 h-2 rounded-full bg-green-500 mr-2"></div> Database</span>
-                                <Badge variant="outline" className="text-green-600 bg-green-50 border-green-200">Operational</Badge>
-                            </div>
-                            <div className="flex justify-between items-center">
-                                <span className="text-sm text-gray-700 flex items-center"><div className="w-2 h-2 rounded-full bg-green-500 mr-2"></div> Email Service</span>
-                                <Badge variant="outline" className="text-green-600 bg-green-50 border-green-200">Operational</Badge>
-                            </div>
-                        </div>
-                    </div>
-                </Card>
+                    <div className="text-[10px] text-red-400/50 mt-1 uppercase font-bold tracking-widest">Action Required</div>
+                </div>
+                <StatCard
+                    label="Active Carriers"
+                    value="14"
+                    change="Live integration active"
+                    highlight
+                    trend="up"
+                />
             </div>
-        </div>
-    );
-};
 
-const PendingActionsWidget = () => {
-    const actions = useQuery(api.admin.getPendingActions);
+            {/* 2. MAIN GRID (Mapping + Tasks) */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-    if (actions === undefined) {
-        return <PendingActionsSkeleton />;
-    }
-
-    if (actions.length === 0) {
-        return <div className="p-8 text-center text-gray-500">All caught up! No pending actions.</div>;
-    }
-
-    return (
-        <div className="divide-y divide-gray-100">
-            {actions.slice(0, 5).map((action: any) => (
-                <div key={action.id} className="p-4 hover:bg-gray-50 transition-colors flex items-center justify-between group">
-                    <div className="flex items-center gap-4">
-                        <div className={`p-2 rounded-lg ${action.type === 'booking' ? 'bg-primary-100 text-primary-600' :
-                            action.type === 'kyc' ? 'bg-purple-100 text-purple-600' :
-                                'bg-orange-100 text-orange-600'
-                            }`}>
-                            {action.type === 'booking' ? <ShoppingBag className="w-5 h-5" /> :
-                                action.type === 'kyc' ? <Shield className="w-5 h-5" /> :
-                                    <FileText className="w-5 h-5" />}
-                        </div>
-                        <div>
-                            <h4 className="text-sm font-semibold text-primary-800">{action.title}</h4>
-                            <p className="text-xs text-gray-500">{action.subtitle}</p>
+                {/* LARGE MAP/OPERATIONS WIDGET */}
+                <div className="lg:col-span-2 rounded-xl border border-slate-800 bg-slate-900/50 backdrop-blur-sm overflow-hidden flex flex-col relative group min-h-[450px]">
+                    <div className="absolute top-4 left-4 z-10 flex gap-2">
+                        <div className="bg-slate-900/90 backdrop-blur border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-300 shadow-xl">
+                            <div className="text-[9px] text-slate-500 uppercase font-bold tracking-widest mb-1">Global Traffic</div>
+                            <div className="font-bold text-white flex items-center gap-2">
+                                <Activity className="w-3 h-3 text-cyan-400 animate-pulse" /> Live Deployment
+                            </div>
                         </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                        <Badge variant={action.priority === 'critical' ? 'destructive' : 'secondary'} className="capitalize">
-                            {action.priority}
-                        </Badge>
-                        <Button size="sm" variant="ghost" className="opacity-0 group-hover:opacity-100 transition-opacity">
-                            Review
-                        </Button>
+
+                    {/* Operational Visuals (Mocking the dark futuristic feel) */}
+                    <div className="relative flex-1 bg-slate-950 overflow-hidden">
+                        <img
+                            src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop"
+                            className="absolute inset-0 w-full h-full object-cover opacity-20 mix-blend-screen scale-110 group-hover:scale-100 transition-transform duration-1000"
+                            alt="Operational Map"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent" />
+
+                        {/* Static points representing data hubs */}
+                        <div className="absolute top-1/2 left-1/4 w-2 h-2 bg-blue-500 rounded-full shadow-[0_0_15px_rgba(59,130,246,0.8)] animate-pulse" />
+                        <div className="absolute top-1/3 right-1/4 w-2 h-2 bg-red-500 rounded-full shadow-[0_0_15px_rgba(239,68,68,0.8)] animate-pulse" />
+                        <div className="absolute bottom-1/4 left-1/2 w-2 h-2 bg-emerald-500 rounded-full shadow-[0_0_15px_rgba(16,185,129,0.8)] animate-pulse" />
+                    </div>
+
+                    {/* Bottom Data Strip */}
+                    <div className="h-20 bg-slate-900/90 border-t border-slate-800 p-4 flex items-center justify-between">
+                        <div>
+                            <div className="flex items-center gap-3 mb-1">
+                                <span className="text-xs font-bold text-white uppercase tracking-wider">System Health</span>
+                                <span className="bg-emerald-500/20 text-emerald-400 text-[9px] font-bold px-1.5 py-0.5 rounded border border-emerald-500/30">OPTIMIZED</span>
+                            </div>
+                            <div className="text-[10px] text-slate-500 font-mono">
+                                API Latency: 24ms • Uptime: 99.98% • Active Webhooks: 42
+                            </div>
+                        </div>
+                        <div className="text-right">
+                            <div className="text-[9px] text-slate-500 uppercase font-bold tracking-widest mb-1">Risk Score</div>
+                            <div className="text-xl font-bold text-cyan-400">08<span className="text-xs text-slate-600">/100</span></div>
+                        </div>
                     </div>
                 </div>
-            ))}
-        </div>
-    );
-};
 
-const RecentActivityFeed = () => {
-    const activity = useQuery(api.admin.getRecentActivity);
-
-    if (activity === undefined) {
-        return <RecentActivitySkeleton />;
-    }
-
-    if (!activity || activity.length === 0) {
-        return <div className="text-sm text-gray-500 text-center py-8">No recent activity found.</div>;
-    }
-
-    return (
-        <div className="space-y-4">
-            {activity.map((log: any) => {
-                const isEmail = log.action === 'email.sent';
-                const isBooking = log.action.startsWith('booking.');
-                const isUser = log.action.startsWith('user.');
-
-                return (
-                    <div key={log._id} className="flex items-start space-x-3 pb-3 border-b border-gray-50 last:border-0">
-                        <div className={`mt-0.5 p-1.5 rounded-full flex-shrink-0 
-                            ${isEmail ? 'bg-primary-50 text-primary-600' :
-                                isBooking ? 'bg-emerald-50 text-emerald-600' :
-                                    'bg-gray-100 text-gray-600'}`}>
-                            {isEmail ? <div className="w-4 h-4">✉️</div> :
-                                isBooking ? <div className="w-4 h-4">📦</div> :
-                                    <div className="w-4 h-4">👤</div>}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-gray-900 truncate">
-                                {formatActionLabel(log.action)}
-                            </p>
-                            <p className="text-xs text-gray-500 truncate mt-0.5">
-                                {formatActionDetails(log)}
-                            </p>
-                        </div>
-                        <span className="text-xs text-gray-400 whitespace-nowrap">
-                            {new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                {/* ACTION ITEMS (Live from convex/admin.ts:getPendingActions) */}
+                <div className="rounded-xl border border-slate-800 bg-slate-900/30 backdrop-blur-sm flex flex-col min-h-[450px]">
+                    <div className="p-4 border-b border-slate-800 flex justify-between items-center bg-slate-900/20">
+                        <h3 className="font-bold text-slate-200 text-sm tracking-tight">Queue Management</h3>
+                        <span className="bg-blue-900/30 text-blue-300 text-[10px] font-bold px-2 py-1 rounded-full border border-blue-900/50 uppercase tracking-wider">
+                            {actions?.length || 0} Pending
                         </span>
                     </div>
-                );
-            })}
+                    <div className="flex-1 overflow-y-auto p-3 space-y-1 custom-scrollbar">
+                        {actions && actions.length > 0 ? (
+                            actions.slice(0, 10).map((action: any) => (
+                                <TaskItem
+                                    key={action.id}
+                                    title={action.title}
+                                    subtitle={action.subtitle}
+                                    priority={action.priority}
+                                    type={action.type}
+                                />
+                            ))
+                        ) : (
+                            <div className="h-full flex flex-col items-center justify-center p-8 text-center text-slate-600">
+                                <Activity className="w-8 h-8 mb-2 opacity-20" />
+                                <p className="text-xs font-medium uppercase tracking-widest">Queue Clear</p>
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+            </div>
+
+            {/* 3. RECENT SHIPMENTS TABLE (Live from convex/admin.ts:listAllShipments) */}
+            <div className="rounded-xl border border-slate-800 bg-slate-900/30 backdrop-blur-sm overflow-hidden">
+                <div className="p-5 border-b border-slate-800 flex justify-between items-center bg-slate-900/40">
+                    <h3 className="font-bold text-slate-200 text-sm tracking-tight flex items-center gap-2">
+                        <Box className="w-4 h-4 text-slate-500" /> Operational Log
+                    </h3>
+                    <Button variant="ghost" size="sm" className="text-[9px] uppercase font-bold text-slate-600 hover:text-white h-7 tracking-widest px-2">
+                        Access Archive <ChevronRight className="w-3 h-3 ml-1" />
+                    </Button>
+                </div>
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left text-sm text-slate-400">
+                        <thead className="bg-slate-950/50 text-[10px] uppercase font-bold text-slate-500 tracking-widest border-b border-slate-800">
+                            <tr>
+                                <th className="px-6 py-4">Ref ID</th>
+                                <th className="px-6 py-4">Origin</th>
+                                <th className="px-6 py-4">Destination</th>
+                                <th className="px-6 py-4">Carrier</th>
+                                <th className="px-6 py-4">Status</th>
+                                <th className="px-6 py-4 text-right">Verification</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-800/50">
+                            {shipments && shipments.length > 0 ? (
+                                shipments.slice(0, 8).map((s: any) => (
+                                    <tr key={s._id} className="hover:bg-slate-800/30 transition-colors group border-transparent">
+                                        <td className="px-6 py-4 font-mono text-white text-xs">{s.shipmentId || s._id.slice(0, 8)}</td>
+                                        <td className="px-6 py-4 text-slate-300 text-xs">{s.shipmentDetails?.origin || s.origin || 'Unknown'}</td>
+                                        <td className="px-6 py-4 text-slate-300 text-xs">{s.shipmentDetails?.destination || s.destination || 'Unknown'}</td>
+                                        <td className="px-6 py-4">
+                                            <span className="flex items-center gap-2 text-xs text-slate-400">
+                                                <Ship className="w-3 h-3 text-slate-600" /> {s.carrier || 'N/A'}
+                                            </span>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <StatusBadge status={s.status} />
+                                        </td>
+                                        <td className="px-6 py-4 text-right">
+                                            <Button size="icon" variant="ghost" className="h-8 w-8 text-slate-700 hover:text-white hover:bg-slate-800">
+                                                <ChevronRight className="w-4 h-4" />
+                                            </Button>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan={6} className="px-6 py-12 text-center text-slate-600 font-medium uppercase tracking-widest text-xs">
+                                        No active deployments found
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
         </div>
     );
 };
-
-function formatActionLabel(action: string) {
-    switch (action) {
-        case 'email.sent': return 'Email Notification Sent';
-        case 'booking.created': return 'New Booking Received';
-        case 'booking.approved': return 'Booking Approved';
-        case 'booking.rejected': return 'Booking Rejected';
-        default: return action;
-    }
-}
-
-function formatActionDetails(log: any) {
-    if (log.action === 'email.sent') return `To: ${log.details?.recipient || 'Unknown'}`;
-    if (log.action.startsWith('booking.')) return `Ref: ${log.entityId} • ${log.details?.customer || ''}`;
-    return log.details ? JSON.stringify(log.details) : '';
-}
-
 
 export default AdminDashboardPage;

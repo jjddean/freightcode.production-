@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bill of Lading - SmartAudit Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            width: 800px;
+            padding: 40px;
+            border: 1px solid #000;
+            color: #000;
+            background: #fff;
+            line-height: 1.4;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 3px solid #000;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border: 1px solid #000;
+            margin-bottom: 20px;
+        }
+
+        .grid-item {
+            border: 1px solid #000;
+            padding: 10px;
+            min-height: 100px;
+        }
+
+        .label {
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .cargo-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .cargo-table th,
+        .cargo-table td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+            font-size: 12px;
+        }
+
+        .cargo-table th {
+            background-color: #f2f2f2;
+        }
+
+        .compliance-box {
+            border: 2px solid #000;
+            padding: 15px;
+            background: #f9f9f9;
+            margin-bottom: 20px;
+        }
+
+        .mrn-text {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 18px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div class="title">BILL OF LADING</div>
+        <div style="text-align: right;">
+            <strong>B/L No: BOL-5544321</strong><br>
+            Booking Ref: SMA-9922
+        </div>
+    </div>
+
+    <div class="main-grid">
+        <div class="grid-item">
+            <div class="label">Shipper / Exporter</div>
+            GLOBAL LOGISTICS SOLUTIONS LTD<br>
+            123 INDUSTRIAL WAY, LONDON, UK<br>
+            VAT: GB123456789
+        </div>
+        <div class="grid-item">
+            <div class="label">Consignee</div>
+            RETAIL HUB INC<br>
+            456 COMMERCE BLVD, NEW YORK, NY<br>
+            UNITED STATES OF AMERICA
+        </div>
+        <div class="grid-item">
+            <div class="label">Notify Party</div>
+            SMA CUSTOMS BROKERS NY<br>
+            JFK AIRPORT CARGO AREA B
+        </div>
+        <div class="grid-item">
+            <div class="label">Vessel / Voyage No.</div>
+            MSC ANNA / 234E
+        </div>
+        <div class="grid-item">
+            <div class="label">Port of Loading</div>
+            SOUTHAMPTON, UK
+        </div>
+        <div class="grid-item">
+            <div class="label">Port of Discharge</div>
+            NEW YORK, USA
+        </div>
+    </div>
+
+    <table class="cargo-table">
+        <thead>
+            <tr>
+                <th>Marks & Nos</th>
+                <th>Qty/Packages</th>
+                <th>Description of Goods</th>
+                <th>Weight (KG)</th>
+                <th>CBM</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>G-LOG/NYC/1-14</td>
+                <td>14 CASES</td>
+                <td>INDUSTRIAL CONTROL VALVES AND PRESSURE GAUGES</td>
+                <td>1,250.00</td>
+                <td>5.20</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="compliance-box">
+        <div class="label">Safety & Security Compliance (ENS)</div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                Movement Reference Number (MRN):<br>
+                <div class="mrn-text">24GB31245678901234</div>
+            </div>
+            <div style="border: 1px solid #000; padding: 5px; font-size: 10px; text-align: center;">
+                SECURED DATA<br>SMARTAUDIT™
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-grid">
+        <div>
+            <div class="label">Freight Details</div>
+            FREIGHT PREPAID<br>
+            Place of Issue: LONDON, UK
+        </div>
+        <div style="border: 1px solid #000; padding: 10px; height: 80px; position: relative;">
+            <div class="label">Carrier Signature</div>
+            <div
+                style="position: absolute; bottom: 10px; right: 10px; opacity: 0.3; transform: rotate(-5deg); font-weight: bold; font-size: 20px;">
+                MSC CARRIER LINE
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

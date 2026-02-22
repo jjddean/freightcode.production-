@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useQuery, useMutation, useAction } from "convex/react";
 import { api } from "../../../convex/_generated/api";
+import { useStickyQueryData } from '@/hooks/useStickyQueryData';
 import DataTable from '@/components/ui/data-table';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -58,8 +59,16 @@ const CDSStatusCell = ({ row, isConnected }: { row: any, isConnected: boolean })
             } else {
                 toast.error(res.message || "HMRC Check Failed");
             }
-        } catch (e) {
+        } catch (e: any) {
             console.error(e);
+            const raw = String(e?.message || "");
+            const details = raw.toLowerCase();
+            if (details.includes("resource_forbidden") || details.includes("not subscribed to the api")) {
+                toast.error("CDS API Not Subscribed", {
+                    description: "OAuth is connected, but this HMRC app is not subscribed to the Customs Declarations Information API in this environment."
+                });
+                return;
+            }
             toast.error("HMRC API Error");
         } finally {
             setLoading(false);
@@ -142,10 +151,13 @@ const DutyDefermentCell = ({ row, isConnected }: { row: any, isConnected: boolea
 };
 
 const AdminCustomsPage = () => {
-    const pendingShipments = useQuery(api.customs.getPendingCustoms) || [];
+    const pendingShipmentsQuery = useQuery(api.customs.getPendingCustoms);
+    const pendingShipments = useStickyQueryData("admin:customs:pending", pendingShipmentsQuery, []);
     const submitFiling = useMutation(api.customs.submitCustomsFiling);
-    const hmrcIntegration = useQuery(api.integrations.getIntegrationStatus, { provider: "hmrc" });
+    const hmrcIntegrationQuery = useQuery(api.integrations.getIntegrationStatus, { provider: "hmrc" });
+    const hmrcIntegration = useStickyQueryData("admin:customs:integration", hmrcIntegrationQuery, null as any);
     const isConnected = !!(hmrcIntegration && hmrcIntegration.status === "active");
+    const isSandboxEnv = import.meta.env.VITE_HMRC_ENVIRONMENT === 'sandbox';
 
     const [selectedShipment, setSelectedShipment] = useState<any>(null);
     const [isFilingModalOpen, setIsFilingModalOpen] = useState(false);
@@ -264,11 +276,17 @@ const AdminCustomsPage = () => {
                         onClick={() => {
                             const entryNumber = row.customs?.entryNumber;
                             if (!entryNumber) return;
-                            const domain = import.meta.env.VITE_HMRC_ENVIRONMENT === 'sandbox'
-                                ? 'test-www.tax.service.gov.uk'
-                                : 'www.tax.service.gov.uk';
+                            if (isSandboxEnv) {
+                                toast.info("Sandbox Portal Unavailable", {
+                                    description: "Sandbox testing is API-driven. Use 'Verify in CDS' to query MRN status via HMRC test APIs. Portal links are production-only."
+                                });
+                                return;
+                            }
+
+                            const domain = 'www.tax.service.gov.uk';
                             window.open(`https://${domain}/customs-declaration-service/declaration/${entryNumber}/status`, "_blank");
                         }}
+                        title={isSandboxEnv ? "No public UI in Sandbox" : "Open official portal"}
                     >
                         <ExternalLink className="w-3.5 h-3.5 mr-1" />
                         Portal
@@ -290,15 +308,36 @@ const AdminCustomsPage = () => {
         <div className="space-y-6">
             <AdminPageHeader
                 title="Customs Filing Queue"
-                subtitle="Manage and file import/export declarations in the official HMRC portal."
+                subtitle={
+                    isSandboxEnv
+                        ? "Sandbox mode: verify declaration status via HMRC CDS APIs. Portal filing links are production-only."
+                        : "Manage and file import/export declarations in the official HMRC portal."
+                }
                 icon={FileSearch}
             >
                 <div className="flex gap-2">
                     {isConnected ? (
-                        <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 px-4 py-2 text-sm flex items-center gap-2 h-10 ring-1 ring-emerald-200">
-                            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                            HMRC Connected
-                        </Badge>
+                        <div className="flex items-center gap-3">
+                            <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 px-3 py-1.5 text-xs flex items-center gap-2 h-8 ring-1 ring-emerald-100">
+                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                HMRC Connected
+                            </Badge>
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                className="text-slate-400 hover:text-blue-600 text-[10px] h-8 font-bold uppercase tracking-tight"
+                                onClick={async () => {
+                                    try {
+                                        const url = await getAuthUrl({});
+                                        window.open(url, "_blank");
+                                    } catch (e) {
+                                        toast.error("Failed to generate auth URL");
+                                    }
+                                }}
+                            >
+                                Reconnect
+                            </Button>
+                        </div>
                     ) : (
                         <Button
                             variant="outline"
@@ -324,9 +363,10 @@ const AdminCustomsPage = () => {
                     <div className="flex items-center gap-3">
                         <div className="p-2 bg-blue-50 text-blue-600 rounded-lg"><Clock className="w-5 h-5" /></div>
                         <div>
-                            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Pending Filing</p>
-                            <p className="text-xl font-bold text-slate-900">{pendingShipments.length}</p>
+                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Pending Filing</p>
+                            <p className="text-lg font-bold text-slate-900 mt-0.5 tracking-tight">{pendingShipments.length}</p>
                         </div>
+
                     </div>
                 </Card>
             </div>
@@ -335,6 +375,7 @@ const AdminCustomsPage = () => {
                 <DataTable
                     data={pendingShipments}
                     columns={columns}
+                    rowKey={(row: any) => row._id ?? row.shipmentId ?? row.trackingNumber}
                     searchPlaceholder="Search shipments to file..."
                     rowsPerPage={10}
                 />

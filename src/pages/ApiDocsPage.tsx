@@ -6,6 +6,7 @@ import { useUser, SignInButton } from "@clerk/clerk-react";
 import { Copy, Trash2, Key, Check, Plus, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import { useFeature } from '@/hooks/useFeature';
+import { useStickyQueryData } from '@/hooks/useStickyQueryData';
 import { Link } from 'react-router-dom';
 
 const ApiDocsPage: React.FC = () => {
@@ -13,7 +14,8 @@ const ApiDocsPage: React.FC = () => {
   const [activeEndpoint, setActiveEndpoint] = useState('shipments');
 
   // API Key State
-  const myKeys = useQuery(api.developer.listApiKeys) || [];
+  const myKeysQuery = useQuery(api.developer.listApiKeys);
+  const myKeys = useStickyQueryData("developer:apiKeys", myKeysQuery, []);
   const generateKey = useMutation(api.developer.generateApiKey);
   const revokeKey = useMutation(api.developer.revokeApiKey);
 

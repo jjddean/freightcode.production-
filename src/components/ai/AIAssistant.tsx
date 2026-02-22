@@ -16,7 +16,7 @@ interface Message {
 export function AIAssistant() {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([
-        { role: 'assistant', content: 'Hello! I am ur freight assistant. Ask me about shipments, metrics, or documents.' }
+        { role: 'assistant', content: 'Hello! I am the FreightCode Main Brain. Ask me about shipments, quotes, or compliance.' }
     ]);
     const [input, setInput] = useState('');
     const [loading, setLoading] = useState(false);
@@ -89,7 +89,7 @@ export function AIAssistant() {
                     <div className="p-4 bg-[#003057] text-white rounded-t-xl flex justify-between items-center">
                         <div className="flex items-center space-x-2">
                             <Sparkles className="h-5 w-5" />
-                            <span className="font-semibold">Freight Assistant</span>
+                            <span className="font-semibold">FreightCode Brain</span>
                         </div>
                         <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 h-8 w-8" onClick={() => setIsOpen(false)}>
                             <X className="h-4 w-4" />
@@ -140,6 +140,7 @@ export function AIAssistant() {
                 <Button
                     onClick={() => setIsOpen(true)}
                     className="rounded-full w-14 h-14 bg-[#003057] hover:opacity-90 shadow-lg flex items-center justify-center transition-transform hover:scale-105"
+                    title="Open FreightCode Brain"
                 >
                     <MessageSquare className="h-10 w-10 text-white" />
                 </Button>

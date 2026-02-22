@@ -4,42 +4,27 @@
 
 @layer base {
   :root {
-    --app-header-h: 64px;
+    --app-header-h: 60px;
     --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
+    --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
+    --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 210 100% 20%;
-    /* #003366 - Freightcode Primary Blue */
-    --primary-foreground: 0 0% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222 47% 11%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 212 100% 17%; /* #003057 */
+    --primary-foreground: 210 40% 98%;
+    --secondary: 212 40% 96.1%;
+    --secondary-foreground: 212 100% 17%;
     --muted: 210 40% 96.1%;
-    --muted-foreground: 215 16% 47%;
-    --accent: 189 94% 43%;
-    /* #06b6d4 - Cyan-500 */
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 189 94% 43%; /* #06b6d4 - Cyan */
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 189 94% 43%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
     --radius: 0.5rem;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   .dark {
@@ -84,7 +69,7 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-slate-50 text-foreground font-sans;
     margin: 0;
     min-height: 100vh;
     font-feature-settings: "rlig" 1, "calt" 1;
@@ -92,23 +77,17 @@
     overflow-x: hidden;
   }
 
-  /* Freightcode specific typography */
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    @apply font-semibold text-primary-800;
+  /* Freightcode premium typography */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold tracking-tight text-primary;
   }
 
-  /* Small text for data density */
   .text-data {
-    @apply text-sm leading-tight;
+    @apply text-sm leading-tight font-medium;
   }
 
   .text-label {
-    @apply text-xs font-medium text-muted-foreground uppercase tracking-wide;
+    @apply text-[10px] font-bold text-muted-foreground uppercase tracking-wider;
   }
 }
 
@@ -119,16 +98,34 @@
 
 @layer components {
 
-  /* Layout */
-  #root {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
-    text-align: left;
+  /* Premium Components */
+  .glass-card {
+    @apply bg-white/80 backdrop-blur-md border border-white/20 shadow-xl shadow-slate-200/50;
   }
 
-  /* Page container with smooth animations */
+  .premium-gradient {
+    @apply bg-gradient-to-br from-[#003057] to-[#004e8a];
+  }
+
+  .accent-gradient {
+    @apply bg-gradient-to-r from-cyan-500 to-blue-500;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-2xl hover:shadow-slate-300/60 hover:-translate-y-1;
+  }
+
+  /* Layout */
+  #root {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    max-width: none;
+  }
+
+  /* Page container */
   .page-container {
-    @apply py-8;
-    animation: fadeIn 0.3s ease-out;
+    @apply p-6 lg:p-8 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500;
   }
 
   .page-content {

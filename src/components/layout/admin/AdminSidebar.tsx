@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import {
     LayoutDashboard,
@@ -9,35 +9,54 @@ import {
     ShieldCheck,
     CreditCard,
     History,
-    Inbox
+    Inbox,
+    ChevronDown,
+    ChevronRight,
+    BarChart3,
+    Zap,
+    MessageSquare
 } from 'lucide-react';
 import { UserButton } from '@clerk/clerk-react';
 import { BrandLogo } from '../../ui/brand-logo';
 import { useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
+import { cn } from '../../../lib/utils';
+import { useStickyQueryData } from '@/hooks/useStickyQueryData';
 
-/* 
-  Simplified Flat Navigation
-  Core high-frequency items only.
-*/
+interface NavItem {
+    name: string;
+    href?: string;
+    icon: any;
+    badge?: number;
+    subItems?: { name: string; href: string }[];
+}
 
-const navigation: { name: string; href: string; icon: any; badge?: number }[] = [
-    { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
-    { name: 'Messages', href: '/admin/messages', icon: Inbox, badge: 3 }, // Placeholder badge
-    { name: 'Bookings', href: '/admin/bookings', icon: FileText },
-    { name: 'Shipments', href: '/admin/shipments', icon: Truck },
+const navigation: NavItem[] = [
+    { name: 'Command Center', href: '/admin', icon: LayoutDashboard },
+    { name: 'Payments', href: '/admin/payments', icon: CreditCard },
     { name: 'Documents', href: '/admin/documents', icon: FileText },
-    { name: 'Customers', href: '/admin/customers', icon: Users }, // Waitlist moved here
-    { name: 'Audit Logs', href: '/admin/audit', icon: ShieldCheck },
-    { name: 'Finance', href: '/admin/payments', icon: CreditCard },
-    { name: 'Compliance', href: '/admin/compliance', icon: ShieldCheck },
-    { name: 'Customs Queue', href: '/admin/customs', icon: FileText },
+    { name: 'Shipments', href: '/admin/shipments', icon: Truck },
+    { name: 'Messages', href: '/admin/messages', icon: MessageSquare },
+    {
+        name: 'Compliance',
+        icon: ShieldCheck,
+        subItems: [
+            { name: 'KYC Approvals', href: '/admin/compliance' },
+            { name: 'Audit Logs', href: '/admin/audit' },
+            { name: 'Customs Queue', href: '/admin/customs' },
+        ]
+    },
+    { name: 'Customers', href: '/admin/customers', icon: Users },
     { name: 'Settings', href: '/admin/settings', icon: Settings },
 ];
 
 const AdminSidebar = () => {
     const location = useLocation();
-    const unreadCount = useQuery(api.messages.adminUnreadCount) || 0;
+    const unreadCountQuery = useQuery(api.messages.adminUnreadCount);
+    const unreadCount = useStickyQueryData("admin:sidebar:unread", unreadCountQuery, 0);
+    const [isComplianceOpen, setIsComplianceOpen] = useState(
+        navigation.find(n => n.name === 'Compliance')?.subItems?.some(sub => location.pathname === sub.href) || false
+    );
 
     const navigationWithBadges = navigation.map(item => {
         if (item.name === 'Messages') {
@@ -47,38 +66,82 @@ const AdminSidebar = () => {
     });
 
     return (
-        <div className="hidden md:flex flex-col w-56 bg-slate-950 border-r border-slate-800/50 h-screen fixed left-0 top-0 text-slate-300 z-50">
-            {/* Logo Area - Compact */}
-            <div className="h-14 flex items-center px-4 border-b border-slate-800/50 bg-slate-950/50 backdrop-blur-sm justify-between">
-                <BrandLogo inverted size="sm" />
-                <div className="flex items-center gap-2 text-white opacity-60">
-                    <ShieldCheck className="h-4 w-4 text-primary-400" />
-                    <span className="font-bold tracking-tight text-[10px] uppercase">Admin</span>
-                </div>
+        <div className="hidden md:flex flex-col w-64 bg-[#0a1628] border-r border-[#1e3a5f]/30 h-screen fixed left-0 top-0 text-white z-50">
+            {/* Logo Area */}
+            <div className="h-16 flex items-center px-6 border-b border-[#1e3a5f]/20">
+                <BrandLogo inverted size="lg" />
             </div>
 
-            {/* Navigation - Flat & Dense */}
-            <div className="flex-1 overflow-y-auto py-4 px-2 custom-scrollbar">
+            {/* Navigation */}
+            <div className="flex-1 overflow-y-auto py-4 px-3 custom-scrollbar">
                 <nav className="space-y-0.5">
                     {navigationWithBadges.map((item) => {
+                        const isCompliance = item.name === 'Compliance';
+
+                        if (isCompliance) {
+                            const isAnySubActive = item.subItems?.some(sub => location.pathname === sub.href);
+
+                            return (
+                                <div key={item.name} className="space-y-0.5">
+                                    <button
+                                        onClick={() => setIsComplianceOpen(!isComplianceOpen)}
+                                        className={cn(
+                                            "w-full flex items-center justify-between px-2.5 py-1.5 text-[12px] font-bold rounded-md transition-all uppercase tracking-tight",
+                                            isAnySubActive
+                                                ? 'bg-[#1e3a5f]/40 text-cyan-400'
+                                                : 'text-slate-400 hover:text-white hover:bg-[#1e3a5f]/20'
+                                        )}
+                                    >
+                                        <div className="flex items-center">
+                                            <item.icon className={cn("h-4 w-4 mr-2.5", isAnySubActive ? 'text-cyan-400' : 'text-slate-500')} />
+                                            {item.name}
+                                        </div>
+                                        {isComplianceOpen ? <ChevronDown className="h-3 w-3" /> : <ChevronRight className="h-3 w-3" />}
+                                    </button>
+
+                                    {isComplianceOpen && (
+                                        <div className="pl-9 space-y-0.5 mt-0.5">
+                                            {item.subItems?.map((sub) => {
+                                                const isSubActive = location.pathname === sub.href;
+                                                return (
+                                                    <NavLink
+                                                        key={sub.name}
+                                                        to={sub.href}
+                                                        className={cn(
+                                                            "flex items-center py-1.5 text-[11px] font-medium transition-all opacity-80 hover:opacity-100",
+                                                            isSubActive ? 'text-cyan-400' : 'text-slate-500 hover:text-white'
+                                                        )}
+                                                    >
+                                                        {sub.name}
+                                                    </NavLink>
+                                                );
+                                            })}
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        }
+
+                        if (!item.href) return null;
+
                         const isActive = location.pathname === item.href;
                         return (
                             <NavLink
                                 key={item.name}
                                 to={item.href}
-                                className={({ isActive }) => `
-                                    flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-md transition-all duration-200
-                                    ${isActive
-                                        ? 'bg-primary-500/10 text-primary-400 shadow-sm shadow-primary-900/10'
-                                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'}
-                                `}
+                                className={({ isActive }) => cn(
+                                    "flex items-center justify-between px-2.5 py-1.5 text-[12px] font-bold rounded-md transition-all uppercase tracking-tight",
+                                    isActive
+                                        ? 'bg-cyan-500 text-white shadow-md shadow-cyan-500/20'
+                                        : 'text-slate-400 hover:text-white hover:bg-[#1e3a5f]/20'
+                                )}
                             >
                                 <div className="flex items-center">
-                                    <item.icon className={`h-4 w-4 mr-3 ${isActive ? 'text-primary-400' : 'text-slate-500'}`} />
+                                    <item.icon className={cn("h-4 w-4 mr-2.5", isActive ? 'text-white' : 'text-slate-500')} />
                                     {item.name}
                                 </div>
                                 {item.badge ? (
-                                    <span className={`text-[11px] px-2 py-0.5 rounded-full font-bold ${isActive ? 'bg-primary-500/20 text-primary-300' : 'bg-slate-800 text-slate-500'}`}>
+                                    <span className="text-[9px] px-1.5 py-0.5 rounded-full font-bold bg-white/10">
                                         {item.badge}
                                     </span>
                                 ) : null}
@@ -88,20 +151,13 @@ const AdminSidebar = () => {
                 </nav>
             </div>
 
-            {/* User Footer - Minimal */}
-            <div className="p-3 border-t border-slate-800/50 bg-slate-900/30">
-                <div className="flex items-center space-x-3 p-1.5 rounded-lg hover:bg-slate-800/50 transition-colors cursor-pointer">
-                    <UserButton afterSignOutUrl="/" appearance={{
-                        elements: {
-                            avatarBox: "w-7 h-7 ring-1 ring-slate-700"
-                        }
-                    }} />
-                    <div className="flex-1 min-w-0 overflow-hidden">
-                        <p className="text-xs font-medium text-white truncate">Administrator</p>
-                        <p className="text-[10px] text-primary-400 truncate flex items-center gap-1">
-                            <span className="w-1 h-1 rounded-full bg-primary-400"></span>
-                            Online
-                        </p>
+            {/* Bottom Section */}
+            <div className="p-4 border-t border-[#1e3a5f]/20 bg-[#07111d]">
+                <div className="flex items-center gap-3">
+                    <UserButton afterSignOutUrl="/" />
+                    <div className="flex-1 min-w-0">
+                        <p className="text-[11px] font-bold text-white truncate">Admin Terminal</p>
+                        <p className="text-[9px] text-slate-500 font-bold uppercase tracking-tighter">System Root</p>
                     </div>
                 </div>
             </div>

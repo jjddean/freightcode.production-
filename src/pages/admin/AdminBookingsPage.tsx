@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StatusBadge } from '@/components/ui/status-badge';
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
+import { useStickyQueryData } from '@/hooks/useStickyQueryData';
 import DataTable from '@/components/ui/data-table';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
@@ -11,8 +12,10 @@ import { Check, X, FileText, AlertCircle } from 'lucide-react';
 import AdminPageHeader from '@/components/layout/admin/AdminPageHeader';
 
 const AdminBookingsPage = () => {
-    const bookings = useQuery(api.admin.listAllBookings) || [];
-    const pendingApprovals = useQuery(api.bookings.listPendingApprovals) || [];
+    const bookingsQuery = useQuery(api.admin.listAllBookings);
+    const pendingApprovalsQuery = useQuery(api.bookings.listPendingApprovals);
+    const bookings = useStickyQueryData("admin:bookings:list", bookingsQuery, []);
+    const pendingApprovals = useStickyQueryData("admin:bookings:pending", pendingApprovalsQuery, []);
 
     const approveBooking = useMutation(api.bookings.approveBooking);
     const rejectBooking = useMutation(api.bookings.rejectBooking);
@@ -26,7 +29,7 @@ const AdminBookingsPage = () => {
         setProcessingId(id);
         try {
             await approveBooking({ bookingId: id });
-            toast.success(`Booking ${id} approved! Customer notified.`);
+            toast.success(`Booking ${id} approved!`);
         } catch (e: any) {
             toast.error(e.message || "Failed to approve booking");
         } finally {
@@ -48,7 +51,7 @@ const AdminBookingsPage = () => {
         setProcessingId(selectedBookingId);
         try {
             await rejectBooking({ bookingId: selectedBookingId, reason: rejectReason });
-            toast.error(`Booking ${selectedBookingId} rejected. Customer notified.`);
+            toast.error(`Booking rejected.`);
             setRejectDialogOpen(false);
         } catch (e: any) {
             toast.error(e.message || "Failed to reject booking");
@@ -57,23 +60,20 @@ const AdminBookingsPage = () => {
         }
     };
 
-    // Combine and sort - pending approvals first
-    const pendingIds = new Set(pendingApprovals.map((b: any) => b.bookingId));
-
     const columns: any[] = [
         {
             key: 'bookingId',
-            header: 'Booking Ref',
+            header: 'Ref',
             mono: true,
-            render: (value: string) => value
+            render: (value: string) => <span className="text-[11px] font-mono font-bold text-gray-900">{value}</span>
         },
         {
             key: 'customerDetails',
             header: 'Customer',
             render: (val: any) => (
                 <div>
-                    <div className="font-medium text-gray-900">{val.name}</div>
-                    <div className="text-xs text-gray-500">{val.company}</div>
+                    <div className="font-bold text-gray-900 text-xs">{val?.name}</div>
+                    <div className="text-[10px] text-gray-500 uppercase tracking-tight">{val?.company}</div>
                 </div>
             )
         },
@@ -81,13 +81,13 @@ const AdminBookingsPage = () => {
             key: 'pickupDetails',
             header: 'Route',
             render: (_: any, row: any) => (
-                <div className="text-sm">
-                    <div className="flex items-center text-gray-900">
-                        <span className="w-16 text-xs text-gray-500">Origin:</span>
+                <div className="text-[11px]">
+                    <div className="flex items-center text-gray-900 font-bold">
+                        <span className="w-12 text-[10px] text-gray-400 uppercase tracking-tighter">Origin</span>
                         {row.pickupDetails?.address?.split(',')[0]}
                     </div>
-                    <div className="flex items-center text-gray-900 mt-1">
-                        <span className="w-16 text-xs text-gray-500">Dest:</span>
+                    <div className="flex items-center text-gray-900 font-bold mt-0.5">
+                        <span className="w-12 text-[10px] text-gray-400 uppercase tracking-tighter">Dest</span>
                         {row.deliveryDetails?.address?.split(',')[0]}
                     </div>
                 </div>
@@ -96,21 +96,12 @@ const AdminBookingsPage = () => {
         {
             key: 'status',
             header: 'Status',
-            render: (value: string, row: any) => {
-                const isPending = value === 'pending' || row.approvalStatus === 'pending';
-                const statusValue = isPending ? 'pending' : value;
-
-                return (
-                    <div className="flex items-center">
-                        <StatusBadge status={statusValue} />
-                    </div>
-                );
-            }
+            render: (value: string) => <StatusBadge status={value} />
         },
         {
             key: 'createdAt',
-            header: 'Submitted',
-            render: (value: number) => new Date(value).toLocaleDateString()
+            header: 'Date',
+            render: (value: number) => <span className="text-[11px] text-gray-500">{new Date(value).toLocaleDateString()}</span>
         },
         {
             key: 'bookingId',
@@ -125,27 +116,25 @@ const AdminBookingsPage = () => {
                             <>
                                 <Button
                                     size="sm"
-                                    className="bg-primary hover:bg-primary-700 h-8 px-2"
+                                    className="bg-slate-900 hover:bg-slate-800 h-7 w-7 p-0"
                                     onClick={() => handleApprove(id)}
                                     disabled={processingId !== null}
-                                    title="Approve Booking"
                                 >
-                                    {isProcessing ? <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" /> : <Check className="h-4 w-4" />}
+                                    {isProcessing ? <div className="animate-spin h-3.5 w-3.5 border-2 border-white border-t-transparent rounded-full" /> : <Check className="h-3.5 w-3.5" />}
                                 </Button>
                                 <Button
                                     size="sm"
                                     variant="destructive"
-                                    className="h-8 px-2"
+                                    className="h-7 w-7 p-0"
                                     onClick={() => handleOpenRejectDialog(id)}
                                     disabled={processingId !== null}
-                                    title="Reject Booking"
                                 >
-                                    <X className="h-4 w-4" />
+                                    <X className="h-3.5 w-3.5" />
                                 </Button>
                             </>
                         )}
-                        <Button size="sm" variant="outline" className="h-8 px-2" title="View Details">
-                            <FileText className="h-4 w-4" />
+                        <Button size="sm" variant="ghost" className="h-7 w-7 p-0 text-gray-400 hover:text-blue-600">
+                            <FileText className="h-3.5 w-3.5" />
                         </Button>
                     </div>
                 );
@@ -155,15 +144,14 @@ const AdminBookingsPage = () => {
 
     return (
         <div className="space-y-6">
-            {/* Pending Approvals Alert */}
             {pendingApprovals.length > 0 && (
-                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 flex items-center">
-                    <AlertCircle className="h-5 w-5 text-yellow-600 mr-3" />
+                <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 flex items-center shadow-sm">
+                    <AlertCircle className="h-4 w-4 text-amber-600 mr-3" />
                     <div>
-                        <p className="font-medium text-yellow-800">
+                        <p className="font-bold text-amber-900 text-xs">
                             {pendingApprovals.length} booking{pendingApprovals.length > 1 ? 's' : ''} pending approval
                         </p>
-                        <p className="text-sm text-yellow-700">Review and approve or reject these requests.</p>
+                        <p className="text-[10px] text-amber-700">Review and approve or reject these requests.</p>
                     </div>
                 </div>
             )}
@@ -171,8 +159,6 @@ const AdminBookingsPage = () => {
             <AdminPageHeader
                 title="Booking Requests"
                 subtitle="Manage incoming booking approvals and shipment requests."
-                actionLabel="Export CSV"
-                onAction={() => { }}
                 icon={FileText}
             />
 
@@ -180,37 +166,34 @@ const AdminBookingsPage = () => {
                 <DataTable
                     data={bookings}
                     columns={columns}
+                    rowKey="bookingId"
                     searchPlaceholder="Search bookings..."
-                    rowsPerPage={10}
+                    rowsPerPage={15}
+                    className="border-0"
                 />
             </div>
 
-            {/* Reject Dialog */}
             <Dialog open={rejectDialogOpen} onOpenChange={setRejectDialogOpen}>
-                <DialogContent>
+                <DialogContent className="sm:max-w-md">
                     <DialogHeader>
-                        <DialogTitle>Reject Booking</DialogTitle>
-                        <DialogDescription>
-                            Please provide a reason for rejecting this booking. The customer will be notified.
-                        </DialogDescription>
+                        <DialogTitle className="text-base font-bold">Reject Booking</DialogTitle>
+                        <DialogDescription className="text-xs">Provide a reason for rejection.</DialogDescription>
                     </DialogHeader>
                     <div className="space-y-4 py-4">
                         <div className="space-y-2">
-                            <Label htmlFor="rejectReason">Rejection Reason</Label>
+                            <Label className="text-[10px] uppercase font-bold text-gray-500">Reason</Label>
                             <textarea
-                                id="rejectReason"
                                 value={rejectReason}
                                 onChange={(e) => setRejectReason(e.target.value)}
-                                placeholder="e.g., Route not serviceable, cargo type not supported..."
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs focus:ring-2 focus:ring-blue-500 outline-none"
                                 rows={3}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
                     </div>
                     <DialogFooter>
-                        <Button variant="outline" onClick={() => setRejectDialogOpen(false)}>Cancel</Button>
-                        <Button variant="destructive" onClick={handleReject} disabled={processingId !== null}>
-                            {processingId ? 'Rejecting...' : 'Reject Booking'}
+                        <Button variant="outline" size="sm" onClick={() => setRejectDialogOpen(false)}>Cancel</Button>
+                        <Button variant="destructive" size="sm" onClick={handleReject} disabled={processingId !== null}>
+                            {processingId ? '...' : 'Reject Booking'}
                         </Button>
                     </DialogFooter>
                 </DialogContent>
@@ -220,4 +203,3 @@ const AdminBookingsPage = () => {
 };
 
 export default AdminBookingsPage;
-

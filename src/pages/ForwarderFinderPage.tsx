@@ -142,6 +142,8 @@ export default function ForwarderFinderPage() {
     const dashboardStats = useQuery(api.freightintel.queries.getDashboardStats);
     const triggerSync = useAction(api.freightintel.management.triggerUSAIngest);
     const toggleWatchlist = useMutation(api.freightintel.mutations.toggleWatchlist);
+    const ingestManualBatch = useMutation(api.freightintel.mutations.ingestManualBatch);
+    const triggerProfileRebuild = useAction(api.freightintel.management.triggerProfileRebuild);
 
     const handleManualSync = async () => {
         setIsSyncing(true);

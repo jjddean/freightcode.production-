@@ -20,13 +20,12 @@ export default function ForwarderFinder() {
     const [originFilter, setOriginFilter] = useState<string>("all");
     const [minScore, setMinScore] = useState<number>(0);
 
-    const forwarders = useQuery(api.freightintel.queries.searchForwarders, {
+    const forwarders = useQuery(api.freightintel.queries.findForwarders, {
         originCountry: originFilter === "all" ? undefined : originFilter,
-        minScore: minScore === 0 ? undefined : minScore,
-        paginationOpts: { numItems: 10, cursor: null }
+        minShipments: 1
     });
 
-    const analytics = useQuery(api.freightintel.queries.getLaneAnalytics);
+    const analytics = useQuery(api.freightintel.queries.getLaneStats, {});
 
     return (
         <div className="space-y-6">
@@ -48,7 +47,7 @@ export default function ForwarderFinder() {
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="all">All Origins</SelectItem>
-                                    {analytics?.map(a => (
+                                    {analytics?.map((a: any) => (
                                         <SelectItem key={a.country} value={a.country}>{a.country}</SelectItem>
                                     ))}
                                 </SelectContent>
@@ -91,14 +90,14 @@ export default function ForwarderFinder() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {forwarders?.page.length === 0 && (
+                            {forwarders?.length === 0 && (
                                 <TableRow>
                                     <TableCell colSpan={6} className="h-24 text-center text-muted-foreground">
                                         No forwarders found matching these criteria.
                                     </TableCell>
                                 </TableRow>
                             )}
-                            {forwarders?.page.map((f) => (
+                            {forwarders?.map((f: any) => (
                                 <TableRow key={f._id}>
                                     <TableCell className="font-medium">{f.name}</TableCell>
                                     <TableCell>
